@@ -9,6 +9,16 @@ export function Music() {
         <ReleaseCard release={single} index={0} />
         <ReleaseCard release={album} index={1} />
       </div>
+      {band.bandcampPlayer.startsWith("https://bandcamp.com/EmbeddedPlayer/") && (
+        <iframe
+          className="bandcamp"
+          data-reveal=""
+          src={band.bandcampPlayer}
+          title={`${band.name} on Bandcamp`}
+          loading="lazy"
+          seamless
+        />
+      )}
       {band.spotifyArtistId && (
         <iframe
           className="spotify"

@@ -26,6 +26,11 @@ export const band = {
   // Spotify artist id (open.spotify.com/artist/THIS_PART). Drives the
   // player in the music section.
   spotifyArtistId: "4g8s6vZBEsGST2PkMqaFoR",
+  // Bandcamp player. On any Bandcamp track or album page: Share / Embed →
+  // Embed this track → pick "Standard", small artwork → copy the code, and
+  // paste the web address inside src="..." here (it starts with
+  // https://bandcamp.com/EmbeddedPlayer/). Empty hides the player.
+  bandcampPlayer: "",
   // Set once the domain is bought; used for social cards and the sitemap.
   url: "https://passionbyproxy.com",
 };
@@ -134,7 +139,7 @@ export const merch: MerchItem[] = [
 
 export const socials: Link[] = [
   { label: "Instagram", href: "https://www.instagram.com/passion_by_proxy/" },
-  { label: "Bandcamp", href: "#" },
+  { label: "Bandcamp", href: "https://passion-by-proxy.bandcamp.com/" },
   { label: "Spotify", href: spotifyArtist },
   { label: "YouTube", href: "#" },
   { label: "TikTok", href: "#" },
