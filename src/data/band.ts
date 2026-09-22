@@ -12,6 +12,8 @@ export const band = {
     "Placeholder bio. Who is in the band, where you are from, what it sounds like.",
     "Second paragraph if you want one. Delete this line if not.",
   ],
+  // Where the band started (the band's word): given to search engines.
+  foundedIn: { town: "Phoenixville", state: "PA" },
   // Band photo for the about section, built by `npm run media -- photo=…`.
   // Empty hides it. photoAlt describes it for screen readers.
   photo: "/media/band-photo.webp",

@@ -51,6 +51,11 @@ export function structuredData(today = new Date().toISOString().slice(0, 10)) {
     url: band.url,
     email: band.email,
     image: `${band.url}/opengraph-image.jpg`,
+    foundingLocation: {
+      "@type": "Place",
+      name: `${band.foundedIn.town}, ${band.foundedIn.state}`,
+      address: { "@type": "PostalAddress", addressLocality: band.foundedIn.town, addressRegion: band.foundedIn.state, addressCountry: "US" },
+    },
     sameAs: socials.filter(isLive).map((s) => s.href),
     album: [single, album].map(release),
   };
