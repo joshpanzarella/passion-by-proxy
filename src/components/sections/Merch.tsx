@@ -1,4 +1,4 @@
-import { merch } from "@/data/band";
+import { isLive, merch } from "@/data/band";
 import { Section, stagger } from "./Section";
 
 export function Merch() {
@@ -22,9 +22,13 @@ export function Merch() {
                 {item.note ? ` · ${item.note}` : ""}
               </p>
             </div>
-            <a className="button" href={item.href} rel="noopener noreferrer" target="_blank">
-              buy
-            </a>
+            {isLive({ label: item.name, href: item.href }) ? (
+              <a className="button" href={item.href} rel="noopener noreferrer" target="_blank">
+                buy
+              </a>
+            ) : (
+              <span className="muted">coming soon</span>
+            )}
           </article>
         ))}
       </div>

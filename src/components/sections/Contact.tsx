@@ -1,4 +1,4 @@
-import { band, socials } from "@/data/band";
+import { band, isLive, socials } from "@/data/band";
 import { Section, stagger } from "./Section";
 
 export function Contact() {
@@ -33,7 +33,7 @@ export function Contact() {
         </dl>
       </div>
       <ul className="socials">
-        {socials.map((s, i) => (
+        {socials.filter(isLive).map((s, i) => (
           <li key={s.label} data-reveal="" style={stagger(i)}>
             <a href={s.href} rel="noopener noreferrer" target="_blank">
               {s.label}

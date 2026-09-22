@@ -1,6 +1,6 @@
 "use client";
 
-import type { Show } from "@/data/band";
+import { isLive, type Show } from "@/data/band";
 import { formatDate, todayIso } from "@/lib/dates";
 import { useNowMinute } from "@/lib/useNow";
 
@@ -55,9 +55,9 @@ function ShowRow({ show, index = 0, past = false }: { show: Show; index?: number
           {show.note ? ` · ${show.note}` : ""}
         </span>
       </span>
-      {!past && show.actions?.length ? (
+      {!past && show.actions?.some(isLive) ? (
         <span className="show__actions">
-          {show.actions.map((a) => (
+          {show.actions.filter(isLive).map((a) => (
             <a key={a.label} className="button" href={a.href} rel="noopener noreferrer" target="_blank">
               {a.label}
             </a>

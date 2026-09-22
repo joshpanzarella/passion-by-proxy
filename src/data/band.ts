@@ -23,11 +23,19 @@ export const band = {
   // Sign-up page on your mailing list service (Mailchimp, Buttondown,
   // Bandcamp follow, Laylo...). The button hides until this is set.
   newsletterHref: "",
+  // Spotify artist id (open.spotify.com/artist/THIS_PART). Drives the
+  // player in the music section.
+  spotifyArtistId: "4g8s6vZBEsGST2PkMqaFoR",
   // Set once the domain is bought; used for social cards and the sitemap.
   url: "https://passionbyproxy.com",
 };
 
+// A link whose href is empty or "#" is a placeholder and is never shown.
 export type Link = { label: string; href: string };
+
+export const isLive = (l: Link) => l.href !== "" && l.href !== "#";
+
+const spotifyArtist = "https://open.spotify.com/artist/4g8s6vZBEsGST2PkMqaFoR";
 
 export type Release = {
   kind: "single" | "album";
@@ -49,8 +57,10 @@ export const single: Release = {
   title: "Single Title",
   date: "2026-09-25",
   blurb: "Placeholder: a sentence about the single.",
+  // Swap Spotify for the track's own link once it is out; add the rest
+  // as they go live. Placeholders ("#") are hidden.
   links: [
-    { label: "Spotify", href: "#" },
+    { label: "Spotify", href: spotifyArtist },
     { label: "Apple Music", href: "#" },
     { label: "Bandcamp", href: "#" },
   ],
@@ -125,7 +135,7 @@ export const merch: MerchItem[] = [
 export const socials: Link[] = [
   { label: "Instagram", href: "https://www.instagram.com/passion_by_proxy/" },
   { label: "Bandcamp", href: "#" },
-  { label: "Spotify", href: "#" },
+  { label: "Spotify", href: spotifyArtist },
   { label: "YouTube", href: "#" },
   { label: "TikTok", href: "#" },
 ];

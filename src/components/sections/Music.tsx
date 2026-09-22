@@ -1,4 +1,4 @@
-import { album, single, type Release } from "@/data/band";
+import { album, band, isLive, single, type Release } from "@/data/band";
 import { ReleaseStatus } from "@/components/ReleaseStatus";
 import { Section, stagger } from "./Section";
 
@@ -9,6 +9,16 @@ export function Music() {
         <ReleaseCard release={single} index={0} />
         <ReleaseCard release={album} index={1} />
       </div>
+      {band.spotifyArtistId && (
+        <iframe
+          className="spotify"
+          data-reveal=""
+          src={`https://open.spotify.com/embed/artist/${band.spotifyArtistId}?theme=0`}
+          title={`${band.name} on Spotify`}
+          loading="lazy"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        />
+      )}
     </Section>
   );
 }
@@ -29,9 +39,9 @@ function ReleaseCard({ release, index }: { release: Release; index: number }) {
         <h3 className="release__title">{release.title}</h3>
         <ReleaseStatus release={release} />
         <p>{release.blurb}</p>
-        {release.links.length > 0 && (
+        {release.links.some(isLive) && (
           <ul className="links">
-            {release.links.map((l) => (
+            {release.links.filter(isLive).map((l) => (
               <li key={l.label}>
                 <a className="button" href={l.href} rel="noopener noreferrer" target="_blank">
                   {l.label}
