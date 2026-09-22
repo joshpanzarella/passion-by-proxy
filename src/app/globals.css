@@ -1,0 +1,322 @@
+@import "tailwindcss";
+
+/*
+  Placeholder look: dark, warm, a little like a projector room. Every colour
+  is a token here so the real palette is one edit once the artwork lands.
+*/
+
+:root {
+  --bg: #0e0c0b;
+  --surface: #1a1715;
+  --line: #3a332e;
+  --text: #efe7dc;
+  --muted: #a69a8c;
+  --accent: #e0a458;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  --gutter: clamp(16px, 5vw, 64px);
+  --max: 1100px;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 3px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* ---------- header ---------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem var(--gutter);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+
+.site-header__mark {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.site-header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.1rem;
+}
+
+.site-header nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.site-header nav a:hover {
+  color: var(--text);
+}
+
+/* ---------- sections ---------- */
+
+.hero {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem var(--gutter);
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+.hero__name {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.6rem, 10vw, 7rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 0 0 1rem;
+}
+
+.hero__tagline {
+  color: var(--muted);
+  font-size: 1.15rem;
+  max-width: 36ch;
+  margin: 0;
+}
+
+.section {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 4rem var(--gutter);
+  border-top: 1px solid var(--line);
+}
+
+.section__label {
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+  margin: 0 0 2rem;
+}
+
+.prose {
+  max-width: 62ch;
+  font-size: 1.1rem;
+}
+
+/* ---------- releases ---------- */
+
+.releases {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: 2rem;
+}
+
+.release {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+@media (max-width: 480px) {
+  .release {
+    grid-template-columns: 1fr;
+  }
+}
+
+.release__cover {
+  aspect-ratio: 1;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  overflow: hidden;
+}
+
+.release__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.release__kind {
+  margin: 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+}
+
+.release__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 2rem;
+  line-height: 1.1;
+  margin: 0.25rem 0 0.5rem;
+}
+
+.status {
+  display: inline-block;
+  font-size: 0.85rem;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+}
+
+.status--out {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.links {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+}
+
+/* ---------- shows ---------- */
+
+.shows {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.shows li {
+  display: grid;
+  grid-template-columns: 11rem 1fr 1fr auto;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+@media (max-width: 640px) {
+  .shows li {
+    grid-template-columns: 1fr;
+    gap: 0.1rem;
+  }
+}
+
+.site-footer {
+  padding: 2rem var(--gutter);
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.not-found {
+  min-height: 80vh;
+  border-top: 0;
+}
+
+/* ---------- zoetrope splash ---------- */
+
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+
+.splash--leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+html[data-splash] .splash {
+  display: none;
+}
+
+/* no page scroll while the splash plays */
+html:not([data-splash]) body {
+  overflow: hidden;
+}
+
+.splash__stage {
+  width: min(60vw, 320px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+}
+
+.splash__frame {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.splash__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  margin: 0;
+}
+
+.splash__skip {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 1.5rem;
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.splash__skip:hover {
+  color: var(--text);
+}
