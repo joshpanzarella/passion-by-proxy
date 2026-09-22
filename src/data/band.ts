@@ -53,7 +53,15 @@ export type Release = {
   cover?: string; // square cover art
   wordmark?: string; // the title as lettering; shown in place of typed text
   art?: string; // feature image, any shape
+  // Looping video of the title, built by scripts/build-video.sh. The hero
+  // plays it right after the splash.
+  // `small`/`large` are paths without extension: .mp4 and .webm both exist.
+  video?: { small: string; large: string; poster: string; width: number; height: number };
   blurb: string;
+  // Where the hero's big "listen" button goes once the release is out. A
+  // link page that lists every service (DistroKid HyperFollow, Linkfire,
+  // song.link) suits fans on different apps. Falls back to the first link.
+  listen?: string;
   links: Link[]; // streaming / pre-save links; placeholders ("#") are hidden
   // Player embed URL (Spotify "Embed track" or Bandcamp "Embed this
   // album" src). Shows a player under the release once set.
@@ -66,7 +74,15 @@ export const single: Release = {
   date: "2026-09-25",
   cover: "/media/u-and-i-cover.webp",
   wordmark: "/media/u-and-i-wordmark.webp",
+  video: {
+    small: "/media/u-and-i-640",
+    large: "/media/u-and-i-1200",
+    poster: "/media/u-and-i-poster.webp",
+    width: 1200,
+    height: 520,
+  },
   blurb: "Placeholder: a sentence about U&I.",
+  listen: spotifyArtist,
   // Swap Spotify for the track's own link once it is out; add the rest
   // as they go live.
   links: [

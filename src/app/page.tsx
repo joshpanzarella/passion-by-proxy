@@ -1,5 +1,5 @@
 import { band, single } from "@/data/band";
-import { Countdown } from "@/components/Countdown";
+import { HeroSingle } from "@/components/HeroSingle";
 import { HeroLogo } from "@/components/HeroLogo";
 import { ScrollEffects } from "@/components/ScrollEffects";
 import { Ticker } from "@/components/Ticker";
@@ -44,7 +44,7 @@ export default function Home() {
             <h1 className="hero__logo">
               <HeroLogo alt={band.name} />
             </h1>
-            <Countdown release={single} />
+            <HeroSingle release={single} />
             <p className="hero__tagline">{band.tagline}</p>
           </div>
           <a className="hero__scroll" href="#music" aria-label="scroll to music">

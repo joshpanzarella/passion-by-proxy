@@ -224,8 +224,8 @@ a {
 }
 
 .hero__logo {
-  margin: 0 0 1.5rem;
-  width: min(100%, 720px);
+  margin: 0 0 0.5rem;
+  width: min(100%, 460px, 52svh);
 }
 
 .hero-logo {
@@ -241,12 +241,48 @@ a {
   height: 100%;
 }
 
-.countdown {
-  margin: 0 0 0.5rem;
+/* the new release under the logo: title video, then countdown or listen */
+.hero-single {
+  --c: var(--ui-blue);
+  --c2: var(--ui-red);
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.hero-single__video {
+  display: block;
+  width: min(100%, 620px);
+  height: auto;
+  /* the clip is on black, like the page. Its black is a shade off the
+     page's on some screens, so the edges fade out and no box shows. */
+  background: var(--bg);
+  --edge: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent),
+    linear-gradient(180deg, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-image: var(--edge);
+  -webkit-mask-composite: source-in;
+  mask-image: var(--edge);
+  mask-composite: intersect;
+}
+
+.hero-single__line {
+  margin: 0;
   font-style: italic;
   font-size: clamp(1.05rem, 2.6vw, 1.35rem);
-  color: var(--text);
-  text-decoration: none;
+}
+
+.hero-single__line strong {
+  font-weight: 600;
+  color: var(--c);
+  text-shadow: 0.05em 0.045em 0 var(--c2);
+}
+
+.hero-single__out {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
 }
 
 .countdown__left {
@@ -259,10 +295,6 @@ a {
   font-style: normal;
   font-variant-numeric: tabular-nums;
   box-shadow: 3px 3px 0 var(--ui-red);
-}
-
-.countdown--out {
-  color: var(--ui-blue);
 }
 
 .hero__tagline {

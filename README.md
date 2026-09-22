@@ -69,6 +69,23 @@ the site fades in. About 3.5 s. It waits for the frames to download first
   (`--splash-bg` in `globals.css`) must stay the same black.
 - To see it again locally, open a new private window.
 
+## U&I video
+
+The hero plays the U&I title video right after the splash, silent and
+looping, and pauses it when it is off screen. Before release day the line
+under it counts down; from release day it says "out now" with a big
+**listen** button that goes to `single.listen` in `band.ts`.
+
+The original (200 MB) is on the `media` release of the passion-by-proxy
+GitHub repo. To rebuild the web copies (needs `brew install ffmpeg`):
+
+```bash
+sh scripts/build-video.sh U.I.moving_layered.mp4
+```
+
+It crops to the letters, makes the loop seamless, and writes 640 px (phones)
+and 1200 px versions as MP4 and WebM, plus a still poster frame.
+
 ## Release dates
 
 A release's badge reads "out September 25, 2026" until that day, then "out
