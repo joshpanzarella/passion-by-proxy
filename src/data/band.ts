@@ -1,5 +1,6 @@
 // Every name, date and link on the site lives here. Edit this file, not the
-// components, when a title or URL changes.
+// components, when a title, price or URL changes. A section with nothing
+// filled in shows a "coming soon" state rather than disappearing.
 
 export const band = {
   name: "Passion by Proxy",
@@ -11,7 +12,17 @@ export const band = {
     "Placeholder bio. Who is in the band, where you are from, what it sounds like.",
     "Second paragraph if you want one. Delete this line if not.",
   ],
+  // Band photo for the about section, path under /public. Optional.
+  photo: "",
+  members: [
+    // { name: "Name", role: "guitar, vocals" },
+  ] as { name: string; role: string }[],
   email: "hello@example.com",
+  bookingEmail: "", // falls back to `email` when empty
+  pressEmail: "",
+  // Sign-up page on your mailing list service (Mailchimp, Buttondown,
+  // Bandcamp follow, Laylo...). The button hides until this is set.
+  newsletterHref: "",
   // Set once the domain is bought; used for social cards and the sitemap.
   url: "https://passionbyproxy.com",
 };
@@ -28,6 +39,9 @@ export type Release = {
   cover?: string; // path under /public, e.g. "/media/single-cover.jpg"
   blurb: string;
   links: Link[]; // streaming / pre-save links; empty until they exist
+  // Player embed URL (Spotify "Embed track" or Bandcamp "Embed this
+  // album" src). Shows a player under the card once set.
+  embed?: string;
 };
 
 export const single: Release = {
@@ -51,13 +65,46 @@ export const album: Release = {
   links: [],
 };
 
+export type Video = {
+  title: string;
+  // The id from the YouTube URL: youtube.com/watch?v=THIS_PART
+  youtubeId: string;
+};
+
+// Empty ids show as "coming soon" cards.
+export const videos: Video[] = [
+  { title: "Single Title (official video)", youtubeId: "" },
+  { title: "Live session", youtubeId: "" },
+];
+
+export type Show = {
+  date: string; // YYYY-MM-DD
+  venue: string;
+  city: string;
+  ticketHref?: string;
+  note?: string; // "w/ Other Band", "all ages", "sold out"
+};
+
+// Any order. Past shows move to the "past shows" list by themselves.
+export const shows: Show[] = [];
+
+export type MerchItem = {
+  name: string;
+  price: string; // written as it should show, e.g. "$25"
+  image?: string; // path under /public
+  href: string; // where it is bought (Bandcamp merch, Big Cartel, Shopify...)
+  note?: string; // "S–XXL", "limited run"
+};
+
+export const merch: MerchItem[] = [
+  { name: "T-shirt one", price: "$25", href: "#", note: "S–XXL" },
+  { name: "T-shirt two", price: "$25", href: "#", note: "S–XXL" },
+];
+
 export const socials: Link[] = [
   { label: "Instagram", href: "#" },
   { label: "Bandcamp", href: "#" },
+  { label: "Spotify", href: "#" },
   { label: "YouTube", href: "#" },
+  { label: "TikTok", href: "#" },
 ];
-
-export type Show = { date: string; venue: string; city: string; ticketHref?: string };
-
-// Newest last. Past shows drop off the page automatically.
-export const shows: Show[] = [];

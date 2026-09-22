@@ -28,9 +28,10 @@ export const viewport: Viewport = {
   themeColor: "#000000",
 };
 
-// Runs before first paint: a returning visitor this session, or one who asked
-// for reduced motion, never sees the splash.
-const splashGate = `try{if(sessionStorage.getItem("${SPLASH_KEY}")||matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.dataset.splash="seen"}catch(e){}`;
+// Runs before first paint. data-js lets CSS hide scroll-reveal content
+// (without JS it stays visible). A returning visitor this session, or one who
+// asked for reduced motion, never sees the splash.
+const splashGate = `document.documentElement.dataset.js="";try{if(sessionStorage.getItem("${SPLASH_KEY}")||matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.dataset.splash="seen"}catch(e){}`;
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

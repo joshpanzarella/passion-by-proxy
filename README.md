@@ -15,15 +15,38 @@ npm run preview  # serve the production build
 
 ## Where things live
 
+It is one page. Sections, top to bottom: hero, ticker, music, videos, shows,
+merch, about, stay in touch.
+
 | What | File |
 | --- | --- |
-| Band name, bio, email, single, album, socials, shows | `src/data/band.ts` |
+| **All content**: names, bio, releases, videos, shows, merch, socials, emails, mailing list link | `src/data/band.ts` |
+| Page order and header nav | `src/app/page.tsx` |
+| One file per section | `src/components/sections/` |
+| Scroll effects (reveal, active nav, ticker, hero drift) | `src/components/ScrollEffects.tsx` |
+| Hero logo that spins with the scroll | `src/components/HeroLogo.tsx` |
 | Splash frames, speed, length | `src/data/zoetrope.ts` |
 | Splash component | `src/components/ZoetropeSplash.tsx` |
-| Page sections | `src/app/page.tsx` |
-| Colours (sampled from the logo) and fonts, tokens at the top | `src/app/globals.css` |
-| Cover art, audio | `public/media/` |
+| Colours (sampled from the logo), each section's colourway | `src/app/globals.css` |
+| Cover art, shirt photos, band photo | `public/media/` |
 | Splash frame images (built by `npm run zoetrope`) | `public/zoetrope/` |
+
+Empty content shows a "coming soon" state: a video with no `youtubeId`, no
+shows, no mailing list link. Past shows move to a "past shows" list on their
+own, in the visitor's browser, so no rebuild is needed after a gig.
+
+## Scroll effects
+
+- The hero logo steps through the colourways as the page scrolls (one
+  frame per 70 px), with the drum's slits showing while it moves.
+- Section headings arrive with their two colours apart and snap together;
+  cards slide in one after another.
+- The header marks the section in view and takes on its colours.
+- The ticker under the hero slides with the scroll.
+- Videos load YouTube only when clicked.
+
+Visitors with reduced motion turned on get none of the motion; everything
+is simply shown. Without JavaScript everything is shown too.
 
 ## Splash screen
 
