@@ -151,8 +151,9 @@ a {
   justify-content: space-between;
   gap: 1rem;
   padding: 0 var(--gutter);
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
-  backdrop-filter: blur(8px);
+  /* solid, not blurred: a backdrop blur over the playing video made iOS
+     Safari redraw the header on every scroll frame */
+  background: rgb(0 0 0 / 0.92);
   border-bottom: 1px solid var(--line);
   transition: border-color 400ms ease;
 }
@@ -239,6 +240,8 @@ a {
   inset: 0;
   width: 100%;
   height: 100%;
+  /* own layer each, so swapping frames is a fade the GPU does, not a repaint */
+  will-change: opacity;
 }
 
 /* the new release under the logo: title video, then countdown or listen */
@@ -252,19 +255,30 @@ a {
   margin-bottom: 1rem;
 }
 
+.hero-single__frame {
+  position: relative;
+  width: min(100%, 620px);
+}
+
 .hero-single__video {
   display: block;
-  width: min(100%, 620px);
+  width: 100%;
   height: auto;
-  /* the clip is on black, like the page. Its black is a shade off the
-     page's on some screens, so the edges fade out and no box shows. */
   background: var(--bg);
-  --edge: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent),
-    linear-gradient(180deg, transparent, #000 10%, #000 90%, transparent);
-  -webkit-mask-image: var(--edge);
-  -webkit-mask-composite: source-in;
-  mask-image: var(--edge);
-  mask-composite: intersect;
+}
+
+/* The clip is on black, like the page, but its black is a shade off the
+   page's on some screens. A fixed gradient over the edges hides the box.
+   (Not a CSS mask: Safari re-masks a playing video every frame, which
+   stuttered the scroll.) */
+.hero-single__frame::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, var(--bg), transparent 7%, transparent 93%, var(--bg)),
+    linear-gradient(180deg, var(--bg), transparent 10%, transparent 90%, var(--bg));
 }
 
 .hero-single__line {
@@ -940,10 +954,18 @@ html:not([data-splash]) body {
   height: 100%;
 }
 
-/* The drum's slits (splash and hero): dark bars that show with speed. */
+/* The drum's slits (splash and hero): dark bars that show with speed.
+   They turn by moving the whole layer (--slit-shift, 0-1 of a pitch), which
+   the GPU does without repainting; one extra pitch on the left covers the
+   gap the shift opens. */
 .slits {
   position: absolute;
-  inset: -4% -2%;
+  top: -4%;
+  bottom: -4%;
+  right: -2%;
+  left: calc(-2% - var(--slit-pitch));
+  transform: translate3d(calc(var(--slit-pitch) * var(--slit-shift, 0)), 0, 0);
+  will-change: transform, opacity;
   background-image: repeating-linear-gradient(
     90deg,
     var(--splash-bg) 0,

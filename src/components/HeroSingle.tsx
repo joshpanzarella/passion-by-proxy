@@ -45,23 +45,25 @@ export function HeroSingle({ release }: { release: Release }) {
   return (
     <div className="hero-single">
       {release.video && (
-        <video
-          ref={videoRef}
-          className="hero-single__video"
-          poster={release.video.poster}
-          width={release.video.width}
-          height={release.video.height}
-          muted
-          loop
-          playsInline
-          preload="auto"
-          aria-label={release.title}
-        >
-          <source src={`${release.video.small}.mp4`} media="(max-width: 700px)" type="video/mp4" />
-          <source src={`${release.video.small}.webm`} media="(max-width: 700px)" type="video/webm" />
-          <source src={`${release.video.large}.mp4`} type="video/mp4" />
-          <source src={`${release.video.large}.webm`} type="video/webm" />
-        </video>
+        <div className="hero-single__frame">
+          <video
+            ref={videoRef}
+            className="hero-single__video"
+            poster={release.video.poster}
+            width={release.video.width}
+            height={release.video.height}
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-label={release.title}
+          >
+            <source src={`${release.video.small}.mp4`} media="(max-width: 700px)" type="video/mp4" />
+            <source src={`${release.video.small}.webm`} media="(max-width: 700px)" type="video/webm" />
+            <source src={`${release.video.large}.mp4`} type="video/mp4" />
+            <source src={`${release.video.large}.webm`} type="video/webm" />
+          </video>
+        </div>
       )}
       {out ? (
         <div className="hero-single__out">

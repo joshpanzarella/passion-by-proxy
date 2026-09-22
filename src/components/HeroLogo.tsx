@@ -41,7 +41,7 @@ export function HeroLogo({ alt }: { alt: string }) {
           imgs[f].style.opacity = "1";
           frame = f;
           slitOffset = (slitOffset + SLIT_STEP) % 1;
-          if (slits) slits.style.backgroundPositionX = `calc(var(--slit-pitch) * ${slitOffset})`;
+          if (slits) slits.style.setProperty("--slit-shift", String(slitOffset));
         }
         if (slits) slits.style.opacity = String(Math.min(1, speed / 10));
       }

@@ -111,7 +111,7 @@ export function ZoetropeSplash() {
           className="slits"
           style={{
             opacity: speed,
-            backgroundPositionX: `calc(var(--slit-pitch) * ${(step * SLIT_STEP) % 1})`,
+            ["--slit-shift" as string]: (step * SLIT_STEP) % 1,
           }}
         />
       </div>
