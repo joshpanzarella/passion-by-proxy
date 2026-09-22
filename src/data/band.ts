@@ -17,7 +17,7 @@ export const band = {
   members: [
     // { name: "Name", role: "guitar, vocals" },
   ] as { name: string; role: string }[],
-  email: "hello@example.com",
+  email: "passionbyproxyband@gmail.com",
   bookingEmail: "", // falls back to `email` when empty
   pressEmail: "",
   // Sign-up page on your mailing list service (Mailchimp, Buttondown,
