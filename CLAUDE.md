@@ -29,3 +29,6 @@ static export (`out/`) and hosted on Cloudflare Pages from `main`.
 - **Colours are sampled from the band's art** and live as tokens at the top
   of `globals.css`; each section picks a colourway through `--c`/`--c2`.
   New art: sample it, don't guess.
+- **Every nav tab has its own colourway**, main and offset both unique and
+  unlike the top of the page's teal/magenta (the header takes the colours
+  of the section in view). A new section needs a new pair.

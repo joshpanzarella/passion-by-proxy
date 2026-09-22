@@ -45,12 +45,15 @@
   color-scheme: dark;
 }
 
+/* One colourway per nav tab, every main and every offset different, so the
+   header (which takes the colours of the section in view) never repeats.
+   The top of the page keeps the logo's teal/magenta. */
 .section--music { --c: var(--ui-blue); --c2: var(--ui-red); }
-.section--videos { --c: var(--pink); --c2: var(--lime); }
+.section--videos { --c: var(--pink); --c2: var(--teal); }
 .section--shows { --c: var(--yellow); --c2: var(--purple); }
-.section--merch { --c: var(--red); --c2: var(--lime); }
-.section--about { --c: var(--teal); --c2: var(--magenta); }
-.section--contact { --c: var(--magenta); --c2: var(--teal); }
+.section--merch { --c: var(--orange); --c2: var(--bottle-blue); }
+.section--about { --c: var(--red); --c2: var(--lime); }
+.section--contact { --c: var(--green); --c2: var(--magenta); }
 
 * {
   box-sizing: border-box;
