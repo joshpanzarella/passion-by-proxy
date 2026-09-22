@@ -7,10 +7,12 @@ import { useEffect } from "react";
 //    (headings also close their offset colour, see .offset in globals.css)
 //  - the header nav marks the section under the middle of the screen and
 //    takes on that section's colours
-//  - the ticker strip slides with the scroll
-//  - the hero's contents drift up slower than the page and fade out
-//  - [data-parallax="k"] images drift by k x their distance from mid-screen
-// Renders nothing. Reduced motion: everything is shown at once, nothing moves.
+// Renders nothing. Reduced motion: everything is shown at once.
+//
+// Motion tied to the scroll position itself (hero drift, ticker, the art
+// drifting) is NOT here: it is CSS scroll-driven animation in globals.css.
+// Moved by script it trailed the finger on iOS Safari, which scrolls apart
+// from the page's code, and read as choppy however fast each frame was.
 export function ScrollEffects() {
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -72,70 +74,6 @@ export function ScrollEffects() {
     );
     document.querySelectorAll<HTMLElement>("main > section[id]").forEach((s) => spy.observe(s));
     cleanups.push(() => spy.disconnect());
-
-    // ---- ticker, hero drift, parallax art
-    // Geometry is measured once and again only when the page changes size;
-    // the scroll handler itself only reads scrollY and writes transforms, so
-    // it never forces the browser to lay the page out mid-scroll.
-    const track = document.querySelector<HTMLElement>(".ticker__track");
-    const heroInner = document.querySelector<HTMLElement>(".hero__inner");
-    const arrow = document.querySelector<HTMLElement>(".hero__scroll");
-    const drifting = Array.from(document.querySelectorAll<HTMLElement>("[data-parallax]")).map((el) => ({
-      el,
-      k: Number(el.dataset.parallax),
-      top: 0,
-      height: 0,
-    }));
-    if (!reduce) {
-      let raf = 0;
-      let viewport = window.innerHeight;
-      let tickerHalf = 1;
-
-      const measure = () => {
-        viewport = window.innerHeight;
-        if (track) tickerHalf = Math.max(1, track.scrollWidth / 2);
-        for (const d of drifting) {
-          const box = (d.el.parentElement ?? d.el).getBoundingClientRect();
-          d.top = box.top + window.scrollY;
-          d.height = box.height;
-        }
-      };
-
-      const move = () => {
-        raf = 0;
-        const y = window.scrollY;
-        if (track) track.style.transform = `translate3d(${-((y * 0.5) % tickerHalf)}px, 0, 0)`;
-        if (heroInner && y < viewport * 1.2) {
-          heroInner.style.transform = `translate3d(0, ${y * 0.35}px, 0)`;
-          heroInner.style.opacity = String(Math.max(0, 1 - y / (viewport * 0.8)));
-          if (arrow) arrow.style.opacity = String(Math.max(0, 1 - y / 120));
-        }
-        for (const d of drifting) {
-          const onScreenTop = d.top - y;
-          if (onScreenTop + d.height < -200 || onScreenTop > viewport + 200) continue;
-          const fromMiddle = onScreenTop + d.height / 2 - viewport / 2;
-          d.el.style.transform = `translate3d(0, ${-fromMiddle * d.k}px, 0)`;
-        }
-      };
-
-      const onScroll = () => {
-        if (!raf) raf = window.requestAnimationFrame(move);
-      };
-      // images and fonts arriving change the page's height: re-measure then
-      const resized = new ResizeObserver(() => {
-        measure();
-        onScroll();
-      });
-      resized.observe(document.body);
-      window.addEventListener("scroll", onScroll, { passive: true });
-      measure();
-      move();
-      cleanups.push(() => {
-        resized.disconnect();
-        window.removeEventListener("scroll", onScroll);
-        window.cancelAnimationFrame(raf);
-      });
-    }
 
     return () => cleanups.forEach((c) => c());
   }, []);

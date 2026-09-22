@@ -49,7 +49,7 @@ function AlbumFeature({ release }: { release: Release }) {
       {release.art && (
         <div className="album__art" data-reveal="">
           {/* eslint-disable-next-line @next/next/no-img-element -- pre-sized webp from npm run media */}
-          <img src={release.art} alt="Two glass bottles, one red and one blue, lit gold from behind" width={975} height={1220} data-parallax="0.12" />
+          <img src={release.art} alt="Two glass bottles, one red and one blue, lit gold from behind" width={975} height={1220} />
         </div>
       )}
       <div className="album__body" data-reveal="" style={{ "--i": 1 } as React.CSSProperties}>

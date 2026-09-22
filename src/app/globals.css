@@ -911,6 +911,88 @@ a {
   margin: 0 0 1rem;
 }
 
+/* ---------- scroll-linked motion ---------- */
+
+/* Tied to the scroll position by the browser itself (CSS scroll-driven
+   animations), so it moves in step with the finger: iOS Safari scrolls apart
+   from the page's code, and the same motion done in script trailed and
+   stuttered. Browsers without support (Firefox, iOS before 26) leave these
+   still. Transform and opacity only. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* the hero's contents drift up slower than the page and fade */
+    .hero__inner {
+      animation: hero-drift linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 80vh;
+    }
+
+    .hero__scroll {
+      animation: nudge 2.4s ease-in-out infinite, fade-out linear both;
+      animation-timeline: auto, scroll(root block);
+      animation-range: normal, 0 120px;
+    }
+
+    .ticker {
+      view-timeline: --ticker block;
+    }
+
+    .ticker__track {
+      animation: ticker-slide linear both;
+      animation-timeline: --ticker;
+    }
+
+    /* art lags the page: starts high in its frame, ends low */
+    .banner,
+    .album__art {
+      view-timeline: --art block;
+    }
+
+    .banner img {
+      animation: drift-banner linear both;
+      animation-timeline: --art;
+    }
+
+    .banner--strip img {
+      animation-name: drift-strip;
+    }
+
+    .album__art img {
+      animation: drift-album linear both;
+      animation-timeline: --art;
+    }
+  }
+}
+
+@keyframes hero-drift {
+  to { transform: translate3d(0, 28vh, 0); opacity: 0; }
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+
+@keyframes ticker-slide {
+  to { transform: translate3d(-6%, 0, 0); }
+}
+
+/* the banner image is 120% of its frame: 8% of it spare above and below */
+@keyframes drift-banner {
+  from { transform: translate3d(0, -7%, 0); }
+  to { transform: translate3d(0, 7%, 0); }
+}
+
+/* a strip's image is 300% of the strip: a third of it spare each way */
+@keyframes drift-strip {
+  from { transform: translate3d(0, -25%, 0); }
+  to { transform: translate3d(0, 25%, 0); }
+}
+
+@keyframes drift-album {
+  from { transform: translate3d(0, -6%, 0); }
+  to { transform: translate3d(0, 6%, 0); }
+}
+
 /* ---------- zoetrope splash ---------- */
 
 .splash {

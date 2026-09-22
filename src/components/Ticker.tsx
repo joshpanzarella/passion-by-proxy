@@ -1,7 +1,7 @@
 import { album, single } from "@/data/band";
 import { formatDate } from "@/lib/dates";
 
-// Strip under the hero; ScrollEffects slides it with the scroll. The items
+// Strip under the hero; it slides with the scroll (globals.css). The items
 // are written twice so the loop has no seam.
 export function Ticker() {
   const items = [
