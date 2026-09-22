@@ -114,7 +114,8 @@ export const album: Release = {
   // the bottles on their own: shown by the album feature only if there is no
   // cover; kept for other uses
   art: "/media/alliterate-bottles.webp",
-  blurb: "Placeholder: a sentence about Alliterate. Features “Zoe’s Zoetrope.”",
+  blurb:
+    "The truly, unbelievably, hotly anticipated freshman album from Phoenixville’s Passion by Proxy. “Alliterate” promises to show you that we’ve tried to put PbP in a box, but, like Pandora’s, they’ve escaped, and now only hope and this album remain.",
   links: [], // pre-save link goes here
 };
 
