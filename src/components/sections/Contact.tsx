@@ -18,10 +18,10 @@ export function Contact() {
   }
 
   return (
-    <Section id="contact" title="stay in touch">
+    <Section id="contact" title="message in a bottle">
       <div className="contact">
         <div className="contact__list" data-reveal="">
-          <p className="contact__lede">new music, shows and merch drops, first.</p>
+          <p className="contact__lede">throw yours in. we&apos;ll write back when there&apos;s something new.</p>
           {band.kitFormId ? (
             <EmailSignup formId={band.kitFormId} />
           ) : band.newsletterHref ? (

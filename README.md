@@ -19,7 +19,7 @@ example `npx serve out`.
 ## Where things live
 
 It is one page. Sections, top to bottom: hero, ticker, music, videos, shows,
-merch, about, stay in touch.
+merch, about, message in a bottle (contact).
 
 | What | File |
 | --- | --- |
