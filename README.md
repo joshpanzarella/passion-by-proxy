@@ -53,7 +53,7 @@ is simply shown. Without JavaScript everything is shown too.
 
 ## Splash screen
 
-A zoetrope made from the five logo colourways. The drum spins up, runs at
+A zoetrope made from the six logo colourways. The drum spins up, runs at
 full speed with its slits showing, slows, and stops on the teal logo; then
 the site fades in. About 3.5 s. It waits for the frames to download first
 (at most 2.5 s).
@@ -64,7 +64,7 @@ the site fades in. About 3.5 s. It waits for the frames to download first
 - To rebuild the frames from new art (originals stay out of the repo):
 
   ```bash
-  npm run zoetrope -- teal.png orange.png pink.png purple.png red.png
+  npm run zoetrope -- teal.png orange.png pink.png blue.png purple.png red.png
   ```
 
   Frames are flattened onto black, because the art's semi-transparent fill

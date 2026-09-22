@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
-  Colours are sampled from the band's art (the logo's five colourways, each a
+  Colours are sampled from the band's art (the logo's six colourways, each a
   main colour with an offset "shadow" colour; U&I; the Alliterate bottles).
   Each section picks one colourway through --c (main) and --c2 (offset).
 

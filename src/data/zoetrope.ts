@@ -6,8 +6,9 @@ export const zoetrope = {
     "/zoetrope/01.webp", // teal
     "/zoetrope/02.webp", // orange
     "/zoetrope/03.webp", // pink
-    "/zoetrope/04.webp", // purple
-    "/zoetrope/05.webp", // red
+    "/zoetrope/04.webp", // blue, coral lettering
+    "/zoetrope/05.webp", // purple
+    "/zoetrope/06.webp", // red
   ],
   // The frame the drum stops on.
   landOn: 0,
