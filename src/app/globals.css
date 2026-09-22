@@ -723,6 +723,16 @@ a {
   will-change: transform;
 }
 
+.banner--strip {
+  aspect-ratio: auto;
+  height: clamp(110px, 18vw, 240px);
+}
+
+.banner--strip img {
+  top: -100%;
+  height: 300%;
+}
+
 .banner + .section {
   border-top: 0;
 }
@@ -816,7 +826,7 @@ a {
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 1rem;
-  padding: 2rem var(--gutter);
+  padding: 3rem var(--gutter) 2rem;
   border-top: 1px solid var(--line);
   color: var(--muted);
   font-size: 0.85rem;
@@ -826,9 +836,23 @@ a {
   color: var(--muted);
 }
 
+.site-footer__wordmark {
+  flex-basis: 100%;
+  width: min(100%, 900px);
+  height: auto;
+  margin: 0 auto 1.5rem;
+}
+
 .not-found {
   min-height: 80vh;
   border-top: 0;
+}
+
+.not-found__arc {
+  display: block;
+  width: min(100%, 520px);
+  height: auto;
+  margin-bottom: 1rem;
 }
 
 .not-found h1 {

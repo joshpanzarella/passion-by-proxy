@@ -1,7 +1,9 @@
 // Turns the band's artwork into web-sized files in public/media/.
 //
 //   npm run media -- cover=U&I.jpg wordmark=U&I-type.png bottles=bottles.png \
-//                    banner=banner.jpg logo=logo-flat.png
+//                    banner=banner.jpg logo=logo-flat.png \
+//                    texture-teal=… texture-gold=… texture-red=… \
+//                    glitter=glitter-type.png arc=arc-type.png
 //
 // Pass only the ones that changed. Originals (up to 17 MB) stay out of the
 // repo. Art with a black background is flattened onto black, the page's own
@@ -37,6 +39,15 @@ const jobs = {
     await sharp(src).resize({ width: 2000 }).webp({ quality: 78 }).toFile(out("banner.webp"));
     await sharp(src).resize(1200, 630, { fit: "cover" }).jpeg({ quality: 84 }).toFile(path.join(process.cwd(), "src/app/opengraph-image.jpg"));
   },
+  // square textures for the strips between sections; grainy art, so a
+  // modest size and quality keep them light
+  "texture-teal": (src) => texture(src, "texture-teal.webp"),
+  "texture-gold": (src) => texture(src, "texture-gold.webp"),
+  "texture-red": (src) => texture(src, "texture-red.webp"),
+  // "PASSION BY PROXY" glitter lettering (footer): transparent, trimmed
+  glitter: (src) => sharp(src).trim().resize({ width: 1100 }).webp({ quality: 85 }).toFile(out("wordmark-glitter.webp")),
+  // arched "passion -by- proxy" (404 page): transparent, trimmed
+  arc: (src) => sharp(src).trim().resize({ width: 1000 }).webp({ quality: 85 }).toFile(out("wordmark-arc.webp")),
   // flat logo: just the pill (top part of the square) for the header
   logo: async (src) => {
     const { width, height } = await sharp(src).metadata();
@@ -55,6 +66,10 @@ const jobs = {
       .toFile(path.join(process.cwd(), "src/app/icon.png"));
   },
 };
+
+function texture(src, name) {
+  return sharp(src).resize(1100, 1100).webp({ quality: 50, effort: 6 }).toFile(out(name));
+}
 
 fs.mkdirSync(path.join(process.cwd(), "public/media"), { recursive: true });
 const args = process.argv.slice(2);

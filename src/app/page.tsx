@@ -53,15 +53,20 @@ export default function Home() {
         </section>
         <Ticker />
         <Music />
+        <Banner kind="strip" src="/media/texture-gold.webp" />
         <Videos />
+        <Banner kind="strip" src="/media/texture-teal.webp" />
         <Shows />
         <Merch />
         <Banner src="/media/banner.webp" />
         <About />
+        <Banner kind="strip" src="/media/texture-red.webp" />
         <Contact />
       </main>
 
       <footer className="site-footer">
+        {/* eslint-disable-next-line @next/next/no-img-element -- lettering art */}
+        <img className="site-footer__wordmark" src="/media/wordmark-glitter.webp" alt={band.name} width={1100} height={142} loading="lazy" />
         <span>
           © {new Date().getFullYear()} {band.name}
         </span>
