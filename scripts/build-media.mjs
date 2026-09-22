@@ -3,7 +3,8 @@
 //   npm run media -- cover=U&I.jpg wordmark=U&I-type.png bottles=bottles.png \
 //                    banner=banner.jpg logo=logo-flat.png \
 //                    texture-teal=… texture-gold=… texture-red=… \
-//                    glitter=glitter-type.png arc=arc-type.png photo=band.jpg
+//                    glitter=glitter-type.png stacked=stacked-type.png \
+//                    arc=arc-type.png photo=band.jpg
 //
 // Pass only the ones that changed. Originals (up to 17 MB) stay out of the
 // repo. Art with a black background is flattened onto black, the page's own
@@ -46,6 +47,18 @@ const jobs = {
   "texture-red": (src) => texture(src, "texture-red.webp"),
   // "PASSION BY PROXY" glitter lettering (footer): transparent, trimmed
   glitter: (src) => sharp(src).trim().resize({ width: 1100 }).webp({ quality: 85 }).toFile(out("wordmark-glitter.webp")),
+  // the same lettering stacked on three lines (footer on phones). Its dots
+  // are only ~40% opaque on average, which reads on white but dims to a
+  // third on black, so their opacity is scaled up 2.5x (capped at solid).
+  // The background stays transparent for the light theme.
+  stacked: async (src) => {
+    const base = sharp(src).ensureAlpha().trim().resize({ width: 640 });
+    const { data, info } = await base.clone().raw().toBuffer({ resolveWithObject: true });
+    for (let i = 3; i < data.length; i += 4) data[i] = Math.min(255, Math.round(data[i] * 2.5));
+    await sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } })
+      .webp({ quality: 70, alphaQuality: 60, effort: 6 })
+      .toFile(out("wordmark-stacked.webp"));
+  },
   // arched "passion -by- proxy" (404 page): transparent, trimmed
   arc: (src) => sharp(src).trim().resize({ width: 1000 }).webp({ quality: 85 }).toFile(out("wordmark-arc.webp")),
   // band photo (about section): never enlarged, at most 1600 px wide

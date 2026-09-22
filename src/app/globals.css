@@ -966,9 +966,22 @@ a {
 
 .site-footer__wordmark {
   flex-basis: 100%;
+  display: block;
   width: min(100%, 900px);
-  height: auto;
   margin: 0 auto 1.5rem;
+}
+
+.site-footer__wordmark img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 640px) {
+  .site-footer__wordmark {
+    /* max-width, not width: the flex-basis above would override a width */
+    max-width: 300px;
+  }
 }
 
 .not-found {
