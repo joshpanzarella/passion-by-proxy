@@ -110,17 +110,16 @@ export const album: Release = {
 
 const tiktokProfile = "https://www.tiktok.com/@passionproxy";
 
-// A TikTok featured at the top of the videos section: its player beside
-// "watch on TikTok" and "follow" buttons. `id` is the long number in the
-// video's link (tiktok.com/@passionproxy/video/THIS_NUMBER). Empty id hides
-// the feature.
+// A TikTok at the top of the videos section: just the player, with a quiet
+// credit line under it (the band wants it low-key: no heading, no big
+// buttons). `id` is the long number in the video's link
+// (tiktok.com/@passionproxy/video/THIS_NUMBER). Empty id hides it.
 export const tiktok = {
   handle: "passionproxy",
   profile: tiktokProfile,
   featured: {
     id: "7684010395413105933",
-    heading: "on TikTok right now",
-    caption: "", // e.g. "300k views and counting"
+    caption: "", // optional, shown quietly after the handle
   },
 };
 

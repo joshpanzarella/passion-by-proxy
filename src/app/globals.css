@@ -625,23 +625,32 @@ a {
 
 /* ---------- videos ---------- */
 
-/* the featured TikTok: a phone-shaped player beside its buttons */
+/* the TikTok: just the phone-shaped player and a quiet credit line */
+/* the TikTok sits in the same row as the other videos, not above them */
+.videos-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.videos-row > .videos {
+  flex: 1 1 420px;
+  min-width: 0;
+}
+
 .tiktok {
-  display: grid;
-  grid-template-columns: minmax(0, 325px) minmax(0, 1fr);
-  gap: clamp(1.5rem, 4vw, 3rem);
-  align-items: center;
-  margin-bottom: clamp(3rem, 8vw, 5rem);
+  flex: none;
+  width: min(100%, 280px);
+  margin: 0;
 }
 
 .tiktok__frame {
   width: 100%;
-  max-width: 325px;
   /* TikTok's player is 9:16 plus its caption and sound bar */
   aspect-ratio: 9 / 18;
   background: var(--surface);
-  border: 1px solid var(--c);
-  box-shadow: 5px 5px 0 var(--c2);
+  border: 1px solid var(--line);
   border-radius: 12px;
   overflow: hidden;
 }
@@ -654,33 +663,30 @@ a {
   border: 0;
 }
 
-.tiktok__title {
-  font-size: clamp(1.8rem, 5vw, 2.8rem);
-  font-style: italic;
-  font-weight: 600;
-  line-height: 1.05;
-  margin: 0.5rem 0 1rem;
+.tiktok__credit {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.tiktok__credit a {
+  color: var(--muted);
+}
+
+.tiktok__credit a:hover {
+  color: var(--c);
 }
 
 @media (max-width: 640px) {
   .tiktok {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    text-align: center;
+    width: min(100%, 270px);
+    margin-inline: auto;
   }
+}
 
-  .tiktok .links {
-    justify-content: center;
-  }
-
-  .tiktok__frame {
-    max-width: 270px;
-  }
-
-  /* heading and buttons first, so they show without scrolling past the player */
-  .tiktok__body {
-    order: -1;
-  }
+/* in the row, the YouTube cards stack beside the TikTok */
+.videos-row .videos {
+  grid-template-columns: 1fr;
 }
 
 .videos {
