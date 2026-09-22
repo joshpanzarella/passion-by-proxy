@@ -7,7 +7,12 @@ export const band = {
   // How people search for and write the name; used in metadata only.
   aliases: ["Passion-by-Proxy", "PbP"],
   short: "PbP",
-  tagline: "placeholder tagline — one line about the band.",
+  // Under the hero logo, shown as written.
+  tagline: "DEAD END CLOUT",
+  // What search results and link previews say about the site: plain words
+  // for someone who has never heard of the band.
+  description:
+    "Passion by Proxy is a band from Phoenixville, PA. New single U&I out September 25, 2026; album Alliterate out November 20, 2026. Shows, merch, lyrics.",
   bio: [
     "Placeholder bio. Who is in the band, where you are from, what it sounds like.",
     "Second paragraph if you want one. Delete this line if not.",

@@ -14,11 +14,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(band.url),
   title: { default: band.name, template: `%s | ${band.name}` },
-  description: band.tagline,
+  description: band.description,
   keywords: [band.name, ...band.aliases],
   openGraph: {
     title: band.name,
-    description: band.tagline,
+    description: band.description,
     siteName: band.name,
     type: "website",
   },
