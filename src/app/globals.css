@@ -565,6 +565,24 @@ a {
   display: grid;
 }
 
+.show__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+@media (max-width: 560px) {
+  .show {
+    grid-template-columns: 4rem 1fr;
+  }
+
+  .show__actions {
+    grid-column: 2;
+    justify-content: flex-start;
+  }
+}
+
 .shows--past .show__day {
   color: var(--muted);
   text-shadow: none;

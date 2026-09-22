@@ -55,10 +55,14 @@ function ShowRow({ show, index = 0, past = false }: { show: Show; index?: number
           {show.note ? ` · ${show.note}` : ""}
         </span>
       </span>
-      {!past && show.ticketHref ? (
-        <a className="button" href={show.ticketHref} rel="noopener noreferrer" target="_blank">
-          tickets
-        </a>
+      {!past && show.actions?.length ? (
+        <span className="show__actions">
+          {show.actions.map((a) => (
+            <a key={a.label} className="button" href={a.href} rel="noopener noreferrer" target="_blank">
+              {a.label}
+            </a>
+          ))}
+        </span>
       ) : (
         <span />
       )}

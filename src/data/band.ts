@@ -81,12 +81,33 @@ export type Show = {
   date: string; // YYYY-MM-DD
   venue: string;
   city: string;
-  ticketHref?: string;
   note?: string; // "w/ Other Band", "all ages", "sold out"
+  // Buttons on the row: tickets, the venue's page, "DM for address"...
+  actions?: Link[];
 };
 
+// Instagram's direct-message link: opens a DM to the band in the app.
+const instagramDm = "https://ig.me/m/passion_by_proxy";
+
 // Any order. Past shows move to the "past shows" list by themselves.
-export const shows: Show[] = [];
+export const shows: Show[] = [
+  {
+    date: "2026-09-25",
+    venue: "House show",
+    city: "West Philadelphia, PA",
+    note: "message us for the address",
+    actions: [
+      { label: "DM for address", href: instagramDm },
+      { label: "email", href: `mailto:${band.email}` },
+    ],
+  },
+  {
+    date: "2026-09-26",
+    venue: "The Rat Shack",
+    city: "Phoenixville, PA",
+    actions: [{ label: "venue", href: "https://www.instagram.com/the_rat_shack_officially/" }],
+  },
+];
 
 export type MerchItem = {
   name: string;
@@ -102,7 +123,7 @@ export const merch: MerchItem[] = [
 ];
 
 export const socials: Link[] = [
-  { label: "Instagram", href: "#" },
+  { label: "Instagram", href: "https://www.instagram.com/passion_by_proxy/" },
   { label: "Bandcamp", href: "#" },
   { label: "Spotify", href: "#" },
   { label: "YouTube", href: "#" },
