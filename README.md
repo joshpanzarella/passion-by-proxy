@@ -21,7 +21,7 @@ npm run preview  # serve the production build
 | Splash frames, speed, length | `src/data/zoetrope.ts` |
 | Splash component | `src/components/ZoetropeSplash.tsx` |
 | Page sections | `src/app/page.tsx` |
-| Colours and fonts (tokens at the top) | `src/app/globals.css` |
+| Colours (sampled from the logo) and fonts, tokens at the top | `src/app/globals.css` |
 | Cover art, audio | `public/media/` |
 | Splash frame images (built by `npm run zoetrope`) | `public/zoetrope/` |
 

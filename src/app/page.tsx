@@ -1,5 +1,6 @@
 import { album, band, shows, single, socials, type Release } from "@/data/band";
 import { ReleaseStatus, formatDate } from "@/components/ReleaseStatus";
+import { zoetrope } from "@/data/zoetrope";
 
 const nav = [
   { href: "#music", label: "music" },
@@ -15,7 +16,7 @@ export default function Home() {
   return (
     <>
       <header className="site-header">
-        <a className="site-header__mark" href="#top" aria-label={`${band.name} home`}>
+        <a className="site-header__mark offset" href="#top" aria-label={`${band.name} home`}>
           {band.short}
         </a>
         <nav aria-label="sections">
@@ -29,20 +30,24 @@ export default function Home() {
 
       <main id="top">
         <section className="hero">
-          <h1 className="hero__name">{band.name}</h1>
+          {/* the same art the splash stops on, so the splash hands over to it */}
+          <h1 className="hero__logo">
+            {/* eslint-disable-next-line @next/next/no-img-element -- already cached by the splash; next/image would fetch a second copy */}
+            <img src={zoetrope.frames[zoetrope.landOn]} alt={band.name} width={900} height={621} />
+          </h1>
           <p className="hero__tagline">{band.tagline}</p>
         </section>
 
-        <section id="music" className="section">
-          <h2 className="section__label">music</h2>
+        <section id="music" className="section section--music">
+          <h2 className="section__label offset">music</h2>
           <div className="releases">
             <ReleaseCard release={single} />
             <ReleaseCard release={album} />
           </div>
         </section>
 
-        <section id="about" className="section">
-          <h2 className="section__label">about</h2>
+        <section id="about" className="section section--about">
+          <h2 className="section__label offset">about</h2>
           <div className="prose">
             {band.bio.map((p) => (
               <p key={p}>{p}</p>
@@ -50,8 +55,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="shows" className="section">
-          <h2 className="section__label">shows</h2>
+        <section id="shows" className="section section--shows">
+          <h2 className="section__label offset">shows</h2>
           {upcoming.length === 0 ? (
             <p className="muted">no dates yet.</p>
           ) : (
@@ -68,8 +73,8 @@ export default function Home() {
           )}
         </section>
 
-        <section id="contact" className="section">
-          <h2 className="section__label">contact</h2>
+        <section id="contact" className="section section--contact">
+          <h2 className="section__label offset">contact</h2>
           <p>
             <a href={`mailto:${band.email}`}>{band.email}</a>
           </p>

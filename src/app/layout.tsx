@@ -1,15 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { band } from "@/data/band";
 import { ZoetropeSplash } from "@/components/ZoetropeSplash";
 import { SPLASH_KEY } from "@/data/zoetrope";
-
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-display",
-});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,7 +25,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0e0c0b",
+  themeColor: "#000000",
 };
 
 // Runs before first paint: a returning visitor this session, or one who asked
@@ -40,7 +34,7 @@ const splashGate = `try{if(sessionStorage.getItem("${SPLASH_KEY}")||matchMedia("
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${inter.variable}`} suppressHydrationWarning>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: splashGate }} />
         <noscript>

@@ -1,27 +1,46 @@
 @import "tailwindcss";
 
 /*
-  Placeholder look: dark, warm, a little like a projector room. Every colour
-  is a token here so the real palette is one edit once the artwork lands.
+  Colours are sampled from the logo art (five colourways, each a main colour
+  with an offset "shadow" colour). Black matches the art's background.
+  Each section picks one colourway through --c (main) and --c2 (offset).
 */
 
 :root {
-  --bg: #0e0c0b;
-  --surface: #1a1715;
-  --line: #3a332e;
-  --text: #efe7dc;
-  --muted: #a69a8c;
-  --accent: #e0a458;
+  --bg: #000000;
+  --surface: #0c0c0f;
+  --line: #26262d;
+  --text: #f2f2f5;
+  --muted: #9d9daa;
+
+  --teal: #4cfad8;
+  --magenta: #fa50fa;
+  --orange: #fa9040;
+  --green: #64fa80;
+  --pink: #fa32b0;
+  --lime: #90fa60;
+  --purple: #7030fa; /* too dark for small text on black: offset use only */
+  --yellow: #fad858;
+  --red: #fa3840;
+
+  --c: var(--teal);
+  --c2: var(--magenta);
+
   /* must match BACKGROUND in scripts/build-zoetrope.mjs (frames are flattened onto it) */
   --splash-bg: #000000;
 
-  --font-display: "Fraunces", Georgia, serif;
   --font-body: "Inter", system-ui, sans-serif;
 
   --gutter: clamp(16px, 5vw, 64px);
   --max: 1100px;
 
   color-scheme: dark;
+}
+
+/* the logo's look: main colour, offset copy behind it */
+.offset {
+  color: var(--c);
+  text-shadow: 0.05em 0.045em 0 var(--c2);
 }
 
 * {
@@ -42,7 +61,7 @@ body {
 }
 
 a {
-  color: var(--accent);
+  color: var(--c);
   text-underline-offset: 3px;
 }
 
@@ -67,10 +86,9 @@ a {
 }
 
 .site-header__mark {
-  font-family: var(--font-display);
   font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--text);
+  font-weight: 700;
+  font-style: italic;
   text-decoration: none;
 }
 
@@ -87,7 +105,7 @@ a {
 }
 
 .site-header nav a:hover {
-  color: var(--text);
+  color: var(--teal);
 }
 
 /* ---------- sections ---------- */
@@ -97,23 +115,28 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  text-align: center;
   padding: 4rem var(--gutter);
   max-width: var(--max);
   margin: 0 auto;
 }
 
-.hero__name {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(2.6rem, 10vw, 7rem);
-  line-height: 1;
-  letter-spacing: -0.02em;
-  margin: 0 0 1rem;
+.hero__logo {
+  margin: 0 0 1.5rem;
+  width: min(100%, 720px);
+}
+
+.hero__logo img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .hero__tagline {
   color: var(--muted);
-  font-size: 1.15rem;
+  font-style: italic;
+  font-size: 1.2rem;
   max-width: 36ch;
   margin: 0;
 }
@@ -125,12 +148,16 @@ a {
   border-top: 1px solid var(--line);
 }
 
+.section--music { --c: var(--orange); --c2: var(--green); }
+.section--about { --c: var(--pink); --c2: var(--lime); }
+.section--shows { --c: var(--yellow); --c2: var(--purple); }
+.section--contact { --c: var(--red); --c2: var(--lime); }
+
 .section__label {
-  font-size: 0.8rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--muted);
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  font-style: italic;
   font-weight: 500;
+  line-height: 1;
   margin: 0 0 2rem;
 }
 
@@ -158,12 +185,17 @@ a {
   .release {
     grid-template-columns: 1fr;
   }
+
+  .release__cover {
+    max-width: 280px;
+  }
 }
 
 .release__cover {
   aspect-ratio: 1;
   background: var(--surface);
-  border: 1px solid var(--line);
+  border: 1px solid var(--c);
+  box-shadow: 4px 4px 0 var(--c2);
   display: grid;
   place-items: center;
   color: var(--muted);
@@ -188,8 +220,8 @@ a {
 }
 
 .release__title {
-  font-family: var(--font-display);
-  font-weight: 500;
+  font-style: italic;
+  font-weight: 600;
   font-size: 2rem;
   line-height: 1.1;
   margin: 0.25rem 0 0.5rem;
@@ -205,8 +237,8 @@ a {
 }
 
 .status--out {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--c);
+  color: var(--c);
 }
 
 .links {
@@ -252,6 +284,13 @@ a {
 .not-found {
   min-height: 80vh;
   border-top: 0;
+}
+
+.not-found h1 {
+  font-size: clamp(2.4rem, 8vw, 5rem);
+  font-style: italic;
+  font-weight: 500;
+  margin: 0 0 1rem;
 }
 
 /* ---------- zoetrope splash ---------- */
@@ -331,5 +370,6 @@ html:not([data-splash]) body {
 }
 
 .splash__skip:hover {
-  color: var(--text);
+  color: var(--teal);
+  border-color: var(--teal);
 }
