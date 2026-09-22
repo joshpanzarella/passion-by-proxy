@@ -2,7 +2,9 @@ import { band, single } from "@/data/band";
 import { HeroSingle } from "@/components/HeroSingle";
 import { HeroLogo } from "@/components/HeroLogo";
 import { ScrollEffects } from "@/components/ScrollEffects";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
+import { ZoetropeSplash } from "@/components/ZoetropeSplash";
 import { structuredDataJson } from "@/lib/structuredData";
 import { Ticker } from "@/components/Ticker";
 import { Banner } from "@/components/Banner";
@@ -13,34 +15,15 @@ import { Merch } from "@/components/sections/Merch";
 import { About } from "@/components/sections/About";
 import { Contact } from "@/components/sections/Contact";
 
-const nav = [
-  { href: "#music", label: "music" },
-  { href: "#videos", label: "videos" },
-  { href: "#shows", label: "shows" },
-  { href: "#merch", label: "merch" },
-  { href: "#about", label: "about" },
-  { href: "#contact", label: "contact" },
-];
-
 export default function Home() {
   return (
     <>
+      {/* the splash plays on the home page only: a link straight to a lyrics
+          page opens straight onto the lyrics */}
+      <ZoetropeSplash />
       <ScrollEffects />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: structuredDataJson() }} />
-      <header className="site-header">
-        <a className="site-header__mark" href="#top" aria-label={`${band.name}, back to top`}>
-          {/* eslint-disable-next-line @next/next/no-img-element -- 8 KB logo */}
-          <img src="/media/logo-pill.webp" alt="" width={174} height={96} />
-        </a>
-        <nav aria-label="sections">
-          {nav.map((item) => (
-            <a key={item.href} href={item.href}>
-              {item.label}
-            </a>
-          ))}
-        </nav>
-        <ThemeToggle />
-      </header>
+      <SiteHeader home />
 
       <main>
         <section id="top" className="hero stage-dark">
@@ -68,14 +51,7 @@ export default function Home() {
         <Contact />
       </main>
 
-      <footer className="site-footer">
-        {/* eslint-disable-next-line @next/next/no-img-element -- lettering art */}
-        <img className="site-footer__wordmark" src="/media/wordmark-glitter.webp" alt={band.name} width={1100} height={142} loading="lazy" />
-        <span>
-          © {new Date().getFullYear()} {band.name}
-        </span>
-        <a href="#top">back to top ↑</a>
-      </footer>
+      <SiteFooter home />
     </>
   );
 }

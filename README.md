@@ -51,6 +51,22 @@ own, in the visitor's browser, so no rebuild is needed after a gig.
 Visitors with reduced motion turned on get none of the motion; everything
 is simply shown. Without JavaScript everything is shown too.
 
+## Lyrics
+
+`/lyrics` lists every song by release; each song has its own page at
+`/lyrics/<slug>`. Songs live in `src/data/lyrics.ts` as plain text:
+
+- a blank line between verses
+- `[chorus]`, `[bridge]`, `[outro]`... on its own line names the part below
+  it (chorus and bridge get a side rule; any label is shown as written)
+- a verse needs no label
+
+The page dims every part but the one in the middle of the screen (the
+"reading light") and, on wide screens, shows a film strip of the song's
+parts to jump between. Both switch off for reduced motion. Pages, the
+sitemap and search listings update from the file by themselves. The splash
+plays on the home page only.
+
 ## Splash screen
 
 A zoetrope made from the six logo colourways. The drum spins up, runs at

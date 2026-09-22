@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { band } from "@/data/band";
-import { ZoetropeSplash } from "@/components/ZoetropeSplash";
 import { SPLASH_KEY } from "@/data/zoetrope";
 import { THEME_KEY } from "@/lib/theme";
 
@@ -45,7 +44,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </noscript>
       </head>
       <body>
-        <ZoetropeSplash />
         {children}
       </body>
     </html>

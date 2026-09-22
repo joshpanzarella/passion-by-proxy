@@ -1,4 +1,5 @@
 import { album, band, isLive, single, type Link, type Release } from "@/data/band";
+import NextLink from "next/link";
 import { ReleaseStatus } from "@/components/ReleaseStatus";
 import { Section } from "./Section";
 
@@ -38,6 +39,9 @@ function Spotlight({ release }: { release: Release }) {
         <ReleaseStatus release={release} />
         <p>{release.blurb}</p>
         <Links links={release.links} />
+        <p className="release__lyrics">
+          <NextLink href="/lyrics">read the lyrics →</NextLink>
+        </p>
       </div>
     </article>
   );

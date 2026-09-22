@@ -38,6 +38,13 @@ static export (`out/`) and hosted on Cloudflare Pages from `main`.
   sits on black lives inside `.stage-dark` (the hero, the album panel),
   which keeps the dark tokens in both themes. A constant a server file
   needs must not live in a `"use client"` file (it arrives as a stub).
+- **Lyrics are data** (`src/data/lyrics.ts`, plain text with `[label]`
+  lines); pages are generated per song. Reading comes first: the column
+  stays ~40ch, nothing animates behind the words, and the reading light
+  (dimming the other stanzas) must stay subtle and off for reduced motion.
+- **The header and footer are shared** (`SiteHeader`, `SiteFooter`); the
+  home page passes `home` so its section links stay plain anchors. The
+  splash is mounted by the home page only.
 - **Every nav tab has its own colourway**, main and offset both unique and
   unlike the top of the page's teal/magenta (the header takes the colours
   of the section in view). A new section needs a new pair.
