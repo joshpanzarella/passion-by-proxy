@@ -108,6 +108,22 @@ export const album: Release = {
   links: [], // pre-save link goes here
 };
 
+const tiktokProfile = "https://www.tiktok.com/@passionproxy";
+
+// A TikTok featured at the top of the videos section: its player beside
+// "watch on TikTok" and "follow" buttons. `id` is the long number in the
+// video's link (tiktok.com/@passionproxy/video/THIS_NUMBER). Empty id hides
+// the feature.
+export const tiktok = {
+  handle: "passionproxy",
+  profile: tiktokProfile,
+  featured: {
+    id: "7684010395413105933",
+    heading: "on TikTok right now",
+    caption: "", // e.g. "300k views and counting"
+  },
+};
+
 export type Video = {
   title: string;
   // The id from the YouTube URL: youtube.com/watch?v=THIS_PART
@@ -170,5 +186,5 @@ export const socials: Link[] = [
   { label: "Bandcamp", href: "https://passion-by-proxy.bandcamp.com/" },
   { label: "Spotify", href: spotifyArtist },
   { label: "YouTube", href: "#" },
-  { label: "TikTok", href: "#" },
+  { label: "TikTok", href: tiktokProfile },
 ];

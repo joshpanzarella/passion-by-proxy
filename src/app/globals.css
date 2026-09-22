@@ -625,6 +625,64 @@ a {
 
 /* ---------- videos ---------- */
 
+/* the featured TikTok: a phone-shaped player beside its buttons */
+.tiktok {
+  display: grid;
+  grid-template-columns: minmax(0, 325px) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+  margin-bottom: clamp(3rem, 8vw, 5rem);
+}
+
+.tiktok__frame {
+  width: 100%;
+  max-width: 325px;
+  /* TikTok's player is 9:16 plus its caption and sound bar */
+  aspect-ratio: 9 / 18;
+  background: var(--surface);
+  border: 1px solid var(--c);
+  box-shadow: 5px 5px 0 var(--c2);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tiktok__player,
+.tiktok__player iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.tiktok__title {
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1.05;
+  margin: 0.5rem 0 1rem;
+}
+
+@media (max-width: 640px) {
+  .tiktok {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .tiktok .links {
+    justify-content: center;
+  }
+
+  .tiktok__frame {
+    max-width: 270px;
+  }
+
+  /* heading and buttons first, so they show without scrolling past the player */
+  .tiktok__body {
+    order: -1;
+  }
+}
+
 .videos {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
