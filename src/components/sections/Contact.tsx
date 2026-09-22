@@ -1,4 +1,5 @@
 import { band, isLive, socials } from "@/data/band";
+import { EmailSignup } from "@/components/EmailSignup";
 import { Section, stagger } from "./Section";
 
 export function Contact() {
@@ -21,7 +22,9 @@ export function Contact() {
       <div className="contact">
         <div className="contact__list" data-reveal="">
           <p className="contact__lede">new music, shows and merch drops, first.</p>
-          {band.newsletterHref ? (
+          {band.kitFormId ? (
+            <EmailSignup formId={band.kitFormId} />
+          ) : band.newsletterHref ? (
             <a className="button button--big" href={band.newsletterHref} rel="noopener noreferrer" target="_blank">
               join the mailing list
             </a>

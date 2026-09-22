@@ -907,6 +907,88 @@ a {
   margin: 0 0 1.25rem;
 }
 
+/* mailing-list sign-up */
+.signup {
+  display: grid;
+  gap: 0.5rem;
+  max-width: 28rem;
+}
+
+.signup__label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+}
+
+.signup__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.signup__input {
+  flex: 1 1 14rem;
+  min-width: 0;
+  font: inherit;
+  font-size: 1rem; /* 16px or more: iOS Safari zooms into smaller inputs */
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.signup__input::placeholder {
+  color: var(--muted);
+}
+
+.signup__input:focus-visible {
+  outline: none;
+  border-color: var(--c);
+  box-shadow: 3px 3px 0 var(--c2);
+}
+
+.signup__button {
+  font: inherit;
+  font-size: 1rem;
+  padding: 0.6rem 1.4rem;
+  background: none;
+  cursor: pointer;
+}
+
+.signup__button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* off-screen, not display:none, so bots still find and fill it */
+.signup__trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.signup__error {
+  margin: 0;
+  color: var(--c);
+}
+
+.signup__fine {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.signup__done {
+  margin: 0;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--c);
+}
+
 .contact__emails {
   margin: 0;
   display: grid;

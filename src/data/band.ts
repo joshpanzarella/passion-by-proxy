@@ -23,8 +23,12 @@ export const band = {
   email: "passionbyproxyband@gmail.com",
   bookingEmail: "", // falls back to `email` when empty
   pressEmail: "",
-  // Sign-up page on your mailing list service (Mailchimp, Buttondown,
-  // Bandcamp follow, Laylo...). The button hides until this is set.
+  // Mailing list on Kit: the form's id, the number in its embed code
+  // (app.kit.com/forms/THIS_NUMBER/subscriptions). Shows a sign-up box in
+  // "stay in touch". Empty hides it.
+  kitFormId: "",
+  // Or a sign-up page on another service: shows a button instead. Used only
+  // when kitFormId is empty.
   newsletterHref: "",
   // Spotify artist id (open.spotify.com/artist/THIS_PART). Drives the
   // player in the music section.
