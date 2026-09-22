@@ -1,0 +1,13 @@
+// Cloudflare settings, for when the site is deployed as a Worker (the
+// dashboard's default for new projects). It serves the static build in
+// out/ and nothing else; there is no server code. A Pages project ignores
+// this file and uses its dashboard settings (build `npm run build`,
+// output `out`).
+{
+  "name": "passion-by-proxy",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}
