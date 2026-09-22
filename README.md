@@ -23,16 +23,28 @@ npm run preview  # serve the production build
 | Page sections | `src/app/page.tsx` |
 | Colours and fonts (tokens at the top) | `src/app/globals.css` |
 | Cover art, audio | `public/media/` |
-| Splash frame images | `public/zoetrope/` |
+| Splash frame images (built by `npm run zoetrope`) | `public/zoetrope/` |
 
 ## Splash screen
 
-Plays once per browser session, then fades. Click, Escape, Enter, Space or
-the skip button end it early. Visitors with reduced motion turned on never
-see it. While `zoetrope.frames` is empty it plays a drawn placeholder.
+A zoetrope made from the five logo colourways. The drum spins up, runs at
+full speed with its slits showing, slows, and stops on the teal logo; then
+the site fades in. About 3.5 s. It waits for the frames to download first
+(at most 2.5 s).
 
-To test it again locally, clear session storage or open a new tab in a
-private window.
+- Plays once per browser session. Click, Escape, Enter, Space or the skip
+  button end it early. Visitors with reduced motion turned on never see it.
+- Timings, frame order and the frame it stops on: `src/data/zoetrope.ts`.
+- To rebuild the frames from new art (originals stay out of the repo):
+
+  ```bash
+  npm run zoetrope -- teal.png orange.png pink.png purple.png red.png
+  ```
+
+  Frames are flattened onto black, because the art's semi-transparent fill
+  costs 5x the file size with transparency kept. The splash background
+  (`--splash-bg` in `globals.css`) must stay the same black.
+- To see it again locally, open a new private window.
 
 ## Release dates
 
