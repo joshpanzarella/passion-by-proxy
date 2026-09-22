@@ -547,6 +547,21 @@ a {
 }
 
 
+/* the official cover: framed like U&I's, in the album's gold and blue */
+.album__cover {
+  order: 2;
+  aspect-ratio: 1;
+  border: 1px solid var(--c);
+  box-shadow: 8px 8px 0 var(--c2);
+  overflow: hidden;
+}
+
+.album__cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .album__art {
   order: 2;
   overflow: hidden;
@@ -575,7 +590,8 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .album__art {
+  .album__art,
+  .album__cover {
     order: 0;
     max-width: 420px;
   }

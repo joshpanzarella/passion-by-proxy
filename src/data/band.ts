@@ -110,6 +110,9 @@ export const album: Release = {
   kind: "album",
   title: "Alliterate",
   date: "2026-11-20",
+  cover: "/media/alliterate-cover.webp", // the official cover
+  // the bottles on their own: shown by the album feature only if there is no
+  // cover; kept for other uses
   art: "/media/alliterate-bottles.webp",
   blurb: "Placeholder: a sentence about Alliterate. Features “Zoe’s Zoetrope.”",
   links: [], // pre-save link goes here

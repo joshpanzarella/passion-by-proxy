@@ -50,7 +50,17 @@ function Spotlight({ release }: { release: Release }) {
 function AlbumFeature({ release }: { release: Release }) {
   return (
     <article className="album stage-dark">
-      {release.art && (
+      {release.cover ? (
+        <div className="album__cover" data-reveal="">
+          {/* eslint-disable-next-line @next/next/no-img-element -- pre-sized webp from npm run media */}
+          <img
+            src={release.cover}
+            alt={`${release.title} cover: two glass bottles, one red and one blue, lit gold from behind, with the band's name arched above and the title below`}
+            width={1000}
+            height={1000}
+          />
+        </div>
+      ) : release.art && (
         <div className="album__art" data-reveal="">
           {/* eslint-disable-next-line @next/next/no-img-element -- pre-sized webp from npm run media */}
           <img src={release.art} alt="Two glass bottles, one red and one blue, lit gold from behind" width={975} height={1220} />
