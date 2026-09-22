@@ -1,7 +1,8 @@
 # Passion by Proxy
 
-Band site. Same stack as shapetaker-site: Next.js App Router, TypeScript,
-Tailwind v4, built for Cloudflare.
+Band site for Passion by Proxy (also written Passion-by-Proxy, PbP).
+Next.js App Router, TypeScript, Tailwind v4. Every page is static: the build
+writes plain files to `out/`, which Cloudflare serves as they are.
 
 ## Commands
 
@@ -10,8 +11,10 @@ npm install
 npm run dev      # http://localhost:3000
 npm run lint
 npm run build
-npm run preview  # serve the production build
 ```
+
+To look at the finished build, serve `out/` with any static server, for
+example `npx serve out`.
 
 ## Where things live
 
@@ -93,3 +96,19 @@ now" in the visitor's own time zone. The album has no date yet, so it shows
 `dateLabel` ("November 2026"); fill in `date` once it is set.
 
 Past shows drop off at build time, so rebuild after a show date passes.
+
+## Deploying on Cloudflare
+
+One-time setup, in the Cloudflare dashboard:
+
+1. **Workers & Pages → Create → Pages → Connect to Git**, and pick
+   `joshpanzarella/passion-by-proxy`.
+2. Production branch: `main`.
+3. Framework preset: **Next.js (Static HTML Export)**. Or set it by hand:
+   build command `npm run build`, build output directory `out`.
+4. **Save and Deploy.** Every push to `main` then redeploys by itself, and
+   every other branch gets its own preview link.
+5. **Custom domains → Set up a domain** to point the band's domain at it.
+   Then set `band.url` in `src/data/band.ts` to that address: the link
+   preview image and the sitemap are built from it.
+

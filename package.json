@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "preview": "next start",
     "lint": "eslint .",
     "zoetrope": "node scripts/build-zoetrope.mjs",
     "media": "node scripts/build-media.mjs"
