@@ -6,8 +6,8 @@ export function About() {
     <Section id="about" title="about">
       <div className={band.photo ? "about about--photo" : "about"}>
         {band.photo && (
-          // eslint-disable-next-line @next/next/no-img-element -- swap for next/image if the photo is large
-          <img className="about__photo" src={band.photo} alt={band.name} data-reveal="" />
+          // eslint-disable-next-line @next/next/no-img-element -- pre-sized webp from npm run media
+          <img className="about__photo" src={band.photo} alt={band.photoAlt || band.name} width={864} height={576} loading="lazy" data-reveal="" />
         )}
         <div className="prose" data-reveal="">
           {band.bio.map((p) => (

@@ -3,7 +3,7 @@
 //   npm run media -- cover=U&I.jpg wordmark=U&I-type.png bottles=bottles.png \
 //                    banner=banner.jpg logo=logo-flat.png \
 //                    texture-teal=… texture-gold=… texture-red=… \
-//                    glitter=glitter-type.png arc=arc-type.png
+//                    glitter=glitter-type.png arc=arc-type.png photo=band.jpg
 //
 // Pass only the ones that changed. Originals (up to 17 MB) stay out of the
 // repo. Art with a black background is flattened onto black, the page's own
@@ -48,6 +48,9 @@ const jobs = {
   glitter: (src) => sharp(src).trim().resize({ width: 1100 }).webp({ quality: 85 }).toFile(out("wordmark-glitter.webp")),
   // arched "passion -by- proxy" (404 page): transparent, trimmed
   arc: (src) => sharp(src).trim().resize({ width: 1000 }).webp({ quality: 85 }).toFile(out("wordmark-arc.webp")),
+  // band photo (about section): never enlarged, at most 1600 px wide
+  photo: (src) =>
+    sharp(src).resize({ width: 1600, withoutEnlargement: true }).webp({ quality: 82 }).toFile(out("band-photo.webp")),
   // flat logo: just the pill (top part of the square) for the header
   logo: async (src) => {
     const { width, height } = await sharp(src).metadata();

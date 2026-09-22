@@ -12,8 +12,11 @@ export const band = {
     "Placeholder bio. Who is in the band, where you are from, what it sounds like.",
     "Second paragraph if you want one. Delete this line if not.",
   ],
-  // Band photo for the about section, path under /public. Optional.
-  photo: "",
+  // Band photo for the about section, built by `npm run media -- photo=…`.
+  // Empty hides it. photoAlt describes it for screen readers.
+  photo: "/media/band-photo.webp",
+  photoAlt:
+    "The band playing live: three members on guitar and bass, the drummer behind them, and a Philadelphia city flag hanging on the wall",
   members: [
     // { name: "Name", role: "guitar, vocals" },
   ] as { name: string; role: string }[],

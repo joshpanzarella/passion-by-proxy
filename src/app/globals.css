@@ -866,7 +866,8 @@ a {
 
 .about--photo {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  /* the photo is a wide shot: it gets the wider column */
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
   gap: 2.5rem;
   align-items: start;
 }
@@ -878,7 +879,9 @@ a {
 }
 
 .about__photo {
+  display: block;
   width: 100%;
+  height: auto;
   border: 1px solid var(--c);
   box-shadow: 6px 6px 0 var(--c2);
 }
