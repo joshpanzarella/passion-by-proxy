@@ -67,12 +67,8 @@ export default function Home() {
       </main>
 
       <footer className="site-footer">
-        {/* the long lettering, or on a phone the same lettering stacked, so
-            it stays big enough to read (a phone never downloads the other) */}
-        <picture className="site-footer__wordmark">
-          <source media="(max-width: 640px)" srcSet="/media/wordmark-stacked.webp" width={640} height={648} />
-          <img src="/media/wordmark-glitter.webp" alt={band.name} width={1100} height={142} loading="lazy" />
-        </picture>
+        {/* eslint-disable-next-line @next/next/no-img-element -- lettering art */}
+        <img className="site-footer__wordmark" src="/media/wordmark-glitter.webp" alt={band.name} width={1100} height={142} loading="lazy" />
         <span>
           © {new Date().getFullYear()} {band.name}
         </span>
