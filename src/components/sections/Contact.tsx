@@ -21,7 +21,7 @@ export function Contact() {
     <Section id="contact" title="message in a bottle">
       <div className="contact">
         <div className="contact__list" data-reveal="">
-          <p className="contact__lede">throw yours in. we&apos;ll write back when there&apos;s something new.</p>
+          <p className="contact__lede">throw yours in. we&apos;ll write soon.</p>
           {band.kitFormId ? (
             <EmailSignup formId={band.kitFormId} />
           ) : band.newsletterHref ? (
