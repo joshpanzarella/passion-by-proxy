@@ -74,7 +74,7 @@ function AlbumFeature({ release }: { release: Release }) {
         </div>
       )}
       <div className="album__body" data-reveal="" style={{ "--i": 1 } as React.CSSProperties}>
-        <p className="release__kind">the {release.kind}</p>
+        <p className="release__kind">new {release.kind}</p>
         <h3 className="album__title offset">{release.title}</h3>
         <ReleaseStatus release={release} />
         <p>{release.blurb}</p>
