@@ -2,6 +2,7 @@ import { band, single } from "@/data/band";
 import { HeroSingle } from "@/components/HeroSingle";
 import { HeroLogo } from "@/components/HeroLogo";
 import { ScrollEffects } from "@/components/ScrollEffects";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Ticker } from "@/components/Ticker";
 import { Banner } from "@/components/Banner";
 import { Music } from "@/components/sections/Music";
@@ -36,10 +37,11 @@ export default function Home() {
             </a>
           ))}
         </nav>
+        <ThemeToggle />
       </header>
 
       <main>
-        <section id="top" className="hero">
+        <section id="top" className="hero stage-dark">
           <div className="hero__inner">
             <h1 className="hero__logo">
               <HeroLogo alt={band.name} />

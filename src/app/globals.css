@@ -1,12 +1,22 @@
 @import "tailwindcss";
 
 /*
-  Colours are sampled from the logo art (five colourways, each a main colour
-  with an offset "shadow" colour). Black matches the art's background.
+  Colours are sampled from the band's art (the logo's five colourways, each a
+  main colour with an offset "shadow" colour; U&I; the Alliterate bottles).
   Each section picks one colourway through --c (main) and --c2 (offset).
+
+  Two themes. Dark is the art's own world (black matches the art's
+  background). Light follows the visitor's system setting or the header
+  switch (<html data-theme>, set before first paint in layout.tsx). Its
+  colours are darker cuts of the same hues, each at least 4.5:1 on the light
+  background, taking the lead from the band's flat logo on white.
+
+  .stage-dark keeps a block dark in both themes: art that sits on black
+  (the hero's logo and video, the bottles) stays on black.
 */
 
-:root {
+:root,
+.stage-dark {
   --bg: #000000;
   --surface: #0c0c0f;
   --line: #26262d;
@@ -30,10 +40,68 @@
   --gold: #f2c65e;
   --bottle-blue: #3a6cff;
 
+  /* redeclared here so a dark block inside the light theme resolves them
+     against the dark colours, not the inherited light ones */
   --c: var(--teal);
   --c2: var(--magenta);
 
-  /* must match BACKGROUND in scripts/build-zoetrope.mjs (frames are flattened onto it) */
+  color-scheme: dark;
+  color: var(--text);
+}
+
+:root[data-theme="light"] {
+  --bg: #fbfaf8;
+  --surface: #f1efeb;
+  --line: #e2dfd9;
+  --text: #141418;
+  --muted: #5c5c68;
+
+  --teal: #00798a;
+  --magenta: #b000b0;
+  --orange: #b84e00;
+  --green: #1b7f36;
+  --pink: #c0137b;
+  --lime: #3f7f12;
+  --purple: #6a28e8;
+  --yellow: #8a6a00; /* yellow cannot be read on white: an amber cut of it */
+  --red: #c81e28;
+  --ui-blue: #1f59d0;
+  --ui-red: #d01414;
+  --gold: #8f6a08;
+  --bottle-blue: #2b5ad8;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #fbfaf8;
+    --surface: #f1efeb;
+    --line: #e2dfd9;
+    --text: #141418;
+    --muted: #5c5c68;
+
+    --teal: #00798a;
+    --magenta: #b000b0;
+    --orange: #b84e00;
+    --green: #1b7f36;
+    --pink: #c0137b;
+    --lime: #3f7f12;
+    --purple: #6a28e8;
+    --yellow: #8a6a00;
+    --red: #c81e28;
+    --ui-blue: #1f59d0;
+    --ui-red: #d01414;
+    --gold: #8f6a08;
+    --bottle-blue: #2b5ad8;
+
+    color-scheme: light;
+  }
+}
+
+:root {
+  /* must match BACKGROUND in scripts/build-zoetrope.mjs (frames are
+     flattened onto it); black in both themes */
   --splash-bg: #000000;
 
   --font-body: "Inter", system-ui, sans-serif;
@@ -41,8 +109,10 @@
   --gutter: clamp(16px, 5vw, 64px);
   --max: 1100px;
   --header-h: 60px;
+}
 
-  color-scheme: dark;
+.stage-dark {
+  background: var(--bg);
 }
 
 /* One colourway per nav tab, every main and every offset different, so the
@@ -156,7 +226,7 @@ a {
   padding: 0 var(--gutter);
   /* solid, not blurred: a backdrop blur over the playing video made iOS
      Safari redraw the header on every scroll frame */
-  background: rgb(0 0 0 / 0.92);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
   border-bottom: 1px solid var(--line);
   transition: border-color 400ms ease;
 }
@@ -175,6 +245,8 @@ a {
 .site-header nav {
   display: flex;
   gap: 1.1rem;
+  min-width: 0;
+  margin-left: auto;
   overflow-x: auto;
   scrollbar-width: none;
   /* fade the cut-off link on a phone */
@@ -203,6 +275,27 @@ a {
 
 .site-header nav a[data-active] {
   border-bottom-color: var(--c2);
+}
+
+.theme-toggle {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 200ms ease, border-color 200ms ease;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  color: var(--c);
+  border-color: var(--c);
 }
 
 /* ---------- hero ---------- */
@@ -467,6 +560,19 @@ a {
   gap: clamp(1.5rem, 4vw, 3.5rem);
   align-items: center;
   margin-top: clamp(4rem, 10vw, 7rem);
+}
+
+/* in the light theme the album is a dark panel, so the bottles still glow */
+:root[data-theme="light"] .album {
+  padding: clamp(1.25rem, 4vw, 3rem);
+  border-radius: 16px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .album {
+    padding: clamp(1.25rem, 4vw, 3rem);
+    border-radius: 16px;
+  }
 }
 
 .album__art {

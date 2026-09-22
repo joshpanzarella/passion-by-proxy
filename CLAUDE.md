@@ -29,6 +29,14 @@ static export (`out/`) and hosted on Cloudflare Pages from `main`.
 - **Colours are sampled from the band's art** and live as tokens at the top
   of `globals.css`; each section picks a colourway through `--c`/`--c2`.
   New art: sample it, don't guess.
+- **Two themes, light and dark.** Dark is the art's world; light follows
+  the device or the header switch (`<html data-theme>`, applied before
+  paint from localStorage `pbp-theme`, key in `src/lib/theme.ts`). Light
+  colours are darker cuts of the same hues, each 4.5:1 or better on the
+  light background: add a light value for every new colour token. Art that
+  sits on black lives inside `.stage-dark` (the hero, the album panel),
+  which keeps the dark tokens in both themes. A constant a server file
+  needs must not live in a `"use client"` file (it arrives as a stub).
 - **Every nav tab has its own colourway**, main and offset both unique and
   unlike the top of the page's teal/magenta (the header takes the colours
   of the section in view). A new section needs a new pair.

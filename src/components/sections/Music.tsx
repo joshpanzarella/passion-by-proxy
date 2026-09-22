@@ -45,7 +45,7 @@ function Spotlight({ release }: { release: Release }) {
 
 function AlbumFeature({ release }: { release: Release }) {
   return (
-    <article className="album">
+    <article className="album stage-dark">
       {release.art && (
         <div className="album__art" data-reveal="">
           {/* eslint-disable-next-line @next/next/no-img-element -- pre-sized webp from npm run media */}
