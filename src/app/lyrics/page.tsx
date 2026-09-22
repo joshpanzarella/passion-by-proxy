@@ -28,9 +28,10 @@ export default function LyricsIndex() {
                 {release.title}
               </h2>
               <ol className="lyrics-index__songs">
-                {songs.map((s) => (
+                {songs.map((s, i) => (
                   <li key={s.slug}>
-                    <span className="lyrics-index__track">{String(s.track).padStart(2, "0")}</span>
+                    {/* its place on this release: U&I is 02 on the album, 01 as the single */}
+                    <span className="lyrics-index__track">{String(s.release === release ? s.track : i + 1).padStart(2, "0")}</span>
                     <Link href={`/lyrics/${s.slug}`}>{s.title}</Link>
                   </li>
                 ))}

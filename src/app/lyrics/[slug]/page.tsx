@@ -30,7 +30,9 @@ export default async function SongPage({ params }: Props) {
   const song = songs.find((s) => s.slug === slug);
   if (!song) notFound();
   const { prev, next } = neighbours(song.slug);
-  const listen = song.release.listen ?? song.release.links.find(isLive)?.href;
+  // the song's own release first, then any other it is on (U&I: the album
+  // has no link yet, the single does)
+  const listen = [song.release, ...(song.alsoOn ?? [])].map((r) => r.listen ?? r.links.find(isLive)?.href).find(Boolean);
 
   return (
     <>
@@ -42,6 +44,7 @@ export default async function SongPage({ params }: Props) {
         <header className="lyrics__head">
           <p className="release__kind">
             {song.release.kind === "album" ? `track ${song.track} · ${song.release.title}` : `${song.release.kind} · ${song.release.title}`}
+            {song.alsoOn?.map((r) => ` · also the ${r.kind}`).join("")}
           </p>
           <h1 className="lyrics__title offset">{song.title}</h1>
           {song.credits && <p className="lyrics__credits">{song.credits}</p>}

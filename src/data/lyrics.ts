@@ -6,23 +6,60 @@ import { album, single, type Release } from "@/data/band";
 //    [verse], [chorus], [bridge], [pre-chorus], [outro]... Chorus and bridge
 //    get their own look; any label is shown as written.
 //  - a verse with no label is just a verse
-// Songs appear on /lyrics under their release, in `track` order.
+// Songs appear on /lyrics under their release (and any `alsoOn`), in
+// `track` order. Placeholder lorem ipsum until the real words come in.
 
 export type Song = {
   slug: string; // the page address: /lyrics/<slug>
   title: string;
-  release: Release;
-  track: number;
+  release: Release; // the album (or single) the song is a track of
+  track: number; // its place on that release
+  // other releases it also appears on, e.g. a single that is also an album
+  // track: it is listed under each, with one page
+  alsoOn?: Release[];
   credits?: string; // "words and music by …"
   lyrics: string;
 };
 
 export const songs: Song[] = [
   {
+    slug: "proxy-music",
+    title: "Proxy Music",
+    release: album,
+    track: 1,
+    lyrics: `
+Lorem dolore nostrud enim laboris nostrud
+Exercitation fugiat pariatur cupidatat
+Adipiscing tempor aliquip dolor ad
+Dolor ad velit aute ut
+
+Ut nisi sed ea dolor aute sunt
+Sed aliquip consequat labore
+Quis exercitation magna amet incididunt consequat
+Irure velit sit quis magna et amet
+
+[chorus]
+Nulla est nisi consectetur id nostrud dolor
+Non laborum do sed proident
+Velit do lorem sint laborum
+
+[bridge]
+Est ullamco esse officia commodo laboris
+Duis aliquip adipiscing fugiat nisi
+Ipsum do laboris deserunt nostrud voluptate
+
+[chorus]
+Nulla est nisi consectetur id nostrud dolor
+Non laborum do sed proident
+Velit do lorem sint laborum
+`,
+  },
+  {
     slug: "u-and-i",
     title: "U&I",
-    release: single,
-    track: 1,
+    release: album,
+    track: 2,
+    alsoOn: [single], // the single too
     credits: "words and music by Passion by Proxy",
     lyrics: `
 [verse]
@@ -67,36 +104,126 @@ you and I, you and I
 `,
   },
   {
-    slug: "track-one",
-    title: "Track One",
+    slug: "one-die-snake-eyes",
+    title: "One Die Snake Eyes",
     release: album,
-    track: 1,
+    track: 3,
     lyrics: `
-Nemo enim ipsam voluptatem quia voluptas
-sit aspernatur aut odit aut fugit
-sed quia consequuntur magni dolores
-eos qui ratione voluptatem sequi nesciunt
+Non consequat commodo ullamco voluptate anim ea
+Incididunt deserunt ipsum exercitation id reprehenderit
+Do velit nulla cupidatat ad reprehenderit minim
+Nulla dolor consectetur nulla duis ullamco
+
+Sed qui laborum reprehenderit ipsum
+Culpa sint ut quis reprehenderit laboris excepteur
+Incididunt elit qui cillum cupidatat consectetur
+Dolor veniam ex aute
 
 [chorus]
-Neque porro quisquam est
-qui dolorem ipsum quia dolor sit amet
-consectetur, adipisci velit
+Irure quis ullamco minim sed anim
+Irure lorem qui quis incididunt
+Dolore nisi incididunt quis enim
 
-Ut enim ad minima veniam, quis nostrum
-exercitationem ullam corporis suscipit
-laboriosam, nisi ut aliquid ex ea
+Ea incididunt nostrud sint veniam incididunt
+Incididunt irure laboris amet velit id ad
+Elit adipiscing velit ipsum
+Ipsum irure aute consectetur commodo
 
 [chorus]
-Neque porro quisquam est
-qui dolorem ipsum quia dolor sit amet
-consectetur, adipisci velit
+Irure quis ullamco minim sed anim
+Irure lorem qui quis incididunt
+Dolore nisi incididunt quis enim
+
+[bridge]
+Voluptate occaecat esse labore
+Eiusmod mollit do sit consequat
+Velit magna dolor cillum ullamco anim
+
+[chorus]
+Irure quis ullamco minim sed anim
+Irure lorem qui quis incididunt
+Dolore nisi incididunt quis enim
+`,
+  },
+  {
+    slug: "sick-stability",
+    title: "Sick Stability",
+    release: album,
+    track: 4,
+    lyrics: `
+Do occaecat id esse culpa pariatur
+Laborum veniam aliqua est voluptate elit
+Fugiat lorem nulla ad ad nisi magna
+Commodo proident eiusmod non
+
+Enim aute cillum consectetur laborum est
+Deserunt dolore exercitation in officia qui do
+Labore aute occaecat sed cupidatat anim labore
+Proident fugiat qui dolor deserunt dolore
+
+[chorus]
+Sint sint nulla labore
+Labore occaecat laboris aliqua
+Qui cillum lorem aliquip nisi non
+
+[bridge]
+Proident dolor anim consectetur ex reprehenderit
+Fugiat deserunt laborum veniam voluptate ut esse
+Pariatur sit cillum cillum dolore
+
+[chorus]
+Sint sint nulla labore
+Labore occaecat laboris aliqua
+Qui cillum lorem aliquip nisi non
+`,
+  },
+  {
+    slug: "the-runner-up",
+    title: "The Runner Up",
+    release: album,
+    track: 5,
+    lyrics: `
+Aliquip consectetur id sint
+Minim ex cupidatat laborum aliqua irure quis
+Culpa exercitation incididunt ex commodo
+Elit commodo ullamco ullamco amet anim sit
+
+Nisi minim veniam id qui
+Et aliquip et velit in sint
+Minim id aliquip laborum nisi cillum dolor
+Cupidatat minim adipiscing consequat
+
+[chorus]
+Esse voluptate ullamco voluptate
+Ad exercitation cillum ad pariatur ut
+Anim ut deserunt dolor voluptate amet
+
+Fugiat est ut voluptate reprehenderit
+Id magna occaecat veniam excepteur ex adipiscing
+Lorem ut ullamco enim cillum reprehenderit
+Officia officia pariatur esse commodo do
+
+[chorus]
+Esse voluptate ullamco voluptate
+Ad exercitation cillum ad pariatur ut
+Anim ut deserunt dolor voluptate amet
+
+[bridge]
+Dolore elit veniam sunt tempor minim
+Qui veniam occaecat occaecat nisi proident eiusmod
+Ad voluptate duis exercitation proident
+
+[chorus]
+Esse voluptate ullamco voluptate
+Ad exercitation cillum ad pariatur ut
+Anim ut deserunt dolor voluptate amet
 `,
   },
   {
     slug: "zoes-zoetrope",
     title: "Zoe’s Zoetrope",
     release: album,
-    track: 2,
+    track: 6,
     credits: "words and music by Passion by Proxy",
     lyrics: `
 [verse]
@@ -137,27 +264,149 @@ a sapiente delectus
 `,
   },
   {
-    slug: "track-three",
-    title: "Track Three",
+    slug: "dead-end-clout",
+    title: "Dead End Clout",
     release: album,
-    track: 3,
+    track: 7,
     lyrics: `
-Quis autem vel eum iure reprehenderit
-qui in ea voluptate velit esse
-quam nihil molestiae consequatur
-vel illum qui dolorem eum fugiat
+Minim minim mollit amet est voluptate minim
+Adipiscing nisi ullamco non
+Voluptate qui do nisi
+Officia cillum excepteur ea excepteur
+
+Elit est anim ex sit ea adipiscing
+Est cillum dolore ullamco exercitation ipsum occaecat
+Sit aute lorem adipiscing
+Velit elit adipiscing quis irure
 
 [chorus]
-Quo voluptas nulla pariatur
-quo voluptas nulla pariatur
+Sit est anim ut ipsum
+Exercitation ad laborum qui sed consequat
+Consequat ad adipiscing irure quis
 
-Similique sunt in culpa qui officia
-deserunt mollitia animi, id est laborum
-et dolorum fuga
+Aliquip eiusmod ex amet ut
+Ullamco duis qui occaecat ut
+Labore nostrud reprehenderit amet
+Laboris sed consectetur laboris enim ea
 
 [chorus]
-Quo voluptas nulla pariatur
-quo voluptas nulla pariatur
+Sit est anim ut ipsum
+Exercitation ad laborum qui sed consequat
+Consequat ad adipiscing irure quis
+
+[bridge]
+Consectetur culpa ad cupidatat quis duis
+Aliqua amet reprehenderit ut fugiat sit cillum
+Anim aute est deserunt elit
+
+[chorus]
+Sit est anim ut ipsum
+Exercitation ad laborum qui sed consequat
+Consequat ad adipiscing irure quis
+`,
+  },
+  {
+    slug: "wet-street-causes-rain",
+    title: "Wet Street Causes Rain",
+    release: album,
+    track: 8,
+    lyrics: `
+Sed et elit ullamco
+Ad ullamco proident commodo
+Ullamco mollit occaecat id sint ea
+Dolor culpa commodo officia esse quis veniam
+
+[chorus]
+Incididunt id anim consequat
+Ipsum laboris non enim dolor
+Fugiat in cupidatat ex id anim
+
+Consequat tempor nisi laborum sint aliquip
+Occaecat amet ut commodo magna commodo
+Ut enim laborum eiusmod laboris ullamco reprehenderit
+Sint adipiscing velit ut tempor ut
+
+[chorus]
+Incididunt id anim consequat
+Ipsum laboris non enim dolor
+Fugiat in cupidatat ex id anim
+
+[outro]
+Nostrud non sit excepteur consectetur quis
+Sunt ad aute magna duis do cillum
+`,
+  },
+  {
+    slug: "cut-corners-run-in-circles",
+    title: "Cut Corners Run in Circles",
+    release: album,
+    track: 9,
+    lyrics: `
+Eiusmod labore fugiat ipsum
+Laboris occaecat voluptate reprehenderit magna sint
+Magna veniam occaecat non sunt ipsum
+Adipiscing occaecat dolore ut velit exercitation ut
+
+Dolor quis laboris sint sunt laborum est
+Mollit sed sit nostrud amet
+Sed aliqua aute velit
+In qui dolor sint magna irure ipsum
+
+[chorus]
+Magna id magna fugiat in minim
+Commodo et sunt exercitation officia occaecat
+Et et anim est duis
+
+Fugiat occaecat ad eiusmod
+Proident quis ullamco amet
+Non adipiscing sint aliqua id ex
+Anim dolor excepteur voluptate nulla enim
+
+[chorus]
+Magna id magna fugiat in minim
+Commodo et sunt exercitation officia occaecat
+Et et anim est duis
+
+[bridge]
+Nulla mollit do do eiusmod est et
+Aliquip ea tempor fugiat deserunt officia incididunt
+Eiusmod ut esse labore tempor consequat voluptate
+
+[chorus]
+Magna id magna fugiat in minim
+Commodo et sunt exercitation officia occaecat
+Et et anim est duis
+`,
+  },
+  {
+    slug: "placid-pastiche",
+    title: "Placid Pastiche",
+    release: album,
+    track: 10,
+    lyrics: `
+Elit aute qui labore adipiscing sunt
+Ullamco qui elit esse do
+Ut elit tempor amet
+Officia aliquip sit non
+
+[chorus]
+Magna occaecat adipiscing elit qui incididunt incididunt
+Occaecat ea commodo nulla cupidatat id sit
+Duis do deserunt et laborum ipsum
+
+Nisi cillum sint ut mollit fugiat
+Culpa id fugiat sunt consectetur labore anim
+Elit quis quis sunt fugiat nisi
+Sunt dolore ut reprehenderit non commodo
+
+[chorus]
+Magna occaecat adipiscing elit qui incididunt incididunt
+Occaecat ea commodo nulla cupidatat id sit
+Duis do deserunt et laborum ipsum
+
+[outro]
+Irure excepteur ut laboris irure eiusmod
+Nulla commodo enim incididunt
 `,
   },
 ];
@@ -184,13 +433,18 @@ export function parseLyrics(text: string): Stanza[] {
 export function songsByRelease() {
   const releases = [single, album];
   return releases
-    .map((r) => ({ release: r, songs: songs.filter((s) => s.release === r).sort((a, b) => a.track - b.track) }))
+    .map((r) => ({
+      release: r,
+      songs: songs.filter((s) => s.release === r || s.alsoOn?.includes(r)).sort((a, b) => a.track - b.track),
+    }))
     .filter((g) => g.songs.length > 0);
 }
 
-// The song before and after, running through every release in order.
+// The song before and after, running through every release in order, each
+// song once (a single that is also an album track is met in the album).
 export function neighbours(slug: string) {
-  const ordered = songsByRelease().flatMap((g) => g.songs);
+  const ordered = songsByRelease()
+    .flatMap((g) => g.songs.filter((s) => s.release === g.release));
   const i = ordered.findIndex((s) => s.slug === slug);
   return { prev: i > 0 ? ordered[i - 1] : undefined, next: i >= 0 && i < ordered.length - 1 ? ordered[i + 1] : undefined };
 }
