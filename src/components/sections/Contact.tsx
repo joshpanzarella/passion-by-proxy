@@ -2,11 +2,19 @@ import { band, isLive, socials } from "@/data/band";
 import { Section, stagger } from "./Section";
 
 export function Contact() {
-  const emails = [
-    { label: "general", address: band.email },
-    { label: "booking", address: band.bookingEmail || band.email },
-    { label: "press", address: band.pressEmail },
-  ].filter((e) => e.address);
+  // One row per address: jobs that share an address share a row
+  // ("general / booking"), so the same email never shows twice.
+  const emails: { label: string; address: string }[] = [];
+  for (const [label, address] of [
+    ["general", band.email],
+    ["booking", band.bookingEmail || band.email],
+    ["press", band.pressEmail],
+  ]) {
+    if (!address) continue;
+    const row = emails.find((e) => e.address === address);
+    if (row) row.label += ` / ${label}`;
+    else emails.push({ label, address });
+  }
 
   return (
     <Section id="contact" title="stay in touch">
