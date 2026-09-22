@@ -10,7 +10,8 @@ import { useNowMinute } from "@/lib/useNow";
 //
 // The video waits for the splash to finish (<html data-splash> is set when
 // it has played or was skipped), pauses while off screen, and never plays
-// for reduced motion; the poster stands in.
+// for reduced motion; the poster stands in. It does not even download
+// until then (preload="none"), so it never competes with the splash.
 export function HeroSingle({ release }: { release: Release }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const now = useNowMinute();
@@ -55,7 +56,7 @@ export function HeroSingle({ release }: { release: Release }) {
             muted
             loop
             playsInline
-            preload="auto"
+            preload="none"
             aria-label={release.title}
           >
             <source src={`${release.video.small}.mp4`} media="(max-width: 700px)" type="video/mp4" />

@@ -1037,6 +1037,8 @@ html:not([data-splash]) body {
   inset: 0;
   width: 100%;
   height: 100%;
+  opacity: 0; /* the keyframes (splashCss) show one at a time */
+  will-change: opacity;
 }
 
 /* The drum's slits (splash and hero): dark bars that show with speed.

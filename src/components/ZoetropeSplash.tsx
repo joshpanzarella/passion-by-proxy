@@ -1,26 +1,26 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { SPLASH_KEY, buildSchedule, zoetrope } from "@/data/zoetrope";
+import { useEffect, useRef, useState } from "react";
+import { SPLASH_KEY, splashCss, zoetrope } from "@/data/zoetrope";
 
 // Plays once per browser session. The inline script in layout.tsx marks
 // <html data-splash="seen"> before first paint for a returning visit or a
 // reduced-motion visitor, and CSS hides the splash, so it never flashes.
 //
-// Every frame is mounted at once and only the current one is shown, so a
-// frame change never waits on a decode.
+// The spin itself is CSS keyframes built from the schedule (splashCss), so
+// the browser keeps its beat even while the page is busy loading. Script
+// only decides when it starts (every frame decoded) and when it ends.
 
 type Phase = "loading" | "spinning" | "holding" | "leaving";
 
-// Slits move this share of one slit's pitch per frame: the drum turning.
-const SLIT_STEP = 0.37;
+const { css, totalMs } = splashCss();
 
 export function ZoetropeSplash() {
-  const schedule = useMemo(() => buildSchedule(), []);
   const [phase, setPhase] = useState<Phase>("loading");
-  const [step, setStep] = useState(0);
+  const stageRef = useRef<HTMLDivElement>(null);
 
-  // Wait for the frames (up to loadTimeoutMs), then start the run.
+  // Decode every frame (not just download it) before the first beat, so no
+  // frame stalls the first time it shows; then start.
   useEffect(() => {
     const root = document.documentElement;
     if (root.dataset.splash) return;
@@ -32,17 +32,14 @@ export function ZoetropeSplash() {
     }
 
     let cancelled = false;
-    const loads = zoetrope.frames.map(
-      (src) =>
-        new Promise<void>((resolve) => {
-          const img = new Image();
-          img.onload = img.onerror = () => resolve();
-          img.src = src;
-        }),
-    );
+    const imgs = Array.from(stageRef.current?.querySelectorAll("img") ?? []);
+    const ready = Promise.all(imgs.map((img) => img.decode().catch(() => {})));
     const timeout = new Promise<void>((resolve) => window.setTimeout(resolve, zoetrope.loadTimeoutMs));
-    Promise.race([Promise.all(loads), timeout]).then(() => {
-      if (!cancelled) setPhase((p) => (p === "loading" ? "spinning" : p));
+    Promise.race([ready, timeout]).then(() => {
+      // one more frame so the decoded images are painted before the beat starts
+      window.requestAnimationFrame(() => {
+        if (!cancelled) setPhase((p) => (p === "loading" ? "spinning" : p));
+      });
     });
 
     const skip = (e: KeyboardEvent) => {
@@ -56,15 +53,13 @@ export function ZoetropeSplash() {
     };
   }, []);
 
-  // Advance one step at a time; each step has its own duration.
+  // End of the spin. The stage's animation ending is the signal; the timer
+  // is a backstop in case the browser drops the event.
   useEffect(() => {
     if (phase !== "spinning") return;
-    const id = window.setTimeout(() => {
-      if (step + 1 < schedule.length) setStep(step + 1);
-      else setPhase("holding");
-    }, schedule[step].ms);
+    const id = window.setTimeout(() => setPhase((p) => (p === "spinning" ? "holding" : p)), totalMs + 250);
     return () => window.clearTimeout(id);
-  }, [phase, step, schedule]);
+  }, [phase]);
 
   useEffect(() => {
     if (phase !== "holding") return;
@@ -80,40 +75,29 @@ export function ZoetropeSplash() {
     return () => window.clearTimeout(id);
   }, [phase]);
 
-  const current = phase === "loading" ? null : schedule[step];
-  const speed = phase === "spinning" && current ? current.speed : 0;
-  // A frame seen through a moving slit never sits in quite the same place.
-  const jitter = speed > 0 ? ((step * 7919) % 5) - 2 : 0;
+  const playing = phase !== "loading";
 
   return (
     <div
-      className={`splash${phase === "leaving" ? " splash--leaving" : ""}`}
+      className={`splash${playing ? " splash--play" : ""}${phase === "leaving" ? " splash--leaving" : ""}`}
       style={{ transitionDuration: `${zoetrope.fadeMs}ms` }}
       role="presentation"
       onClick={() => setPhase("leaving")}
     >
+      <style dangerouslySetInnerHTML={{ __html: css }} />
       <div
         className="splash__stage"
+        ref={stageRef}
         aria-hidden="true"
-        style={{ transform: `translateX(${jitter * speed * 0.4}%)` }}
+        onAnimationEnd={(e) => {
+          if (e.animationName === "pbp-stage") setPhase((p) => (p === "spinning" ? "holding" : p));
+        }}
       >
-        {zoetrope.frames.map((src, i) => (
-          // eslint-disable-next-line @next/next/no-img-element -- all frames stay mounted and swap by opacity; next/image adds nothing here
-          <img
-            key={src}
-            className="splash__frame"
-            src={src}
-            alt=""
-            style={{ opacity: current?.frame === i ? 1 : 0 }}
-          />
+        {zoetrope.frames.map((src) => (
+          // eslint-disable-next-line @next/next/no-img-element -- frames swap by opacity; next/image adds nothing here
+          <img key={src} className="splash__frame" src={src} alt="" decoding="async" />
         ))}
-        <div
-          className="slits"
-          style={{
-            opacity: speed,
-            ["--slit-shift" as string]: (step * SLIT_STEP) % 1,
-          }}
-        />
+        <div className="slits" />
       </div>
       <button className="splash__skip" type="button" onClick={() => setPhase("leaving")}>
         skip
