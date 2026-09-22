@@ -6,8 +6,9 @@
   Each section picks one colourway through --c (main) and --c2 (offset).
 
   Two themes. Dark is the art's own world (black matches the art's
-  background). Light follows the visitor's system setting or the header
-  switch (<html data-theme>, set before first paint in layout.tsx). Its
+  background) and every visitor starts there (the band's call). Light is
+  chosen with the header switch (<html data-theme="light">, applied before
+  first paint in layout.tsx and remembered per browser). Its
   colours are darker cuts of the same hues, each at least 4.5:1 on the light
   background, taking the lead from the band's flat logo on white.
 
@@ -73,31 +74,6 @@
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    --bg: #fbfaf8;
-    --surface: #f1efeb;
-    --line: #e2dfd9;
-    --text: #141418;
-    --muted: #5c5c68;
-
-    --teal: #00798a;
-    --magenta: #b000b0;
-    --orange: #b84e00;
-    --green: #1b7f36;
-    --pink: #c0137b;
-    --lime: #3f7f12;
-    --purple: #6a28e8;
-    --yellow: #8a6a00;
-    --red: #c81e28;
-    --ui-blue: #1f59d0;
-    --ui-red: #d01414;
-    --gold: #8f6a08;
-    --bottle-blue: #2b5ad8;
-
-    color-scheme: light;
-  }
-}
 
 :root {
   /* must match BACKGROUND in scripts/build-zoetrope.mjs (frames are
@@ -568,12 +544,6 @@ a {
   border-radius: 16px;
 }
 
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) .album {
-    padding: clamp(1.25rem, 4vw, 3rem);
-    border-radius: 16px;
-  }
-}
 
 .album__art {
   order: 2;

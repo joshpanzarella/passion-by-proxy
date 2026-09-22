@@ -29,9 +29,10 @@ static export (`out/`) and hosted on Cloudflare Pages from `main`.
 - **Colours are sampled from the band's art** and live as tokens at the top
   of `globals.css`; each section picks a colourway through `--c`/`--c2`.
   New art: sample it, don't guess.
-- **Two themes, light and dark.** Dark is the art's world; light follows
-  the device or the header switch (`<html data-theme>`, applied before
-  paint from localStorage `pbp-theme`, key in `src/lib/theme.ts`). Light
+- **Two themes, dark first.** Every visitor starts dark (the band's call,
+  not the device setting); light is the header switch
+  (`<html data-theme="light">`, applied before paint from localStorage
+  `pbp-theme`, key in `src/lib/theme.ts`). Light
   colours are darker cuts of the same hues, each 4.5:1 or better on the
   light background: add a light value for every new colour token. Art that
   sits on black lives inside `.stage-dark` (the hero, the album panel),

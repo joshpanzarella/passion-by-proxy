@@ -26,17 +26,14 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbfaf8" },
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
-  ],
+  themeColor: "#000000",
 };
 
 // Runs before first paint. data-js lets CSS hide scroll-reveal content
-// (without JS it stays visible). A chosen theme is applied (else the device
-// setting rules, in CSS). A returning visitor this session, or one who asked
+// (without JS it stays visible). Light is applied if chosen (everyone
+// starts dark). A returning visitor this session, or one who asked
 // for reduced motion, never sees the splash.
-const splashGate = `document.documentElement.dataset.js="";try{var t=localStorage.getItem("${THEME_KEY}");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}try{if(sessionStorage.getItem("${SPLASH_KEY}")||matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.dataset.splash="seen"}catch(e){}`;
+const splashGate = `document.documentElement.dataset.js="";try{var t=localStorage.getItem("${THEME_KEY}");if(t==="light")document.documentElement.dataset.theme=t}catch(e){}try{if(sessionStorage.getItem("${SPLASH_KEY}")||matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.dataset.splash="seen"}catch(e){}`;
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
