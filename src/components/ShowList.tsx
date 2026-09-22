@@ -1,7 +1,7 @@
 "use client";
 
 import { isLive, type Show } from "@/data/band";
-import { formatDate, todayIso } from "@/lib/dates";
+import { formatDate, formatTime, todayIso } from "@/lib/dates";
 import { useNowMinute } from "@/lib/useNow";
 
 // Splits upcoming from past in the visitor's browser, so a show drops off
@@ -52,6 +52,7 @@ function ShowRow({ show, index = 0, past = false }: { show: Show; index?: number
         <strong>{show.venue}</strong>
         <span className="muted">
           {show.city}
+          {show.time ? ` · ${formatTime(show.time)}` : ""}
           {show.note ? ` · ${show.note}` : ""}
         </span>
       </span>

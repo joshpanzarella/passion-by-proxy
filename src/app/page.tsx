@@ -3,6 +3,7 @@ import { HeroSingle } from "@/components/HeroSingle";
 import { HeroLogo } from "@/components/HeroLogo";
 import { ScrollEffects } from "@/components/ScrollEffects";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { structuredDataJson } from "@/lib/structuredData";
 import { Ticker } from "@/components/Ticker";
 import { Banner } from "@/components/Banner";
 import { Music } from "@/components/sections/Music";
@@ -25,6 +26,7 @@ export default function Home() {
   return (
     <>
       <ScrollEffects />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: structuredDataJson() }} />
       <header className="site-header">
         <a className="site-header__mark" href="#top" aria-label={`${band.name}, back to top`}>
           {/* eslint-disable-next-line @next/next/no-img-element -- 8 KB logo */}

@@ -16,3 +16,10 @@ export function todayIso(now = new Date()) {
   const p = (n: number) => String(n).padStart(2, "0");
   return `${now.getFullYear()}-${p(now.getMonth() + 1)}-${p(now.getDate())}`;
 }
+
+// "20:00" -> "8pm", "19:30" -> "7:30pm"
+export function formatTime(hhmm: string) {
+  const [h, m] = hhmm.split(":").map(Number);
+  const hour = ((h + 11) % 12) + 1;
+  return `${hour}${m ? `:${String(m).padStart(2, "0")}` : ""}${h < 12 ? "am" : "pm"}`;
+}

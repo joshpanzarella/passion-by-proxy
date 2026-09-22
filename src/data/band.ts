@@ -137,8 +137,11 @@ export const videos: Video[] = [
 
 export type Show = {
   date: string; // YYYY-MM-DD
+  // Start time, 24-hour "HH:MM" in local time (e.g. "20:00"). Optional:
+  // shown on the site and given to Google when set.
+  time?: string;
   venue: string;
-  city: string;
+  city: string; // "Town, ST": Google reads the town and state from it
   note?: string; // "w/ Other Band", "all ages", "sold out"
   // Buttons on the row: tickets, the venue's page, "DM for address"...
   actions?: Link[];
