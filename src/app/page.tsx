@@ -3,6 +3,7 @@ import { Countdown } from "@/components/Countdown";
 import { HeroLogo } from "@/components/HeroLogo";
 import { ScrollEffects } from "@/components/ScrollEffects";
 import { Ticker } from "@/components/Ticker";
+import { Banner } from "@/components/Banner";
 import { Music } from "@/components/sections/Music";
 import { Videos } from "@/components/sections/Videos";
 import { Shows } from "@/components/sections/Shows";
@@ -24,8 +25,9 @@ export default function Home() {
     <>
       <ScrollEffects />
       <header className="site-header">
-        <a className="site-header__mark offset" href="#top" aria-label={`${band.name}, back to top`}>
-          {band.short}
+        <a className="site-header__mark" href="#top" aria-label={`${band.name}, back to top`}>
+          {/* eslint-disable-next-line @next/next/no-img-element -- 8 KB logo */}
+          <img src="/media/logo-pill.webp" alt="" width={174} height={96} />
         </a>
         <nav aria-label="sections">
           {nav.map((item) => (
@@ -54,6 +56,7 @@ export default function Home() {
         <Videos />
         <Shows />
         <Merch />
+        <Banner src="/media/banner.webp" />
         <About />
         <Contact />
       </main>

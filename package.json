@@ -7,7 +7,8 @@
     "build": "next build",
     "preview": "next start",
     "lint": "eslint .",
-    "zoetrope": "node scripts/build-zoetrope.mjs"
+    "zoetrope": "node scripts/build-zoetrope.mjs",
+    "media": "node scripts/build-media.mjs"
   },
   "dependencies": {
     "next": "16.2.7",

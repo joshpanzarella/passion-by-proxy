@@ -1,23 +1,76 @@
-import { album, band, isLive, single, type Release } from "@/data/band";
+import { album, band, isLive, single, type Link, type Release } from "@/data/band";
 import { ReleaseStatus } from "@/components/ReleaseStatus";
-import { Section, stagger } from "./Section";
+import { Section } from "./Section";
 
+// The new single leads with its cover and lettering; the album follows as
+// its own feature with the bottles. Each takes its colours from its artwork.
 export function Music() {
   return (
     <Section id="music" title="music">
-      <div className="releases">
-        <ReleaseCard release={single} index={0} />
-        <ReleaseCard release={album} index={1} />
+      <Spotlight release={single} />
+      <AlbumFeature release={album} />
+      <Players />
+    </Section>
+  );
+}
+
+function Spotlight({ release }: { release: Release }) {
+  return (
+    <article className="spotlight">
+      <div className="spotlight__cover" data-reveal="">
+        {release.cover ? (
+          // eslint-disable-next-line @next/next/no-img-element -- pre-sized webp from npm run media
+          <img src={release.cover} alt={`${release.title} cover art`} width={1000} height={1000} />
+        ) : (
+          <span aria-hidden="true">{release.kind}</span>
+        )}
       </div>
-      {band.bandcampPlayer.startsWith("https://bandcamp.com/EmbeddedPlayer/") && (
-        <iframe
-          className="bandcamp"
-          data-reveal=""
-          src={band.bandcampPlayer}
-          title={`${band.name} on Bandcamp`}
-          loading="lazy"
-          seamless
-        />
+      <div className="spotlight__body" data-reveal="" style={{ "--i": 1 } as React.CSSProperties}>
+        <p className="release__kind">new {release.kind}</p>
+        <h3 className="spotlight__title">
+          {release.wordmark ? (
+            // eslint-disable-next-line @next/next/no-img-element -- lettering art; alt carries the title
+            <img src={release.wordmark} alt={release.title} width={900} height={358} />
+          ) : (
+            release.title
+          )}
+        </h3>
+        <ReleaseStatus release={release} />
+        <p>{release.blurb}</p>
+        <Links links={release.links} />
+      </div>
+    </article>
+  );
+}
+
+function AlbumFeature({ release }: { release: Release }) {
+  return (
+    <article className="album">
+      {release.art && (
+        <div className="album__art" data-reveal="">
+          {/* eslint-disable-next-line @next/next/no-img-element -- pre-sized webp from npm run media */}
+          <img src={release.art} alt="Two glass bottles, one red and one blue, lit gold from behind" width={975} height={1220} data-parallax="0.12" />
+        </div>
+      )}
+      <div className="album__body" data-reveal="" style={{ "--i": 1 } as React.CSSProperties}>
+        <p className="release__kind">the {release.kind}</p>
+        <h3 className="album__title offset">{release.title}</h3>
+        <ReleaseStatus release={release} />
+        <p>{release.blurb}</p>
+        <Links links={release.links} />
+      </div>
+    </article>
+  );
+}
+
+function Players() {
+  const bandcamp = band.bandcampPlayer.startsWith("https://bandcamp.com/EmbeddedPlayer/");
+  if (!bandcamp && !band.spotifyArtistId) return null;
+  return (
+    <div className="players">
+      <p className="release__kind">listen</p>
+      {bandcamp && (
+        <iframe className="bandcamp" data-reveal="" src={band.bandcampPlayer} title={`${band.name} on Bandcamp`} loading="lazy" seamless />
       )}
       {band.spotifyArtistId && (
         <iframe
@@ -29,41 +82,21 @@ export function Music() {
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
         />
       )}
-    </Section>
+    </div>
   );
 }
 
-function ReleaseCard({ release, index }: { release: Release; index: number }) {
+function Links({ links }: { links: Link[] }) {
+  if (!links.some(isLive)) return null;
   return (
-    <article className="release" data-reveal="" style={stagger(index)}>
-      <div className="release__cover">
-        {release.cover ? (
-          // eslint-disable-next-line @next/next/no-img-element -- swap for next/image if covers get large
-          <img src={release.cover} alt={`${release.title} cover`} />
-        ) : (
-          <span aria-hidden="true">{release.kind}</span>
-        )}
-      </div>
-      <div className="release__body">
-        <p className="release__kind">{release.kind}</p>
-        <h3 className="release__title">{release.title}</h3>
-        <ReleaseStatus release={release} />
-        <p>{release.blurb}</p>
-        {release.links.some(isLive) && (
-          <ul className="links">
-            {release.links.filter(isLive).map((l) => (
-              <li key={l.label}>
-                <a className="button" href={l.href} rel="noopener noreferrer" target="_blank">
-                  {l.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-      {release.embed && (
-        <iframe className="release__embed" src={release.embed} title={`${release.title} player`} loading="lazy" allow="encrypted-media" />
-      )}
-    </article>
+    <ul className="links">
+      {links.filter(isLive).map((l) => (
+        <li key={l.label}>
+          <a className="button" href={l.href} rel="noopener noreferrer" target="_blank">
+            {l.label}
+          </a>
+        </li>
+      ))}
+    </ul>
   );
 }

@@ -49,21 +49,26 @@ export type Release = {
   // day is not set yet.
   date: string;
   dateLabel?: string;
-  cover?: string; // path under /public, e.g. "/media/single-cover.jpg"
+  // Images under /public/media, built by `npm run media`.
+  cover?: string; // square cover art
+  wordmark?: string; // the title as lettering; shown in place of typed text
+  art?: string; // feature image, any shape
   blurb: string;
-  links: Link[]; // streaming / pre-save links; empty until they exist
+  links: Link[]; // streaming / pre-save links; placeholders ("#") are hidden
   // Player embed URL (Spotify "Embed track" or Bandcamp "Embed this
-  // album" src). Shows a player under the card once set.
+  // album" src). Shows a player under the release once set.
   embed?: string;
 };
 
 export const single: Release = {
   kind: "single",
-  title: "Single Title",
+  title: "U&I",
   date: "2026-09-25",
-  blurb: "Placeholder: a sentence about the single.",
+  cover: "/media/u-and-i-cover.webp",
+  wordmark: "/media/u-and-i-wordmark.webp",
+  blurb: "Placeholder: a sentence about U&I.",
   // Swap Spotify for the track's own link once it is out; add the rest
-  // as they go live. Placeholders ("#") are hidden.
+  // as they go live.
   links: [
     { label: "Spotify", href: spotifyArtist },
     { label: "Apple Music", href: "#" },
@@ -73,11 +78,11 @@ export const single: Release = {
 
 export const album: Release = {
   kind: "album",
-  title: "Album Title",
-  date: "",
-  dateLabel: "November 2026",
-  blurb: "Placeholder: a sentence about the album. Features “Zoe’s Zoetrope.”",
-  links: [],
+  title: "Alliterate",
+  date: "2026-11-20",
+  art: "/media/alliterate-bottles.webp",
+  blurb: "Placeholder: a sentence about Alliterate. Features “Zoe’s Zoetrope.”",
+  links: [], // pre-save link goes here
 };
 
 export type Video = {
@@ -88,7 +93,7 @@ export type Video = {
 
 // Empty ids show as "coming soon" cards.
 export const videos: Video[] = [
-  { title: "Single Title (official video)", youtubeId: "" },
+  { title: "U&I", youtubeId: "" },
   { title: "Live session", youtubeId: "" },
 ];
 

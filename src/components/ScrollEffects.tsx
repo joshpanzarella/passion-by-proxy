@@ -9,6 +9,7 @@ import { useEffect } from "react";
 //    takes on that section's colours
 //  - the ticker strip slides with the scroll
 //  - the hero's contents drift up slower than the page and fade out
+//  - [data-parallax="k"] images drift by k x their distance from mid-screen
 // Renders nothing. Reduced motion: everything is shown at once, nothing moves.
 export function ScrollEffects() {
   useEffect(() => {
@@ -76,6 +77,7 @@ export function ScrollEffects() {
     const track = document.querySelector<HTMLElement>(".ticker__track");
     const heroInner = document.querySelector<HTMLElement>(".hero__inner");
     const arrow = document.querySelector<HTMLElement>(".hero__scroll");
+    const drifting = Array.from(document.querySelectorAll<HTMLElement>("[data-parallax]"));
     if (track && heroInner && !reduce) {
       let raf = 0;
       const move = () => {
@@ -87,6 +89,12 @@ export function ScrollEffects() {
           heroInner.style.transform = `translateY(${y * 0.35}px)`;
           heroInner.style.opacity = String(Math.max(0, 1 - y / (window.innerHeight * 0.8)));
           if (arrow) arrow.style.opacity = String(Math.max(0, 1 - y / 120));
+        }
+        for (const el of drifting) {
+          const box = (el.parentElement ?? el).getBoundingClientRect();
+          if (box.bottom < -200 || box.top > window.innerHeight + 200) continue;
+          const fromMiddle = box.top + box.height / 2 - window.innerHeight / 2;
+          el.style.transform = `translateY(${-fromMiddle * Number(el.dataset.parallax)}px)`;
         }
       };
       const onScroll = () => {
