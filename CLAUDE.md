@@ -53,8 +53,10 @@ static export (`out/`) and hosted on Cloudflare Pages from `main`.
   The captions are the lyrics (`lyrics.ts`), passed in by `page.tsx`;
   songs marked `placeholder` (still lorem ipsum) are left out.
   Safari (so all of iOS) runs displacement maps on the CPU, ~10 fps on an
-  iPhone, so there it melts in columns of `feOffset` instead; Safari drops
-  a filter of over 200 parts.
+  iPhone, so there it melts in columns of `feOffset` instead, with the
+  stretch done by scaling `<main>`. Safari draws nothing for a filter of
+  over 200 parts, or one with a part left empty (a column moved out of
+  its area).
 - **Every nav tab has its own colourway**, main and offset both unique and
   unlike the top of the page's teal/magenta (the header takes the colours
   of the section in view). A new section needs a new pair.

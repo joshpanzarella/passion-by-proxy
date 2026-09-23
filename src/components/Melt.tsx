@@ -24,8 +24,9 @@ import { useEffect, useRef } from "react";
 // Safari (and so every browser on iOS) works a displacement map out on the
 // processor, a few frames a second on a phone's dense screen. There the page
 // falls in thin columns instead (html[data-melting="columns"]), each the
-// same page simply moved down, which it does at full speed: the same drips,
-// waves and round tips, without the stretch.
+// same page simply moved down, which it does at full speed, and the stretch
+// is the whole page scaled down the screen: the same drips, waves and round
+// tips, stretching as they fall.
 
 const IDLE_MS = 7_000; // this long without scrolling, and it starts
 const MELT_MS = 9_000; // to melt all the way
@@ -35,7 +36,7 @@ const FINE = 4 / 255; // the fine map's scale, as a share of the main one's
 const ROUND_PX = 32; // the largest drip tip or shoulder
 const ROUND_BY = 0.25; // tips and shoulders are fully formed by this share of the melt
 const SINK = 4; // after the melt, everything sinks this many screens × (time past it, in melts)²
-const COLUMN_PX = 4; // in columns, the width of each
+const COLUMN_PX = 2; // in columns, the width of each
 const COLUMNS_MAX = 190; // Safari drops a filter of over 200 parts
 const SVG_NS = "http://www.w3.org/2000/svg";
 const BURST_MS = [80, 400] as const; // the gap between bursts of words, at random
@@ -74,6 +75,8 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
     const root = document.documentElement;
     const inColumns = "GestureEvent" in window; // only Safari has it
     let columns: { el: Element; length: number; tip: number }[] = [];
+    let spread = 0; // the columns' average length
+    let reach = 0; // how far down the columns go, from the header
     let idle = 0;
     let raf = 0;
     let start = 0;
@@ -107,6 +110,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       if (playing) playing.textContent = "";
       if (root.dataset.melting !== undefined) {
         delete root.dataset.melting;
+        main.style.transform = "";
         for (const el of [shift, nudge, round]) el.setAttribute("scale", "0");
         sink.setAttribute("dy", "0");
       }
@@ -126,18 +130,23 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       if (inColumns) {
         // a column every COLUMN_PX (a pixel wider, so no seam shows between
         // two), each the page moved down by the fall at its middle; the
-        // filter starts below the header, so nothing above it flows in
+        // filter starts below the header, so nothing above it flows in, and
+        // ends a little past the bottom of the screen, where a column that
+        // has fallen off it stops: an empty one, and Safari draws none
+        reach = seen.height + 2;
         const n = Math.min(COLUMNS_MAX, Math.ceil(w / COLUMN_PX));
         const merge = svg("feMerge", {});
         columns = Array.from({ length: n }, (_, i) => {
           const x0 = Math.round((i * w) / n);
           const x1 = Math.round(((i + 1) * w) / n);
           merge.append(svg("feMergeNode", { in: `c${i}` }));
-          const el = svg("feOffset", { in: "SourceGraphic", result: `c${i}`, x: x0, width: x1 - x0 + 1, y: seen.y, height: seen.height });
+          const el = svg("feOffset", { in: "SourceGraphic", result: `c${i}`, x: x0, width: x1 - x0 + 1, y: seen.y, height: reach });
           return { el, ...shape[Math.min(w - 1, (x0 + x1) >> 1)] };
         });
+        spread = columns.reduce((sum, c) => sum + c.length, 0) / n;
         columnsFilter.replaceChildren(...columns.map((c) => c.el), merge);
-        set(columnsFilter, seen);
+        set(columnsFilter, { ...seen, height: reach });
+        main.style.transformOrigin = `0 ${box.y}px`; // the top of the screen
         root.dataset.melting = "columns";
       } else {
         for (const el of [filter, coarse, fine, tips]) set(el, box);
@@ -174,13 +183,19 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       const gone = SINK * past * past;
       const h = window.innerHeight;
       if (inColumns) {
+        // the map's fall grows down the screen, from STRETCH of a column's
+        // full fall at the top to all of it at the bottom, which takes a
+        // point y down the screen to (y + STRETCH × full) × stretch(full).
+        // A column can only move, so the page stretches as a whole, by the
+        // columns' average, and each column moves so that its top edge
+        // lands where the map would put it
+        const stretch = (full: number) => 1 / Math.max(0.1, 1 - ((1 - STRETCH) * full) / h);
+        const all = stretch((scale / 2) * spread);
+        main.style.transform = `scale(1, ${all})`;
         for (const c of columns) {
-          // where the map would have this column's top edge: its fall grows
-          // down the screen, from STRETCH of the full fall at the top
           const full = (scale / 2) * c.length;
-          const left = 1 - ((1 - STRETCH) * full) / h;
-          const edge = left > 0 ? Math.min(h, (header + STRETCH * full) / left - header) : h;
-          c.el.setAttribute("dy", String(edge + rounding * c.tip + gone * h));
+          const edge = (header + STRETCH * full) * stretch(full) + rounding * c.tip + gone * h;
+          c.el.setAttribute("dy", String(Math.min(reach - 1, edge / all - header)));
         }
       } else {
         shift.setAttribute("scale", String(scale));
@@ -200,6 +215,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       window.cancelAnimationFrame(raf);
       timers.forEach((id) => window.clearTimeout(id));
       delete root.dataset.melting;
+      main.style.transform = "";
     };
   }, [captions]);
 
