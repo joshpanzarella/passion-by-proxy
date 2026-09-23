@@ -243,6 +243,24 @@ a {
   width: auto;
 }
 
+/* the song the melt's captions are from (Melt.tsx), by the logo while they
+   run: set like the captions, white on black */
+.site-header__playing {
+  min-width: 0;
+  overflow: hidden;
+  padding: 0.1em 0.45em;
+  background: #000;
+  color: #fff;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.site-header__playing:empty {
+  display: none;
+}
+
 .site-header nav {
   display: flex;
   gap: 1.1rem;
@@ -521,8 +539,10 @@ html[data-melting] .static::before {
   top: 0;
   bottom: 0;
   left: 0;
-  width: max(14vw, 110px);
+  width: max(7vw, 60px);
   background: var(--bg);
+  /* see-through: the plain grain shows through the dragged band */
+  opacity: 0.55;
   mask-image: linear-gradient(90deg, transparent, #000 40%, #000 60%, transparent);
   transform: translate3d(-100%, 0, 0);
 }
@@ -613,6 +633,8 @@ html[data-melting] .melt-cue--right {
    black box, as on TV, in both themes; up top, just under the header, where
    the melt has cleared */
 .melt-captions {
+  /* its own layer, so new words never make the browser redraw the melt */
+  will-change: transform;
   position: fixed;
   top: calc(var(--header-h) + 6vh);
   left: 50%;
@@ -726,6 +748,11 @@ html[data-melting] .melt-cue--right {
   height: auto;
 }
 
+/* a release after the album (the first single) keeps the album's spacing */
+.album + .spotlight {
+  margin-top: clamp(4rem, 10vw, 7rem);
+}
+
 /* the album: the bottles, lit */
 .album {
   --c: var(--gold);
@@ -772,7 +799,9 @@ html[data-melting] .melt-cue--right {
   will-change: transform;
 }
 
-.album__title {
+/* a title with no lettering art (the first single): set like the album's */
+.album__title,
+.spotlight__name {
   font-size: clamp(2.6rem, 8vw, 4.6rem);
   font-style: italic;
   font-weight: 600;

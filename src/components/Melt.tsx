@@ -8,7 +8,8 @@ import { useEffect, useRef } from "react";
 // altogether, leaving only the static and captions. Cues at both edges say how
 // to fix it. Halfway through, the static starts carrying closed captions: a
 // random song's lines from a random place, one at a time, each typed in
-// uneven bursts of a word or a few, as live TV captions come in. Any scroll, tap or key puts it all back at
+// uneven bursts of a word or a few, as live TV captions come in, with the
+// song's title by the logo in the header. Any scroll, tap or key puts it all back at
 // once.
 //
 // It is an SVG displacement filter on <main> (html[data-melting] in
@@ -31,8 +32,8 @@ const BURST_MS = [80, 400] as const; // the gap between bursts of words, at rand
 const HOLD_MS = [1_400, 3_000] as const; // a finished line stays up this long, at random
 const between = ([lo, hi]: readonly [number, number]) => lo + Math.random() * (hi - lo);
 
-// captions: each song's lines, in order
-export function Melt({ captions }: { captions: string[][] }) {
+// captions: each song's title, and its lines in order
+export function Melt({ captions }: { captions: { title: string; lines: string[] }[] }) {
   const filterRef = useRef<SVGFilterElement>(null);
   const cropRef = useRef<SVGFEOffsetElement>(null);
   const coarseRef = useRef<SVGFEImageElement>(null);
@@ -62,6 +63,7 @@ export function Melt({ captions }: { captions: string[][] }) {
     let idle = 0;
     let raf = 0;
     let start = 0;
+    const playing = document.querySelector<HTMLElement>(".site-header__playing");
     let timers: number[] = []; // the captions'
     const later = (fn: () => void, ms: number) => timers.push(window.setTimeout(fn, ms));
 
@@ -87,6 +89,7 @@ export function Melt({ captions }: { captions: string[][] }) {
       timers.forEach((id) => window.clearTimeout(id));
       timers = [];
       caption.textContent = "";
+      if (playing) playing.textContent = "";
       if (root.dataset.melting !== undefined) {
         delete root.dataset.melting;
         for (const el of [shift, nudge, round]) el.setAttribute("scale", "0");
@@ -115,10 +118,13 @@ export function Melt({ captions }: { captions: string[][] }) {
       root.dataset.melting = "";
       start = performance.now();
       raf = window.requestAnimationFrame(frame);
-      const sung = captions.filter((lines) => lines.length > 0);
+      const sung = captions.filter((song) => song.lines.length > 0);
       if (sung.length > 0) {
-        const lines = sung[Math.floor(Math.random() * sung.length)];
-        later(() => roll(lines, Math.floor(Math.random() * lines.length)), MELT_MS / 2);
+        const song = sung[Math.floor(Math.random() * sung.length)];
+        later(() => {
+          if (playing) playing.textContent = `♪ ${song.title}`;
+          roll(song.lines, Math.floor(Math.random() * song.lines.length));
+        }, MELT_MS / 2);
       }
     };
 
