@@ -46,17 +46,21 @@ static export (`out/`) and hosted on Cloudflare Pages from `main`.
   home page passes `home` so its section links stay plain anchors. The
   splash is mounted by the home page only.
 - **The home page melts when left alone** (`Melt.tsx`): an SVG filter on
-  `<main>` while it runs, over the static (`.static`, a fixed layer behind
-  everything that shows only where a block has no background of its own).
-  Nothing inside `<main>` may be `position: fixed` (the filter would pin it
-  to `<main>`); overlays go outside it, as the splash, cues and captions do.
+  `.melts` (`<main>` and the footer; the header stays) while it runs, over
+  the static (`.static`, a fixed layer behind everything that shows only
+  where a block has no background of its own). Nothing inside `.melts` may
+  be `position: fixed` (the filter would pin it to `.melts`); overlays go
+  outside it, as the splash, cues and captions do. Anything that animates
+  inside it pauses while it runs. Chrome can't filter (or even fade)
+  another site's iframe (a player), so there those are hidden instead.
   The captions are the lyrics (`lyrics.ts`), passed in by `page.tsx`;
   songs marked `placeholder` (still lorem ipsum) are left out.
   Safari (so all of iOS) runs displacement maps on the CPU, ~10 fps on an
   iPhone, so there it melts in columns of `feOffset` instead, with the
-  stretch done by scaling `<main>`. Safari draws nothing for a filter of
-  over 200 parts, or one with a part left empty (a column moved out of
-  its area).
+  stretch done by scaling `.melts`. Safari hands a filter the whole page
+  (cut it at the header first, or what is above pours in), and draws
+  nothing for a filter of over 200 parts or with a part left empty (a
+  column moved out of its area).
 - **Every nav tab has its own colourway**, main and offset both unique and
   unlike the top of the page's teal/magenta (the header takes the colours
   of the section in view). A new section needs a new pair.

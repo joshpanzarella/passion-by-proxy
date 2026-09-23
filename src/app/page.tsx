@@ -37,6 +37,8 @@ export default function Home() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: structuredDataJson() }} />
       <SiteHeader home />
 
+      {/* what melts (Melt.tsx): the page and its footer, not the header */}
+      <div className="melts">
       <main>
         <section id="top" className="hero stage-dark">
           <div className="hero__inner">
@@ -64,6 +66,7 @@ export default function Home() {
       </main>
 
       <SiteFooter home />
+      </div>
     </>
   );
 }

@@ -12,12 +12,13 @@ import { useEffect, useRef } from "react";
 // song's title by the logo in the header. Any scroll, tap or key puts it all back at
 // once.
 //
-// It is an SVG displacement filter on <main> (html[data-melting] in
-// globals.css), so the real page melts, text and all. The filter covers only
-// the screen, in <main>'s own coordinates; the drip map is drawn fresh each
-// time, full size, with a second, fine map that adds the part of each fall
-// the first cannot hold (a map has only 256 steps), so edges fall to a
-// fraction of a pixel and the melt stays liquid, not stair-stepped. Home
+// It is an SVG displacement filter on .melts, <main> and the footer
+// (html[data-melting] in globals.css), so the real page melts, text and all.
+// The filter covers only the screen, in their own coordinates; the drip map
+// is drawn fresh each time, full size, with a second, fine map that adds the
+// part of each fall the first cannot hold (a map has only 256 steps), so
+// edges fall to a fraction of a pixel and the melt stays liquid, not
+// stair-stepped. Home
 // page only, never for reduced motion, not during the splash, and not while
 // someone is using an embedded player (focus in an iframe).
 //
@@ -58,7 +59,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
   const captionRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    const main = document.querySelector("main");
+    const page = document.querySelector<HTMLElement>(".melts");
     const filter = filterRef.current;
     const columnsFilter = columnsRef.current;
     const crop = cropRef.current;
@@ -70,13 +71,14 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
     const round = roundRef.current;
     const sink = sinkRef.current;
     const caption = captionRef.current;
-    if (!main || !filter || !crop || !coarse || !fine || !shift || !nudge || !tips || !round || !sink || !columnsFilter || !caption) return;
+    if (!page || !filter || !crop || !coarse || !fine || !shift || !nudge || !tips || !round || !sink || !columnsFilter || !caption) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const root = document.documentElement;
+    const parts = [...page.children] as HTMLElement[]; // <main> and the footer
     const inColumns = "GestureEvent" in window; // only Safari has it
     let columns: { el: Element; length: number; tip: number }[] = [];
     let spread = 0; // the columns' average length
-    let reach = 0; // how far down the columns go, from the header
+    let reach = 0; // how far down the columns go, from the top of the screen
     let idle = 0;
     let raf = 0;
     let start = 0;
@@ -110,7 +112,8 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       if (playing) playing.textContent = "";
       if (root.dataset.melting !== undefined) {
         delete root.dataset.melting;
-        main.style.transform = "";
+        page.style.transform = "";
+        for (const part of parts) part.style.clipPath = "";
         for (const el of [shift, nudge, round]) el.setAttribute("scale", "0");
         sink.setAttribute("dy", "0");
       }
@@ -120,7 +123,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
 
     const melt = () => {
       if (!root.dataset.splash || document.hidden || document.activeElement?.tagName === "IFRAME") return reset();
-      const box = { x: 0, y: -main.getBoundingClientRect().top, width: main.clientWidth, height: window.innerHeight };
+      const box = { x: 0, y: -page.getBoundingClientRect().top, width: page.clientWidth, height: window.innerHeight };
       // only what shows below the header falls; nothing flows in from above
       // it, so what melts away uncovers the static
       header = document.querySelector(".site-header")?.getBoundingClientRect().bottom ?? 0;
@@ -129,24 +132,34 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       const shape = drips(w, DEPTH * window.innerHeight); // px, at the full melt
       if (inColumns) {
         // a column every COLUMN_PX (a pixel wider, so no seam shows between
-        // two), each the page moved down by the fall at its middle; the
-        // filter starts below the header, so nothing above it flows in, and
-        // ends a little past the bottom of the screen, where a column that
-        // has fallen off it stops: an empty one, and Safari draws none
-        reach = seen.height + 2;
+        // two), each the seen page moved down by the fall at its middle.
+        // Safari hands a filter all that the page draws, not only what is in
+        // its area, and ignores a cut made inside it, so the page itself is
+        // clipped at the header while it melts, or what is above would pour
+        // in. It also puts what it hands over at the top of the filter's
+        // area, so that is the top of the screen, as the page is drawn from
+        // there (from the header, all of it would drop by the header's
+        // height). The columns end a little past the bottom of the screen,
+        // where one that has fallen off it stops: an empty one, and Safari
+        // draws none
+        reach = box.height + 2;
         const n = Math.min(COLUMNS_MAX, Math.ceil(w / COLUMN_PX));
         const merge = svg("feMerge", {});
         columns = Array.from({ length: n }, (_, i) => {
           const x0 = Math.round((i * w) / n);
           const x1 = Math.round(((i + 1) * w) / n);
           merge.append(svg("feMergeNode", { in: `c${i}` }));
-          const el = svg("feOffset", { in: "SourceGraphic", result: `c${i}`, x: x0, width: x1 - x0 + 1, y: seen.y, height: reach });
+          const el = svg("feOffset", { in: "SourceGraphic", result: `c${i}`, x: x0, width: x1 - x0 + 1, y: box.y, height: reach });
           return { el, ...shape[Math.min(w - 1, (x0 + x1) >> 1)] };
         });
         spread = columns.reduce((sum, c) => sum + c.length, 0) / n;
         columnsFilter.replaceChildren(...columns.map((c) => c.el), merge);
-        set(columnsFilter, { ...seen, height: reach });
-        main.style.transformOrigin = `0 ${box.y}px`; // the top of the screen
+        for (const part of parts) {
+          const cut = header - part.getBoundingClientRect().top;
+          part.style.clipPath = cut > 0 ? `inset(${cut}px 0 0 0)` : "";
+        }
+        set(columnsFilter, { ...box, height: reach });
+        page.style.transformOrigin = `0 ${box.y}px`; // the top of the screen
         root.dataset.melting = "columns";
       } else {
         for (const el of [filter, coarse, fine, tips]) set(el, box);
@@ -191,7 +204,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
         // lands where the map would put it
         const stretch = (full: number) => 1 / Math.max(0.1, 1 - ((1 - STRETCH) * full) / h);
         const all = stretch((scale / 2) * spread);
-        main.style.transform = `scale(1, ${all})`;
+        page.style.transform = `scale(1, ${all})`;
         for (const c of columns) {
           const full = (scale / 2) * c.length;
           const edge = (header + STRETCH * full) * stretch(full) + rounding * c.tip + gone * h;
@@ -215,7 +228,8 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       window.cancelAnimationFrame(raf);
       timers.forEach((id) => window.clearTimeout(id));
       delete root.dataset.melting;
-      main.style.transform = "";
+      page.style.transform = "";
+      for (const part of parts) part.style.clipPath = "";
     };
   }, [captions]);
 
