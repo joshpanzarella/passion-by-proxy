@@ -67,7 +67,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const root = document.documentElement;
     const flat = [...page.querySelectorAll<HTMLImageElement>("img[data-melt-flat]")];
-    const parts = [...page.children] as HTMLElement[]; // <main> and the footer
+    let above: HTMLElement[] = []; // parts of the page wholly above the header, hidden meanwhile
     const safari = "GestureEvent" in window; // only Safari has it
     const chrome = !safari && "chrome" in window;
     let shape: Column[] = []; // the drips, per px across
@@ -106,7 +106,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       if (root.dataset.melting !== undefined) {
         delete root.dataset.melting;
         for (const img of flat) img.parentElement?.style.removeProperty("background");
-        for (const part of parts) part.style.removeProperty("clip-path");
+        for (const el of above) el.style.removeProperty("visibility");
         release();
         for (const el of [shift, nudge, round]) el.setAttribute("scale", "0");
         sink.setAttribute("dy", "0");
@@ -126,12 +126,14 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       header = document.querySelector(".site-header")?.getBoundingClientRect().bottom ?? 0;
       const seen = { ...box, y: box.y + header, height: box.height - header };
       // Safari hands the filter all that the page draws, above the screen
-      // too, and passes it through the cut above (crop), so the hero's black
-      // poured in and fell through: the page itself is cut at the header
-      for (const part of parts) {
-        const cut = header - part.getBoundingClientRect().top;
-        if (cut > 0) part.style.clipPath = `inset(${cut}px 0 0 0)`;
-      }
+      // too, and passes it through the cut above (crop), so, scrolled down,
+      // the hero's black poured in and fell through: what is wholly above
+      // the header hides meanwhile. (Not a clip-path: on an iPhone that
+      // lifts <main> onto a layer of its own, out of the filter's reach.)
+      above = [...page.querySelectorAll<HTMLElement>(":scope > main > *, :scope > footer")].filter(
+        (el) => el.getBoundingClientRect().bottom <= header + 1,
+      );
+      for (const el of above) el.style.visibility = "hidden";
       for (const [k, v] of Object.entries(seen)) crop.setAttribute(k, String(v));
       const fall = DEPTH * window.innerHeight; // px, at the full melt
       const maps = drips(Math.round(box.width), Math.round(box.height), fall);
@@ -258,7 +260,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       timers.forEach((id) => window.clearTimeout(id));
       delete root.dataset.melting;
       for (const img of flat) img.parentElement?.style.removeProperty("background");
-      for (const part of parts) part.style.removeProperty("clip-path");
+      for (const el of above) el.style.removeProperty("visibility");
       release();
     };
   }, [captions]);

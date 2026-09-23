@@ -59,6 +59,12 @@ static export (`out/`) and hosted on Cloudflare Pages from `main`.
   outside Safari: Chrome still moves, stretches and clips it, so there it
   follows the melt's shape (its edges where the page's fall, what is inside
   riding along); any other browser hides it.
+  Safari pulls in page content from above the screen (its cut at the
+  header doesn't hold), so what lies wholly above the header is hidden
+  (`visibility`) while it melts. Never use `clip-path`, a mask or anything
+  that makes a layer on `.melts` or its parts: on an iPhone that lifts
+  them out of the filter and nothing melts. Headless WebKit screenshots
+  of a scrolled melt are shifted and can't be trusted for this.
   The captions are the lyrics (`lyrics.ts`), passed in by `page.tsx`;
   songs marked `placeholder` (still lorem ipsum) are left out.
   Safari runs the displacement maps on the CPU, so on an iPhone the melt
