@@ -35,9 +35,13 @@ const jobs = {
     const pad = 60;
     await sharp(trimmed).extend({ top: pad, bottom: pad, left: pad, right: pad, background: BLACK }).resize({ height: 1100 }).webp({ quality: 80 }).toFile(out("alliterate-bottles.webp"));
   },
-  // purple banner: page strip, plus the 1200x630 link preview image
+  // purple banner: page strip (its green lettering painted out, as the other
+  // strips are only pattern), plus the 1200x630 link preview image (which
+  // keeps it)
   banner: async (src) => {
-    await sharp(src).resize({ width: 2000 }).webp({ quality: 78 }).toFile(out("banner.webp"));
+    const page = await sharp(src).resize({ width: 2000 }).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+    const { data, info } = await paintOutGreen(page);
+    await sharp(data, { raw: info }).webp({ quality: 78 }).toFile(out("banner.webp"));
     await sharp(src).resize(1200, 630, { fit: "cover" }).jpeg({ quality: 84 }).toFile(path.join(process.cwd(), "src/app/opengraph-image.jpg"));
   },
   // square textures for the strips between sections; grainy art, so a
@@ -74,6 +78,59 @@ const jobs = {
       .toFile(path.join(process.cwd(), "src/app/icon.png"));
   },
 };
+
+// The green lettering, painted over with the art's own pattern from higher
+// up and to the left (FROM), through a soft mask: the green (and the faint
+// green spray about it) grown to cover the letters' shadows, then blurred at
+// the rim. Worked out on the 2000 px copy.
+const FROM = { x: -150, y: -350 };
+async function paintOutGreen({ data, info }) {
+  const { width: w, height: h, channels: c } = info;
+  const n = w * h;
+  const strong = new Uint8Array(n);
+  const faint = new Uint8Array(n);
+  for (let i = 0; i < n; i++) {
+    const [r, g, b] = [data[i * c], data[i * c + 1], data[i * c + 2]];
+    const lead = g - Math.max(r, b);
+    strong[i] = lead > 50 && g > 110 ? 255 : 0;
+    faint[i] = lead > 12 ? 255 : 0;
+  }
+  const near = grow(strong, w, h, 60);
+  const green = strong.map((v, i) => (v || (faint[i] && near[i]) ? 255 : 0));
+  const mask = await sharp(grow(green, w, h, 20), { raw: { width: w, height: h, channels: 1 } }).blur(10).extractChannel(0).raw().toBuffer();
+  const res = Buffer.from(data);
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const i = y * w + x;
+      const a = Math.min(255, mask[i] * 2) / 255; // solid inside, soft at the rim
+      if (!a) continue;
+      const j = Math.min(h - 1, Math.max(0, y + FROM.y)) * w + Math.min(w - 1, Math.max(0, x + FROM.x));
+      for (let k = 0; k < 3; k++) res[i * c + k] = Math.round(data[j * c + k] * a + data[i * c + k] * (1 - a));
+    }
+  }
+  return { data: res, info };
+}
+
+// a square max filter: each pixel takes the largest value within r of it
+function grow(src, w, h, r) {
+  const across = new Uint8Array(src.length);
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      let m = 0;
+      for (let k = Math.max(0, x - r); k <= Math.min(w - 1, x + r) && m < 255; k++) m = Math.max(m, src[y * w + k]);
+      across[y * w + x] = m;
+    }
+  }
+  const out = new Uint8Array(src.length);
+  for (let x = 0; x < w; x++) {
+    for (let y = 0; y < h; y++) {
+      let m = 0;
+      for (let k = Math.max(0, y - r); k <= Math.min(h - 1, y + r) && m < 255; k++) m = Math.max(m, across[k * w + x]);
+      out[y * w + x] = m;
+    }
+  }
+  return out;
+}
 
 function texture(src, name) {
   return sharp(src).resize(1100, 1100).webp({ quality: 50, effort: 6 }).toFile(out(name));

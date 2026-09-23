@@ -3,8 +3,9 @@ import { BannerWarp } from "./BannerWarp";
 // Full-width artwork between sections, drifting with the scroll (a CSS
 // scroll-driven animation, see "scroll-linked motion" in globals.css) and
 // slowly undulating (BannerWarp, drawn over the image).
-//  - "banner": the whole picture at 2:1 (art with lettering in it); it
-//    undulates at half strength so the lettering stays readable
+//  - "banner": the whole picture at 2:1 (its lettering painted out by
+//    npm run media, like the strips it is only pattern); it undulates at
+//    half strength
 //  - "strip": a short slice of a square texture; the image is three times
 //    the strip's height so the drift has room to travel
 export function Banner({ src, kind = "banner" }: { src: string; kind?: "banner" | "strip" }) {
