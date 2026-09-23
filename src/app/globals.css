@@ -607,11 +607,6 @@ html[data-melting] .melts {
   filter: url(#melt);
 }
 
-/* Safari's, in columns */
-html[data-melting="columns"] .melts {
-  filter: url(#melt-columns);
-}
-
 /* nothing under it moves while it runs (the hero video and the banners'
    waves stop in their components): any change in it has the whole filter
    redone, and Safari does that on the processor, so the melt stutters and,
@@ -624,12 +619,12 @@ html[data-melting] .site-footer__wordmark * {
   animation-play-state: paused;
 }
 
-/* Chrome (the map melt) draws another site's player (Spotify, TikTok,
-   YouTube) apart from the page, out of reach of the filter and even of the
-   player's own opacity: rather than stand whole while all else melts, it
-   cuts out to the static as the melt starts (hidden, it keeps its place and
-   its state). Safari melts it with the rest. */
-html[data-melting=""] .melts iframe {
+/* Chrome (every browser but Safari, which melts it with the rest) draws
+   another site's player (Spotify, TikTok, YouTube) apart from the page, out
+   of reach of the filter and even of the player's own opacity: rather than
+   stand whole while all else melts, it cuts out to the static as the melt
+   starts (hidden, it keeps its place and its state) */
+html[data-melting="hide-players"] .melts iframe {
   visibility: hidden;
 }
 

@@ -18,28 +18,18 @@ import { useEffect, useRef } from "react";
 // is drawn fresh each time, full size, with a second, fine map that adds the
 // part of each fall the first cannot hold (a map has only 256 steps), so
 // edges fall to a fraction of a pixel and the melt stays liquid, not
-// stair-stepped. Home
-// page only, never for reduced motion, not during the splash, and not while
-// someone is using an embedded player (focus in an iframe).
-//
-// Safari (and so every browser on iOS) works a displacement map out on the
-// processor, a few frames a second on a phone's dense screen. There the page
-// falls in thin columns instead (html[data-melting="columns"]), each the
-// same page simply moved down, which it does at full speed, and the stretch
-// is the whole page scaled down the screen: the same drips, waves and round
-// tips, stretching as they fall.
+// stair-stepped. Home page only, never for reduced motion, not during the
+// splash, and not while someone is using an embedded player (focus in an
+// iframe). Only Safari melts an embedded player with the page; elsewhere it
+// would stand whole, so it hides (data-melting="hide-players").
 
 const IDLE_MS = 7_000; // this long without scrolling, and it starts
 const MELT_MS = 9_000; // to melt all the way
 const DEPTH = 1.2; // how far the longest drip falls, of the screen's height (past the bottom)
-const STRETCH = 0.75; // the fall at the top of the screen, as a share of that at the bottom
 const FINE = 4 / 255; // the fine map's scale, as a share of the main one's
 const ROUND_PX = 32; // the largest drip tip or shoulder
 const ROUND_BY = 0.25; // tips and shoulders are fully formed by this share of the melt
 const SINK = 4; // after the melt, everything sinks this many screens × (time past it, in melts)²
-const COLUMN_PX = 2; // in columns, the width of each
-const COLUMNS_MAX = 190; // Safari drops a filter of over 200 parts
-const SVG_NS = "http://www.w3.org/2000/svg";
 const BURST_MS = [80, 400] as const; // the gap between bursts of words, at random
 const HOLD_MS = [1_400, 3_000] as const; // a finished line stays up this long, at random
 const between = ([lo, hi]: readonly [number, number]) => lo + Math.random() * (hi - lo);
@@ -55,13 +45,11 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
   const tipsRef = useRef<SVGFEImageElement>(null);
   const roundRef = useRef<SVGFEDisplacementMapElement>(null);
   const sinkRef = useRef<SVGFEOffsetElement>(null);
-  const columnsRef = useRef<SVGFilterElement>(null);
   const captionRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const page = document.querySelector<HTMLElement>(".melts");
     const filter = filterRef.current;
-    const columnsFilter = columnsRef.current;
     const crop = cropRef.current;
     const coarse = coarseRef.current;
     const fine = fineRef.current;
@@ -71,18 +59,12 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
     const round = roundRef.current;
     const sink = sinkRef.current;
     const caption = captionRef.current;
-    if (!page || !filter || !crop || !coarse || !fine || !shift || !nudge || !tips || !round || !sink || !columnsFilter || !caption) return;
+    if (!page || !filter || !crop || !coarse || !fine || !shift || !nudge || !tips || !round || !sink || !caption) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const root = document.documentElement;
-    const parts = [...page.children] as HTMLElement[]; // <main> and the footer
-    const inColumns = "GestureEvent" in window; // only Safari has it
-    let columns: { el: Element; length: number; tip: number }[] = [];
-    let spread = 0; // the columns' average length
-    let reach = 0; // how far down the columns go, from the top of the screen
     let idle = 0;
     let raf = 0;
     let start = 0;
-    let header = 0; // its bottom, from the top of the screen
     const playing = document.querySelector<HTMLElement>(".site-header__playing");
     let timers: number[] = []; // the captions'
     const later = (fn: () => void, ms: number) => timers.push(window.setTimeout(fn, ms));
@@ -112,8 +94,6 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       if (playing) playing.textContent = "";
       if (root.dataset.melting !== undefined) {
         delete root.dataset.melting;
-        page.style.transform = "";
-        for (const part of parts) part.style.clipPath = "";
         for (const el of [shift, nudge, round]) el.setAttribute("scale", "0");
         sink.setAttribute("dy", "0");
       }
@@ -124,52 +104,20 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
     const melt = () => {
       if (!root.dataset.splash || document.hidden || document.activeElement?.tagName === "IFRAME") return reset();
       const box = { x: 0, y: -page.getBoundingClientRect().top, width: page.clientWidth, height: window.innerHeight };
+      for (const el of [filter, coarse, fine, tips]) {
+        for (const [k, v] of Object.entries(box)) el.setAttribute(k, String(v));
+      }
       // only what shows below the header falls; nothing flows in from above
       // it, so what melts away uncovers the static
-      header = document.querySelector(".site-header")?.getBoundingClientRect().bottom ?? 0;
+      const header = document.querySelector(".site-header")?.getBoundingClientRect().bottom ?? 0;
       const seen = { ...box, y: box.y + header, height: box.height - header };
-      const w = Math.round(box.width);
-      const shape = drips(w, DEPTH * window.innerHeight); // px, at the full melt
-      if (inColumns) {
-        // a column every COLUMN_PX (a pixel wider, so no seam shows between
-        // two), each the seen page moved down by the fall at its middle.
-        // Safari hands a filter all that the page draws, not only what is in
-        // its area, and ignores a cut made inside it, so the page itself is
-        // clipped at the header while it melts, or what is above would pour
-        // in. It also puts what it hands over at the top of the filter's
-        // area, so that is the top of the screen, as the page is drawn from
-        // there (from the header, all of it would drop by the header's
-        // height). The columns end a little past the bottom of the screen,
-        // where one that has fallen off it stops: an empty one, and Safari
-        // draws none
-        reach = box.height + 2;
-        const n = Math.min(COLUMNS_MAX, Math.ceil(w / COLUMN_PX));
-        const merge = svg("feMerge", {});
-        columns = Array.from({ length: n }, (_, i) => {
-          const x0 = Math.round((i * w) / n);
-          const x1 = Math.round(((i + 1) * w) / n);
-          merge.append(svg("feMergeNode", { in: `c${i}` }));
-          const el = svg("feOffset", { in: "SourceGraphic", result: `c${i}`, x: x0, width: x1 - x0 + 1, y: box.y, height: reach });
-          return { el, ...shape[Math.min(w - 1, (x0 + x1) >> 1)] };
-        });
-        spread = columns.reduce((sum, c) => sum + c.length, 0) / n;
-        columnsFilter.replaceChildren(...columns.map((c) => c.el), merge);
-        for (const part of parts) {
-          const cut = header - part.getBoundingClientRect().top;
-          part.style.clipPath = cut > 0 ? `inset(${cut}px 0 0 0)` : "";
-        }
-        set(columnsFilter, { ...box, height: reach });
-        page.style.transformOrigin = `0 ${box.y}px`; // the top of the screen
-        root.dataset.melting = "columns";
-      } else {
-        for (const el of [filter, coarse, fine, tips]) set(el, box);
-        set(crop, seen);
-        const urls = maps(shape, Math.round(box.height));
-        coarse.setAttribute("href", urls.coarse);
-        fine.setAttribute("href", urls.fine);
-        tips.setAttribute("href", urls.tips);
-        root.dataset.melting = "";
-      }
+      for (const [k, v] of Object.entries(seen)) crop.setAttribute(k, String(v));
+      const fall = DEPTH * window.innerHeight; // px, at the full melt
+      const maps = drips(Math.round(box.width), Math.round(box.height), fall);
+      coarse.setAttribute("href", maps.coarse);
+      fine.setAttribute("href", maps.fine);
+      tips.setAttribute("href", maps.tips);
+      root.dataset.melting = "GestureEvent" in window ? "" : "hide-players"; // only Safari has GestureEvent
       start = performance.now();
       raf = window.requestAnimationFrame(frame);
       const sung = captions.filter((song) => song.lines.length > 0);
@@ -186,36 +134,17 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       const p = (now - start) / MELT_MS; // past 1, the melt goes on as it sinks
       // a column falls scale × its share of the map (half, at most)
       const scale = p * p * DEPTH * window.innerHeight * 2;
+      shift.setAttribute("scale", String(scale));
+      nudge.setAttribute("scale", String(scale * FINE));
       // tips and shoulders form early, at full size, then ride down on the
       // drips: round the whole way, never squashed flat by the scale
       const t = Math.min(1, p / ROUND_BY);
-      const rounding = t * t * (3 - 2 * t) * ROUND_PX;
+      round.setAttribute("scale", String(t * t * (3 - 2 * t) * ROUND_PX * (255 / 127)));
       // then all of it sinks too, from a standstill, faster and faster (the
       // drips keep their own speed), until nothing is left on screen
       const past = Math.max(0, p - 1);
       const gone = SINK * past * past;
-      const h = window.innerHeight;
-      if (inColumns) {
-        // the map's fall grows down the screen, from STRETCH of a column's
-        // full fall at the top to all of it at the bottom, which takes a
-        // point y down the screen to (y + STRETCH × full) × stretch(full).
-        // A column can only move, so the page stretches as a whole, by the
-        // columns' average, and each column moves so that its top edge
-        // lands where the map would put it
-        const stretch = (full: number) => 1 / Math.max(0.1, 1 - ((1 - STRETCH) * full) / h);
-        const all = stretch((scale / 2) * spread);
-        page.style.transform = `scale(1, ${all})`;
-        for (const c of columns) {
-          const full = (scale / 2) * c.length;
-          const edge = (header + STRETCH * full) * stretch(full) + rounding * c.tip + gone * h;
-          c.el.setAttribute("dy", String(Math.min(reach - 1, edge / all - header)));
-        }
-      } else {
-        shift.setAttribute("scale", String(scale));
-        nudge.setAttribute("scale", String(scale * FINE));
-        round.setAttribute("scale", String(rounding * (255 / 127)));
-        sink.setAttribute("dy", String(gone * h));
-      }
+      sink.setAttribute("dy", String(gone * window.innerHeight));
       raf = gone < 1.05 ? window.requestAnimationFrame(frame) : 0;
     };
 
@@ -228,8 +157,6 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       window.cancelAnimationFrame(raf);
       timers.forEach((id) => window.clearTimeout(id));
       delete root.dataset.melting;
-      page.style.transform = "";
-      for (const part of parts) part.style.clipPath = "";
     };
   }, [captions]);
 
@@ -246,8 +173,6 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
           <feDisplacementMap ref={roundRef} in="grown" in2="tips" scale="0" xChannelSelector="R" yChannelSelector="G" result="melted" />
           <feOffset ref={sinkRef} in="melted" dx="0" dy="0" />
         </filter>
-        {/* Safari's: the columns are made for each melt */}
-        <filter ref={columnsRef} id="melt-columns" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse" colorInterpolationFilters="sRGB" />
       </svg>
       {/* one each side, bobbing at slightly different rates: in step, out,
           and back in */}
@@ -264,18 +189,23 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
   );
 }
 
-// The drips, across the screen: how far each column falls. Slow waves
-// across the screen, and a few drips that fall much further. A drip is
-// shaped like one of paint, worked out in screen pixels (w px across;
-// depthPx is the full fall): straight sides, a round tip (a half circle),
-// and rounded shoulders where it leaves the surface (a quarter circle each
-// side), so no corner is square. Drips that meet merge (the larger fall
-// wins), so none is ever cut off flat.
+// The drip map, over the screen: how far each column falls, in green
+// (mid-grey stays put, darker falls further). Slow waves across the screen,
+// a few drips that fall much further, and a little more fall lower down, so
+// things stretch as they go. A drip is shaped like one of paint, worked out
+// in screen pixels (the map is w by h px; depthPx is the full fall):
+// straight sides, a round tip (a half circle), and rounded shoulders where
+// it leaves the surface (a quarter circle each side), so no corner is
+// square. Drips that meet merge (the larger fall wins), so none is ever cut
+// off flat.
 //
 // Each column's fall is split in two, so the round parts keep their shape
-// while the drips grow: its length (scaled up through the melt) and its tip
-// or shoulder (at full size from early on).
-function drips(w: number, depthPx: number) {
+// while the drips grow: its length (the main and fine maps, scaled up
+// through the melt) and its tip or shoulder (the tips map, at full size from
+// early on). The main map holds the nearest of its 256 steps, and the fine
+// map (at FINE of the scale) holds what is left over; its red also cancels
+// the main map's small sideways shift (128 is a hair past the middle).
+function drips(w: number, h: number, depthPx: number) {
   const r = () => Math.random() * Math.PI * 2;
   const phase = [r(), r(), r()];
   // the surface: slow waves, in px of fall
@@ -315,24 +245,12 @@ function drips(w: number, depthPx: number) {
     return { length: Math.min(1, Math.max(0, length / depthPx)), tip: Math.min(1, tip / ROUND_PX) };
   });
 
-  return shape;
-}
-
-// The drips as displacement maps over the screen (h px tall), for the
-// filter: in green, mid-grey stays put and darker falls further, and a
-// little more fall lower down, so things stretch as they go. The length is
-// in the main and fine maps, the tip in the tips map. The main map holds the
-// nearest of its 256 steps, and the fine map (at FINE of the scale) holds
-// what is left over; its red also cancels the main map's small sideways
-// shift (128 is a hair past the middle).
-function maps(shape: { length: number; tip: number }[], h: number) {
-  const w = shape.length;
   const main = canvas(w, h);
   const extra = canvas(w, h);
   const round = canvas(w, h);
   if (!main || !extra || !round) return { coarse: "", fine: "", tips: "" };
   for (let y = 0; y < h; y++) {
-    const stretch = STRETCH + ((1 - STRETCH) * y) / (h - 1);
+    const stretch = 0.75 + (0.25 * y) / (h - 1);
     for (let x = 0; x < w; x++) {
       const i = (y * w + x) * 4;
       const k = shape[x].length * stretch;
@@ -356,15 +274,6 @@ function maps(shape: { length: number; tip: number }[], h: number) {
     }
   }
   return { coarse: main.url(), fine: extra.url(), tips: round.url() };
-}
-
-function svg(name: string, values: Record<string, string | number>) {
-  return set(document.createElementNS(SVG_NS, name), values);
-}
-
-function set<T extends Element>(el: T, values: Record<string, string | number>) {
-  for (const [k, v] of Object.entries(values)) el.setAttribute(k, String(v));
-  return el;
 }
 
 function canvas(w: number, h: number) {
