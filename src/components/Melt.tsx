@@ -26,7 +26,7 @@ import { useEffect, useRef } from "react";
 // page's would and what is inside rides along, stretched. Any other browser
 // hides them (data-melting="hide-players").
 
-const IDLE_MS = 7_000; // this long without scrolling, and it starts
+const IDLE_MS = 10_000; // this long without scrolling (once the page shows), and it starts
 const MELT_MS = 9_000; // to melt all the way
 const DEPTH = 1.2; // how far the longest drip falls, of the screen's height (past the bottom)
 const STRETCH = 0.75; // the fall at the top of the screen, as a share of that at the bottom
@@ -241,8 +241,17 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
 
     const events = ["scroll", "wheel", "touchstart", "keydown", "pointerdown"] as const;
     for (const e of events) window.addEventListener(e, reset, { passive: true });
-    reset();
+    // the wait starts once the page shows: after the splash (data-splash),
+    // not while it plays
+    const shown = new MutationObserver(() => {
+      if (!root.dataset.splash) return;
+      shown.disconnect();
+      reset();
+    });
+    if (root.dataset.splash) reset();
+    else shown.observe(root, { attributes: true, attributeFilter: ["data-splash"] });
     return () => {
+      shown.disconnect();
       for (const e of events) window.removeEventListener(e, reset);
       window.clearTimeout(idle);
       window.cancelAnimationFrame(raf);
