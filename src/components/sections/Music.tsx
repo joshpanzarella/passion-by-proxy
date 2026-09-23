@@ -2,7 +2,6 @@ import { album, band, isLive, single, type Link, type Release } from "@/data/ban
 import { songs } from "@/data/lyrics";
 import NextLink from "next/link";
 import { ReleaseStatus } from "@/components/ReleaseStatus";
-import { SplitWordmark, type Piece } from "@/components/SplitWordmark";
 import { Section } from "./Section";
 
 // The new single leads with its cover and lettering; the album follows as
@@ -32,7 +31,8 @@ function Spotlight({ release }: { release: Release }) {
         <p className="release__kind">new {release.kind}</p>
         <h3 className="spotlight__title">
           {release.wordmark ? (
-            <SplitWordmark src={release.wordmark} alt={release.title} width={900} height={358} pieces={UI_PIECES} />
+            // eslint-disable-next-line @next/next/no-img-element -- lettering art; alt carries the title
+            <img src={release.wordmark} alt={release.title} width={900} height={358} />
           ) : (
             release.title
           )}
@@ -53,17 +53,6 @@ function lyricsHref(release: Release) {
   const on = songs.filter((s) => s.release === release || s.alsoOn?.includes(release));
   return on.length === 1 ? `/lyrics/${on[0].slug}` : "/lyrics";
 }
-
-// The U&I lettering (u-and-i-wordmark.webp, 900 x 358) cut into its three
-// letters along lines measured off the art: U | & runs from x 408 at the
-// top to 385 by y 200 (the U's slanted right edge and the tip of the &'s
-// left arm); & | I follows the I's slanted left edge, x 764 at the top to 690
-// at the bottom.
-const UI_PIECES: Piece[] = [
-  { clip: "0% 0%, 45.3% 0%, 42.8% 56%, 42.8% 100%, 0% 100%", cx: 22, cy: 52 },
-  { clip: "45.3% 0%, 84.9% 0%, 76.7% 100%, 42.8% 100%, 42.8% 56%", cx: 62, cy: 50 },
-  { clip: "84.9% 0%, 100% 0%, 100% 100%, 76.7% 100%", cx: 90, cy: 50 },
-];
 
 function AlbumFeature({ release }: { release: Release }) {
   return (
