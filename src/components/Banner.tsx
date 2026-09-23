@@ -11,7 +11,7 @@ export function Banner({ src, kind = "banner" }: { src: string; kind?: "banner" 
   return (
     <div className={`banner banner--${kind}`} aria-hidden="true">
       {/* eslint-disable-next-line @next/next/no-img-element -- decorative, pre-sized webp */}
-      <img src={src} alt="" loading="lazy" />
+      <img src={src} alt="" loading="lazy" data-melt-flat="" />
       <BannerWarp src={src} amount={kind === "banner" ? 0.5 : 1} />
     </div>
   );

@@ -62,6 +62,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
     if (!page || !filter || !crop || !coarse || !fine || !shift || !nudge || !tips || !round || !sink || !caption) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const root = document.documentElement;
+    const flat = [...page.querySelectorAll<HTMLImageElement>("img[data-melt-flat]")];
     let idle = 0;
     let raf = 0;
     let start = 0;
@@ -94,6 +95,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       if (playing) playing.textContent = "";
       if (root.dataset.melting !== undefined) {
         delete root.dataset.melting;
+        for (const img of flat) img.parentElement?.style.removeProperty("background");
         for (const el of [shift, nudge, round]) el.setAttribute("scale", "0");
         sink.setAttribute("dy", "0");
       }
@@ -117,6 +119,22 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       coarse.setAttribute("href", maps.coarse);
       fine.setAttribute("href", maps.fine);
       tips.setAttribute("href", maps.tips);
+      // art that drifts with the scroll rides a layer of its own, which
+      // Safari on an iPhone melts as one block, if at all: meanwhile it is
+      // painted instead as its frame's background, just where it has drifted
+      // to (as object-fit: cover), and steps aside (globals.css)
+      for (const img of flat) {
+        const frame = img.parentElement;
+        if (!frame || !img.naturalWidth) continue;
+        const f = frame.getBoundingClientRect();
+        const r = img.getBoundingClientRect();
+        const s = Math.max(r.width / img.naturalWidth, r.height / img.naturalHeight);
+        const w = img.naturalWidth * s;
+        const h = img.naturalHeight * s;
+        const x = r.left - f.left - frame.clientLeft + (r.width - w) / 2;
+        const y = r.top - f.top - frame.clientTop + (r.height - h) / 2;
+        frame.style.background = `url("${img.currentSrc || img.src}") ${x}px ${y}px / ${w}px ${h}px no-repeat`;
+      }
       root.dataset.melting = "GestureEvent" in window ? "" : "hide-players"; // only Safari has GestureEvent
       start = performance.now();
       raf = window.requestAnimationFrame(frame);
@@ -157,6 +175,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       window.cancelAnimationFrame(raf);
       timers.forEach((id) => window.clearTimeout(id));
       delete root.dataset.melting;
+      for (const img of flat) img.parentElement?.style.removeProperty("background");
     };
   }, [captions]);
 

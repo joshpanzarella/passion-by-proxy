@@ -51,9 +51,11 @@ static export (`out/`) and hosted on Cloudflare Pages from `main`.
   where a block has no background of its own). Nothing inside `.melts` may
   be `position: fixed` (the filter would pin it to `.melts`); overlays go
   outside it, as the splash, cues and captions do. Anything that animates
-  inside it pauses while it runs. What the filter can't reach hides while
-  it runs: the banners' WebGL canvases (on an iPhone), and outside Safari
-  another site's iframe (a player).
+  inside it pauses while it runs. What the filter can't reach steps aside
+  while it runs: art on a layer of its own (drifting images, marked
+  `data-melt-flat`, are painted as their frame's background meanwhile; the
+  banners' WebGL copy), which Safari on an iPhone melts as one block or not
+  at all, and outside Safari another site's iframe (a player).
   The captions are the lyrics (`lyrics.ts`), passed in by `page.tsx`;
   songs marked `placeholder` (still lorem ipsum) are left out.
   Safari runs the displacement maps on the CPU, so on an iPhone the melt
