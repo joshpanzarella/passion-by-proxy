@@ -124,7 +124,8 @@ export const album: Release = {
   links: [], // pre-save link goes here
 };
 
-// The first single, out before this site. On the lyrics page for now.
+// The first single, out before this site: in the music section after the
+// album, and on the lyrics page. An empty blurb shows nothing.
 export const firstSingle: Release = {
   kind: "single",
   title: "I Won’t Be(Long)",
@@ -132,7 +133,11 @@ export const firstSingle: Release = {
   cover: "/media/i-wont-be-long-cover.webp",
   tone: "desert",
   blurb: "",
-  links: [{ label: "Bandcamp", href: "https://passion-by-proxy.bandcamp.com/track/i-wont-be-long" }],
+  links: [
+    { label: "Spotify", href: "https://open.spotify.com/album/7GsBnC3nzQVTAKuzHhYO51" },
+    { label: "Apple Music", href: "https://music.apple.com/us/album/i-wont-be-long-single/1816682845" },
+    { label: "Bandcamp", href: "https://passion-by-proxy.bandcamp.com/track/i-wont-be-long" },
+  ],
 };
 
 const tiktokProfile = "https://www.tiktok.com/@passionproxy";

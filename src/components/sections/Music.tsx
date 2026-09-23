@@ -1,24 +1,27 @@
-import { album, band, isLive, single, type Link, type Release } from "@/data/band";
-import { songs } from "@/data/lyrics";
+import { album, band, firstSingle, isLive, single, type Link, type Release } from "@/data/band";
+import { releaseTone, songs } from "@/data/lyrics";
 import NextLink from "next/link";
 import { ReleaseStatus } from "@/components/ReleaseStatus";
 import { Section } from "./Section";
 
 // The new single leads with its cover and lettering; the album follows as
-// its own feature with the bottles. Each takes its colours from its artwork.
+// its own feature with the bottles, then the first single, laid out like the
+// new one (the covers zigzag). Each takes its colours from its artwork.
 export function Music() {
   return (
     <Section id="music" title="music">
-      <Spotlight release={single} />
+      <Spotlight release={single} fresh />
       <AlbumFeature release={album} />
+      <Spotlight release={firstSingle} />
       <Players />
     </Section>
   );
 }
 
-function Spotlight({ release }: { release: Release }) {
+// fresh: the new one ("new single"); otherwise just its kind
+function Spotlight({ release, fresh = false }: { release: Release; fresh?: boolean }) {
   return (
-    <article className="spotlight">
+    <article className={`spotlight ${releaseTone(release)}`}>
       <div className="spotlight__cover" data-reveal="">
         {release.cover ? (
           // eslint-disable-next-line @next/next/no-img-element -- pre-sized webp from npm run media
@@ -28,17 +31,20 @@ function Spotlight({ release }: { release: Release }) {
         )}
       </div>
       <div className="spotlight__body" data-reveal="" style={{ "--i": 1 } as React.CSSProperties}>
-        <p className="release__kind">new {release.kind}</p>
-        <h3 className="spotlight__title">
-          {release.wordmark ? (
-            // eslint-disable-next-line @next/next/no-img-element -- lettering art; alt carries the title
+        <p className="release__kind">
+          {fresh ? "new " : ""}
+          {release.kind}
+        </p>
+        {release.wordmark ? (
+          <h3 className="spotlight__title">
+            {/* eslint-disable-next-line @next/next/no-img-element -- lettering art; alt carries the title */}
             <img src={release.wordmark} alt={release.title} width={900} height={358} />
-          ) : (
-            release.title
-          )}
-        </h3>
+          </h3>
+        ) : (
+          <h3 className="spotlight__name offset">{release.title}</h3>
+        )}
         <ReleaseStatus release={release} />
-        <p>{release.blurb}</p>
+        {release.blurb && <p>{release.blurb}</p>}
         <Links links={release.links} />
         <p className="release__lyrics">
           <NextLink href={lyricsHref(release)}>read the lyrics →</NextLink>
