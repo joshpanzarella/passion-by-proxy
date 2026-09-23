@@ -50,7 +50,8 @@ static export (`out/`) and hosted on Cloudflare Pages from `main`.
   everything that shows only where a block has no background of its own).
   Nothing inside `<main>` may be `position: fixed` (the filter would pin it
   to `<main>`); overlays go outside it, as the splash, cues and captions do.
-  The captions are the lyrics (`lyrics.ts`), passed in by `page.tsx`.
+  The captions are the lyrics (`lyrics.ts`), passed in by `page.tsx`;
+  songs marked `placeholder` (still lorem ipsum) are left out.
 - **Every nav tab has its own colourway**, main and offset both unique and
   unlike the top of the page's teal/magenta (the header takes the colours
   of the section in view). A new section needs a new pair.

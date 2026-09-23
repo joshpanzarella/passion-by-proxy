@@ -47,6 +47,10 @@
   /* Alliterate bottles (sampled) */
   --gold: #f2c65e;
   --bottle-blue: #3a6cff;
+  /* I Won't Be(Long) (sampled): the desert backdrop's sunlit rock, and its
+     sky (offset use) */
+  --desert: #d97f7b;
+  --desert-sky: #30898c;
 
   /* redeclared here so a dark block inside the light theme resolves them
      against the dark colours, not the inherited light ones */
@@ -82,6 +86,8 @@
   --ui-red: #d01414;
   --gold: #8f6a08;
   --bottle-blue: #2b5ad8;
+  --desert: #c63f39;
+  --desert-sky: #2b7b7d;
 
   color-scheme: light;
 }
@@ -515,7 +521,7 @@ html[data-melting] .static::before {
   top: 0;
   bottom: 0;
   left: 0;
-  width: max(28vw, 220px);
+  width: max(14vw, 110px);
   background: var(--bg);
   mask-image: linear-gradient(90deg, transparent, #000 40%, #000 60%, transparent);
   transform: translate3d(-100%, 0, 0);
@@ -603,7 +609,7 @@ html[data-melting] .melt-cue--right {
   animation-duration: 1.8s;
 }
 
-/* closed captions on the static once the page has melted: white type on a
+/* closed captions on the static, from halfway through the melt: white type on a
    black box, as on TV, in both themes; up top, just under the header, where
    the melt has cleared */
 .melt-captions {
@@ -1466,6 +1472,7 @@ html[data-melting] .melt-cue--right {
 /* a release's colourway, on its lyrics pages */
 .tone--single { --c: var(--ui-blue); --c2: var(--ui-red); }
 .tone--album { --c: var(--gold); --c2: var(--bottle-blue); }
+.tone--desert { --c: var(--desert); --c2: var(--desert-sky); }
 
 .release__lyrics {
   margin: 1rem 0 0;

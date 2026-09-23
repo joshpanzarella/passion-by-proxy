@@ -4,10 +4,11 @@ import { useEffect, useRef } from "react";
 
 // Left alone long enough, the home page melts: everything on screen slides
 // down in drips of different lengths, slowly and then faster, uncovering the
-// static behind (stronger while it melts), and cues at both edges say how
-// to fix it. Once it has melted, the static carries closed captions: a
-// random song's lines from a random place, one at a time, each typed in word
-// by word like live TV captions. Any scroll, tap or key puts it all back at
+// static behind (stronger while it melts), then sinks off the bottom
+// altogether, leaving only the static and captions. Cues at both edges say how
+// to fix it. Halfway through, the static starts carrying closed captions: a
+// random song's lines from a random place, one at a time, each typed in
+// uneven bursts of a word or a few, as live TV captions come in. Any scroll, tap or key puts it all back at
 // once.
 //
 // It is an SVG displacement filter on <main> (html[data-melting] in
@@ -21,10 +22,14 @@ import { useEffect, useRef } from "react";
 
 const IDLE_MS = 7_000; // this long without scrolling, and it starts
 const MELT_MS = 9_000; // to melt all the way
-const DEPTH = 0.8; // how far the longest drip falls, of the screen's height
+const DEPTH = 1.2; // how far the longest drip falls, of the screen's height (past the bottom)
 const FINE = 4 / 255; // the fine map's scale, as a share of the main one's
-const WORD_MS = 180; // a caption types in a word this often
-const HOLD_MS = 2_000; // and stays up this long once it is all in
+const ROUND_PX = 32; // the largest drip tip or shoulder
+const ROUND_BY = 0.25; // tips and shoulders are fully formed by this share of the melt
+const SINK = 4; // after the melt, everything sinks this many screens × (time past it, in melts)²
+const BURST_MS = [80, 400] as const; // the gap between bursts of words, at random
+const HOLD_MS = [1_400, 3_000] as const; // a finished line stays up this long, at random
+const between = ([lo, hi]: readonly [number, number]) => lo + Math.random() * (hi - lo);
 
 // captions: each song's lines, in order
 export function Melt({ captions }: { captions: string[][] }) {
@@ -34,6 +39,9 @@ export function Melt({ captions }: { captions: string[][] }) {
   const fineRef = useRef<SVGFEImageElement>(null);
   const shiftRef = useRef<SVGFEDisplacementMapElement>(null);
   const nudgeRef = useRef<SVGFEDisplacementMapElement>(null);
+  const tipsRef = useRef<SVGFEImageElement>(null);
+  const roundRef = useRef<SVGFEDisplacementMapElement>(null);
+  const sinkRef = useRef<SVGFEOffsetElement>(null);
   const captionRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -44,8 +52,11 @@ export function Melt({ captions }: { captions: string[][] }) {
     const fine = fineRef.current;
     const shift = shiftRef.current;
     const nudge = nudgeRef.current;
+    const tips = tipsRef.current;
+    const round = roundRef.current;
+    const sink = sinkRef.current;
     const caption = captionRef.current;
-    if (!main || !filter || !crop || !coarse || !fine || !shift || !nudge || !caption) return;
+    if (!main || !filter || !crop || !coarse || !fine || !shift || !nudge || !tips || !round || !sink || !caption) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const root = document.documentElement;
     let idle = 0;
@@ -54,15 +65,20 @@ export function Melt({ captions }: { captions: string[][] }) {
     let timers: number[] = []; // the captions'
     const later = (fn: () => void, ms: number) => timers.push(window.setTimeout(fn, ms));
 
-    // one line, word by word, then the song's next line
+    // one line, in bursts (mostly a word, sometimes two or three at once, at
+    // uneven gaps), held a while, then the song's next line
     const roll = (lines: string[], i: number) => {
       const words = lines[i % lines.length].split(/\s+/);
-      words.forEach((_, n) =>
+      let at = 0;
+      for (let n = 0; n < words.length; ) {
+        n = Math.min(words.length, n + 1 + (Math.random() < 0.35 ? 1 + Math.floor(Math.random() * 2) : 0));
+        const shown = n;
         later(() => {
-          caption.textContent = `♪ ${words.slice(0, n + 1).join(" ")}${n === words.length - 1 ? " ♪" : ""}`;
-        }, n * WORD_MS),
-      );
-      later(() => roll(lines, i + 1), words.length * WORD_MS + HOLD_MS);
+          caption.textContent = `♪ ${words.slice(0, shown).join(" ")}${shown === words.length ? " ♪" : ""}`;
+        }, at);
+        at += between(BURST_MS);
+      }
+      later(() => roll(lines, i + 1), at + between(HOLD_MS));
     };
 
     const reset = () => {
@@ -73,8 +89,8 @@ export function Melt({ captions }: { captions: string[][] }) {
       caption.textContent = "";
       if (root.dataset.melting !== undefined) {
         delete root.dataset.melting;
-        shift.setAttribute("scale", "0");
-        nudge.setAttribute("scale", "0");
+        for (const el of [shift, nudge, round]) el.setAttribute("scale", "0");
+        sink.setAttribute("dy", "0");
       }
       window.clearTimeout(idle);
       idle = window.setTimeout(melt, IDLE_MS);
@@ -83,7 +99,7 @@ export function Melt({ captions }: { captions: string[][] }) {
     const melt = () => {
       if (!root.dataset.splash || document.hidden || document.activeElement?.tagName === "IFRAME") return reset();
       const box = { x: 0, y: -main.getBoundingClientRect().top, width: main.clientWidth, height: window.innerHeight };
-      for (const el of [filter, coarse, fine]) {
+      for (const el of [filter, coarse, fine, tips]) {
         for (const [k, v] of Object.entries(box)) el.setAttribute(k, String(v));
       }
       // only what shows below the header falls; nothing flows in from above
@@ -95,23 +111,33 @@ export function Melt({ captions }: { captions: string[][] }) {
       const maps = drips(Math.round(box.width), Math.round(box.height), fall);
       coarse.setAttribute("href", maps.coarse);
       fine.setAttribute("href", maps.fine);
+      tips.setAttribute("href", maps.tips);
       root.dataset.melting = "";
       start = performance.now();
       raf = window.requestAnimationFrame(frame);
       const sung = captions.filter((lines) => lines.length > 0);
       if (sung.length > 0) {
         const lines = sung[Math.floor(Math.random() * sung.length)];
-        later(() => roll(lines, Math.floor(Math.random() * lines.length)), MELT_MS);
+        later(() => roll(lines, Math.floor(Math.random() * lines.length)), MELT_MS / 2);
       }
     };
 
     const frame = (now: number) => {
-      const p = Math.min(1, (now - start) / MELT_MS);
+      const p = (now - start) / MELT_MS; // past 1, the melt goes on as it sinks
       // a column falls scale × its share of the map (half, at most)
       const scale = p * p * DEPTH * window.innerHeight * 2;
       shift.setAttribute("scale", String(scale));
       nudge.setAttribute("scale", String(scale * FINE));
-      raf = p < 1 ? window.requestAnimationFrame(frame) : 0;
+      // tips and shoulders form early, at full size, then ride down on the
+      // drips: round the whole way, never squashed flat by the scale
+      const t = Math.min(1, p / ROUND_BY);
+      round.setAttribute("scale", String(t * t * (3 - 2 * t) * ROUND_PX * (255 / 127)));
+      // then all of it sinks too, from a standstill, faster and faster (the
+      // drips keep their own speed), until nothing is left on screen
+      const past = Math.max(0, p - 1);
+      const gone = SINK * past * past;
+      sink.setAttribute("dy", String(gone * window.innerHeight));
+      raf = gone < 1.05 ? window.requestAnimationFrame(frame) : 0;
     };
 
     const events = ["scroll", "wheel", "touchstart", "keydown", "pointerdown"] as const;
@@ -134,7 +160,10 @@ export function Melt({ captions }: { captions: string[][] }) {
           <feImage ref={coarseRef} preserveAspectRatio="none" result="coarse" />
           <feImage ref={fineRef} preserveAspectRatio="none" result="fine" />
           <feDisplacementMap ref={shiftRef} in="seen" in2="coarse" scale="0" xChannelSelector="R" yChannelSelector="G" result="fell" />
-          <feDisplacementMap ref={nudgeRef} in="fell" in2="fine" scale="0" xChannelSelector="R" yChannelSelector="G" />
+          <feDisplacementMap ref={nudgeRef} in="fell" in2="fine" scale="0" xChannelSelector="R" yChannelSelector="G" result="grown" />
+          <feImage ref={tipsRef} preserveAspectRatio="none" result="tips" />
+          <feDisplacementMap ref={roundRef} in="grown" in2="tips" scale="0" xChannelSelector="R" yChannelSelector="G" result="melted" />
+          <feOffset ref={sinkRef} in="melted" dx="0" dy="0" />
         </filter>
       </svg>
       {/* one each side, bobbing at slightly different rates: in step, out,
@@ -157,14 +186,17 @@ export function Melt({ captions }: { captions: string[][] }) {
 // a few drips that fall much further, and a little more fall lower down, so
 // things stretch as they go. A drip is shaped like one of paint, worked out
 // in screen pixels (the map is w by h px; depthPx is the full fall):
-// straight sides, a round tip (a half circle, at the full melt), and
-// rounded shoulders where it leaves the surface (a quarter circle each
-// side), so no corner is square. Drips that meet merge (the larger fall
-// wins), so none is ever cut off flat.
+// straight sides, a round tip (a half circle), and rounded shoulders where
+// it leaves the surface (a quarter circle each side), so no corner is
+// square. Drips that meet merge (the larger fall wins), so none is ever cut
+// off flat.
 //
-// The main map holds the nearest of its 256 steps, and the fine map (at FINE
-// of the scale) holds what is left over; its red also cancels the main map's
-// small sideways shift (128 is a hair past the middle).
+// Each column's fall is split in two, so the round parts keep their shape
+// while the drips grow: its length (the main and fine maps, scaled up
+// through the melt) and its tip or shoulder (the tips map, at full size from
+// early on). The main map holds the nearest of its 256 steps, and the fine
+// map (at FINE of the scale) holds what is left over; its red also cancels
+// the main map's small sideways shift (128 is a hair past the middle).
 function drips(w: number, h: number, depthPx: number) {
   const r = () => Math.random() * Math.PI * 2;
   const phase = [r(), r(), r()];
@@ -180,26 +212,40 @@ function drips(w: number, h: number, depthPx: number) {
     const reach = Math.min(0.97 * depthPx, surface(x) + radius + shoulder + (0.1 + Math.random() * 0.45) * depthPx);
     return { x, radius, shoulder, reach };
   });
-  const fall = Array.from({ length: w }, (_, px) => {
+  // per column: its length (of the full fall) and its tip (of ROUND_PX)
+  const shape = Array.from({ length: w }, (_, px) => {
     const base = surface(px);
-    let f = base;
+    let length = base;
+    let tip = 0;
     for (const d of drops) {
       const dx = Math.abs(px - d.x);
       const out = dx - d.radius; // past the drip's side
-      if (dx < d.radius) f = Math.max(f, d.reach - d.radius + Math.sqrt(d.radius ** 2 - dx ** 2));
-      else if (out < d.shoulder) f = Math.max(f, base + d.shoulder - Math.sqrt(d.shoulder ** 2 - (d.shoulder - out) ** 2));
+      let l = 0;
+      let t = -1;
+      if (dx < d.radius) {
+        l = d.reach - d.radius;
+        t = Math.sqrt(d.radius ** 2 - dx ** 2);
+      } else if (out < d.shoulder) {
+        l = base;
+        t = d.shoulder - Math.sqrt(d.shoulder ** 2 - (d.shoulder - out) ** 2);
+      }
+      if (t >= 0 && l + t > length + tip) {
+        length = l;
+        tip = t;
+      }
     }
-    return Math.min(1, Math.max(0, f / depthPx));
+    return { length: Math.min(1, Math.max(0, length / depthPx)), tip: Math.min(1, tip / ROUND_PX) };
   });
 
   const main = canvas(w, h);
   const extra = canvas(w, h);
-  if (!main || !extra) return { coarse: "", fine: "" };
+  const round = canvas(w, h);
+  if (!main || !extra || !round) return { coarse: "", fine: "", tips: "" };
   for (let y = 0; y < h; y++) {
     const stretch = 0.75 + (0.25 * y) / (h - 1);
     for (let x = 0; x < w; x++) {
       const i = (y * w + x) * 4;
-      const k = fall[x] * stretch;
+      const k = shape[x].length * stretch;
       main.img.data[i] = 128; // no sideways shift
       main.img.data[i + 2] = 128;
       main.img.data[i + 3] = 255;
@@ -212,9 +258,14 @@ function drips(w: number, h: number, depthPx: number) {
       extra.img.data[i + 1] = Math.round(127.5 + (left / FINE) * 255);
       extra.img.data[i + 2] = 128;
       extra.img.data[i + 3] = 255;
+      // the tip: 128 steps over ROUND_PX is fine enough
+      round.img.data[i] = 128;
+      round.img.data[i + 1] = Math.round(128 - 127 * shape[x].tip);
+      round.img.data[i + 2] = 128;
+      round.img.data[i + 3] = 255;
     }
   }
-  return { coarse: main.url(), fine: extra.url() };
+  return { coarse: main.url(), fine: extra.url(), tips: round.url() };
 }
 
 function canvas(w: number, h: number) {

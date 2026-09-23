@@ -17,8 +17,9 @@ import { Merch } from "@/components/sections/Merch";
 import { About } from "@/components/sections/About";
 import { Contact } from "@/components/sections/Contact";
 
-// every song's lines, captioned over the static once the page has melted
-const captions = songs.map((s) => parseLyrics(s.lyrics).flatMap((stanza) => stanza.lines));
+// every song's lines (real words only, not placeholders), captioned over
+// the static as the page melts
+const captions = songs.filter((s) => !s.placeholder).map((s) => parseLyrics(s.lyrics).flatMap((stanza) => stanza.lines));
 
 export default function Home() {
   return (
