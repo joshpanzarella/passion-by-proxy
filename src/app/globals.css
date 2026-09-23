@@ -524,9 +524,24 @@ a {
   line-height: 0;
 }
 
-.spotlight__title img {
+.spotlight__title .split {
   width: min(100%, 420px);
-  height: auto;
+}
+
+/* lettering cut into letters (SplitWordmark): copies of one image stacked,
+   each clipped to its letter */
+.split {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.split__piece {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
 }
 
 /* the album: the bottles, lit */
