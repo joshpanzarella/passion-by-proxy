@@ -244,9 +244,10 @@ a {
 }
 
 /* the song the melt's captions are from (Melt.tsx), by the logo while they
-   run: set like the captions, white on black */
+   run: set like the captions, white on black. It keeps its width; the nav
+   gives way (it scrolls). */
 .site-header__playing {
-  min-width: 0;
+  flex: none;
   overflow: hidden;
   padding: 0.1em 0.45em;
   background: #000;
@@ -259,6 +260,21 @@ a {
 
 .site-header__playing:empty {
   display: none;
+}
+
+/* on a phone there is no room for both: the nav steps aside while the song
+   is named (a tap brings it back, with the page), and a long title takes
+   two lines */
+@media (max-width: 720px) {
+  .site-header__playing {
+    flex: 0 1 auto;
+    margin-right: auto;
+    white-space: normal;
+  }
+
+  .site-header__playing:not(:empty) ~ nav {
+    display: none;
+  }
 }
 
 .site-header nav {
@@ -588,6 +604,11 @@ html[data-melting] .static::before {
 
 html[data-melting] main {
   filter: url(#melt);
+}
+
+/* Safari's, in columns */
+html[data-melting="columns"] main {
+  filter: url(#melt-columns);
 }
 
 /* nothing under it moves while it runs (the hero video and the banners'

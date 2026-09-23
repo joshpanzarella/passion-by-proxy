@@ -52,6 +52,9 @@ static export (`out/`) and hosted on Cloudflare Pages from `main`.
   to `<main>`); overlays go outside it, as the splash, cues and captions do.
   The captions are the lyrics (`lyrics.ts`), passed in by `page.tsx`;
   songs marked `placeholder` (still lorem ipsum) are left out.
+  Safari (so all of iOS) runs displacement maps on the CPU, ~10 fps on an
+  iPhone, so there it melts in columns of `feOffset` instead; Safari drops
+  a filter of over 200 parts.
 - **Every nav tab has its own colourway**, main and offset both unique and
   unlike the top of the page's teal/magenta (the header takes the colours
   of the section in view). A new section needs a new pair.
