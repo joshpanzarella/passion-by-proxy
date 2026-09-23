@@ -63,6 +63,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const root = document.documentElement;
     const flat = [...page.querySelectorAll<HTMLImageElement>("img[data-melt-flat]")];
+    const parts = [...page.children] as HTMLElement[]; // <main> and the footer
     let idle = 0;
     let raf = 0;
     let start = 0;
@@ -96,6 +97,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       if (root.dataset.melting !== undefined) {
         delete root.dataset.melting;
         for (const img of flat) img.parentElement?.style.removeProperty("background");
+      for (const part of parts) part.style.removeProperty("clip-path");
         for (const el of [shift, nudge, round]) el.setAttribute("scale", "0");
         sink.setAttribute("dy", "0");
       }
@@ -113,6 +115,13 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       // it, so what melts away uncovers the static
       const header = document.querySelector(".site-header")?.getBoundingClientRect().bottom ?? 0;
       const seen = { ...box, y: box.y + header, height: box.height - header };
+      // Safari hands the filter all that the page draws, above the screen
+      // too, and passes it through the cut above (crop), so the hero's black
+      // poured in and fell through: the page itself is cut at the header
+      for (const part of parts) {
+        const cut = header - part.getBoundingClientRect().top;
+        if (cut > 0) part.style.clipPath = `inset(${cut}px 0 0 0)`;
+      }
       for (const [k, v] of Object.entries(seen)) crop.setAttribute(k, String(v));
       const fall = DEPTH * window.innerHeight; // px, at the full melt
       const maps = drips(Math.round(box.width), Math.round(box.height), fall);
@@ -176,6 +185,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       timers.forEach((id) => window.clearTimeout(id));
       delete root.dataset.melting;
       for (const img of flat) img.parentElement?.style.removeProperty("background");
+      for (const part of parts) part.style.removeProperty("clip-path");
     };
   }, [captions]);
 
