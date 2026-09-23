@@ -634,11 +634,12 @@ html[data-melting] .banner canvas {
   display: none;
 }
 
-/* Chrome (every browser but Safari, which melts it with the rest) draws
-   another site's player (Spotify, TikTok, YouTube) apart from the page, out
-   of reach of the filter and even of the player's own opacity: rather than
-   stand whole while all else melts, it cuts out to the static as the melt
-   starts (hidden, it keeps its place and its state) */
+/* another site's player (Spotify, TikTok, YouTube) is drawn apart from the
+   page, out of the filter's reach, in every browser but Safari (which melts
+   it with the rest). Chrome still moves, stretches and clips it, so there
+   Melt.tsx gives it the melt's shape; anywhere else, rather than stand whole
+   while all else melts, it cuts out to the static as the melt starts
+   (hidden, it keeps its place and its state) */
 html[data-melting="hide-players"] .melts iframe {
   visibility: hidden;
 }

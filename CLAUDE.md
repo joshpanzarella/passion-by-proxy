@@ -55,7 +55,10 @@ static export (`out/`) and hosted on Cloudflare Pages from `main`.
   while it runs: art on a layer of its own (drifting images, marked
   `data-melt-flat`, are painted as their frame's background meanwhile; the
   banners' WebGL copy), which Safari on an iPhone melts as one block or not
-  at all, and outside Safari another site's iframe (a player).
+  at all. Another site's iframe (a player) is out of the filter's reach
+  outside Safari: Chrome still moves, stretches and clips it, so there it
+  follows the melt's shape (its edges where the page's fall, what is inside
+  riding along); any other browser hides it.
   The captions are the lyrics (`lyrics.ts`), passed in by `page.tsx`;
   songs marked `placeholder` (still lorem ipsum) are left out.
   Safari runs the displacement maps on the CPU, so on an iPhone the melt

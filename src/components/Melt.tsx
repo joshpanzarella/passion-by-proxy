@@ -20,12 +20,16 @@ import { useEffect, useRef } from "react";
 // edges fall to a fraction of a pixel and the melt stays liquid, not
 // stair-stepped. Home page only, never for reduced motion, not during the
 // splash, and not while someone is using an embedded player (focus in an
-// iframe). Only Safari melts an embedded player with the page; elsewhere it
-// would stand whole, so it hides (data-melting="hide-players").
+// iframe). Only Safari melts an embedded player (another site's iframe)
+// with the page. Chrome can't, but does move, stretch and clip one, so there
+// each player takes the melt's shape instead: its edges fall where the
+// page's would and what is inside rides along, stretched. Any other browser
+// hides them (data-melting="hide-players").
 
 const IDLE_MS = 7_000; // this long without scrolling, and it starts
 const MELT_MS = 9_000; // to melt all the way
 const DEPTH = 1.2; // how far the longest drip falls, of the screen's height (past the bottom)
+const STRETCH = 0.75; // the fall at the top of the screen, as a share of that at the bottom
 const FINE = 4 / 255; // the fine map's scale, as a share of the main one's
 const ROUND_PX = 32; // the largest drip tip or shoulder
 const ROUND_BY = 0.25; // tips and shoulders are fully formed by this share of the melt
@@ -64,6 +68,11 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
     const root = document.documentElement;
     const flat = [...page.querySelectorAll<HTMLImageElement>("img[data-melt-flat]")];
     const parts = [...page.children] as HTMLElement[]; // <main> and the footer
+    const safari = "GestureEvent" in window; // only Safari has it
+    const chrome = !safari && "chrome" in window;
+    let shape: Column[] = []; // the drips, per px across
+    let header = 0; // its bottom, from the top of the screen
+    let players: { el: HTMLIFrameElement; top: number; bottom: number; left: number; right: number }[] = [];
     let idle = 0;
     let raf = 0;
     let start = 0;
@@ -97,7 +106,8 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       if (root.dataset.melting !== undefined) {
         delete root.dataset.melting;
         for (const img of flat) img.parentElement?.style.removeProperty("background");
-      for (const part of parts) part.style.removeProperty("clip-path");
+        for (const part of parts) part.style.removeProperty("clip-path");
+        release();
         for (const el of [shift, nudge, round]) el.setAttribute("scale", "0");
         sink.setAttribute("dy", "0");
       }
@@ -113,7 +123,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       }
       // only what shows below the header falls; nothing flows in from above
       // it, so what melts away uncovers the static
-      const header = document.querySelector(".site-header")?.getBoundingClientRect().bottom ?? 0;
+      header = document.querySelector(".site-header")?.getBoundingClientRect().bottom ?? 0;
       const seen = { ...box, y: box.y + header, height: box.height - header };
       // Safari hands the filter all that the page draws, above the screen
       // too, and passes it through the cut above (crop), so the hero's black
@@ -125,6 +135,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       for (const [k, v] of Object.entries(seen)) crop.setAttribute(k, String(v));
       const fall = DEPTH * window.innerHeight; // px, at the full melt
       const maps = drips(Math.round(box.width), Math.round(box.height), fall);
+      shape = maps.shape;
       coarse.setAttribute("href", maps.coarse);
       fine.setAttribute("href", maps.fine);
       tips.setAttribute("href", maps.tips);
@@ -144,7 +155,17 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
         const y = r.top - f.top - frame.clientTop + (r.height - h) / 2;
         frame.style.background = `url("${img.currentSrc || img.src}") ${x}px ${y}px / ${w}px ${h}px no-repeat`;
       }
-      root.dataset.melting = "GestureEvent" in window ? "" : "hide-players"; // only Safari has GestureEvent
+      if (chrome) {
+        players = [...page.querySelectorAll("iframe")].flatMap((el) => {
+          const r = el.getBoundingClientRect();
+          if (r.bottom <= header || r.top >= box.height || !r.width) return [];
+          el.style.transition = "none"; // its reveal's
+          el.style.transformOrigin = "0 0";
+          el.style.pointerEvents = "none"; // a tap on it puts the page back
+          return [{ el, top: r.top, bottom: r.bottom, left: r.left, right: r.right }];
+        });
+      }
+      root.dataset.melting = safari || chrome ? "" : "hide-players";
       start = performance.now();
       raf = window.requestAnimationFrame(frame);
       const sung = captions.filter((song) => song.lines.length > 0);
@@ -172,7 +193,50 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       const past = Math.max(0, p - 1);
       const gone = SINK * past * past;
       sink.setAttribute("dy", String(gone * window.innerHeight));
+      follow(scale, t * t * (3 - 2 * t) * ROUND_PX, gone * window.innerHeight);
       raf = gone < 1.05 ? window.requestAnimationFrame(frame) : 0;
+    };
+
+    // Chrome's players, as the melt would have them. The map takes a point
+    // y down the screen (below the header) in a column to
+    //   (y + STRETCH × full) / (1 − (1 − STRETCH) × full / h) + tip + sink
+    // for full the column's fall at the bottom of the screen, so a player's
+    // edges are worked out column by column; what is inside can only move
+    // as a whole, so it falls and stretches by its columns' average, and is
+    // clipped to their edges
+    const follow = (scale: number, rounding: number, sunk: number) => {
+      const h = window.innerHeight;
+      for (const p of players) {
+        const from = Math.max(p.top, header); // above it is cut
+        const at = (x: number, y: number) => {
+          const c = shape[Math.min(shape.length - 1, Math.max(0, Math.round(x)))];
+          const full = (scale / 2) * (254 / 255) * c.length;
+          return (y + STRETCH * full) / Math.max(0.1, 1 - ((1 - STRETCH) * full) / h) + rounding * c.tip + sunk;
+        };
+        const xs: number[] = [];
+        for (let x = p.left; x < p.right; x += 4) xs.push(x);
+        xs.push(p.right);
+        const tops = xs.map((x) => at(x, from));
+        const bottoms = xs.map((x) => at(x, p.bottom));
+        const mean = (ys: number[]) => ys.reduce((a, b) => a + b, 0) / ys.length;
+        const s = Math.max(1, (mean(bottoms) - mean(tops)) / (p.bottom - from));
+        const d = mean(tops) - p.top - s * (from - p.top); // the player's top goes to top + d
+        const local = (y: number) => (y - p.top - d) / s;
+        const point = (i: number, y: number) => `${(xs[i] - p.left).toFixed(1)}px ${y.toFixed(1)}px`;
+        const outline = [
+          ...tops.map((y, i) => point(i, Math.max(0, local(y)))),
+          ...bottoms.map((y, i) => point(i, Math.min(p.bottom - p.top, local(y)))).reverse(),
+        ];
+        p.el.style.transform = `translateY(${d.toFixed(1)}px) scaleY(${s.toFixed(4)})`;
+        p.el.style.clipPath = `polygon(${outline.join(", ")})`;
+      }
+    };
+
+    const release = () => {
+      for (const p of players) {
+        for (const k of ["transition", "transform-origin", "pointer-events", "transform", "clip-path"]) p.el.style.removeProperty(k);
+      }
+      players = [];
     };
 
     const events = ["scroll", "wheel", "touchstart", "keydown", "pointerdown"] as const;
@@ -186,6 +250,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       delete root.dataset.melting;
       for (const img of flat) img.parentElement?.style.removeProperty("background");
       for (const part of parts) part.style.removeProperty("clip-path");
+      release();
     };
   }, [captions]);
 
@@ -250,7 +315,7 @@ function drips(w: number, h: number, depthPx: number) {
     return { x, radius, shoulder, reach };
   });
   // per column: its length (of the full fall) and its tip (of ROUND_PX)
-  const shape = Array.from({ length: w }, (_, px) => {
+  const shape: Column[] = Array.from({ length: w }, (_, px) => {
     const base = surface(px);
     let length = base;
     let tip = 0;
@@ -277,9 +342,9 @@ function drips(w: number, h: number, depthPx: number) {
   const main = canvas(w, h);
   const extra = canvas(w, h);
   const round = canvas(w, h);
-  if (!main || !extra || !round) return { coarse: "", fine: "", tips: "" };
+  if (!main || !extra || !round) return { coarse: "", fine: "", tips: "", shape };
   for (let y = 0; y < h; y++) {
-    const stretch = 0.75 + (0.25 * y) / (h - 1);
+    const stretch = STRETCH + ((1 - STRETCH) * y) / (h - 1);
     for (let x = 0; x < w; x++) {
       const i = (y * w + x) * 4;
       const k = shape[x].length * stretch;
@@ -302,8 +367,11 @@ function drips(w: number, h: number, depthPx: number) {
       round.img.data[i + 3] = 255;
     }
   }
-  return { coarse: main.url(), fine: extra.url(), tips: round.url() };
+  return { coarse: main.url(), fine: extra.url(), tips: round.url(), shape };
 }
+
+// a column of the drips: its length (of the full fall) and its tip (of ROUND_PX)
+type Column = { length: number; tip: number };
 
 function canvas(w: number, h: number) {
   const el = document.createElement("canvas");
