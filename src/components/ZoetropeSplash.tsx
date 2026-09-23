@@ -18,6 +18,7 @@ const { css, totalMs } = splashCss();
 export function ZoetropeSplash() {
   const [phase, setPhase] = useState<Phase>("loading");
   const stageRef = useRef<HTMLDivElement>(null);
+  const landed = useRef(false); // the drum has stopped on the hero's frame
 
   // Decode every frame (not just download it) before the first beat, so no
   // frame stalls the first time it shows; then start.
@@ -63,15 +64,48 @@ export function ZoetropeSplash() {
 
   useEffect(() => {
     if (phase !== "holding") return;
+    landed.current = true;
     const id = window.setTimeout(() => setPhase("leaving"), zoetrope.holdMs);
     return () => window.clearTimeout(id);
   }, [phase]);
 
+  // The black behind the drum fades (CSS). Once the drum has stopped, it is
+  // showing the hero logo's frame, so it glides and shrinks onto the hero
+  // logo, which stays hidden until it arrives: one logo throughout, never
+  // two. Skipped mid-spin, or with the hero logo off screen, it fades out
+  // with the black instead.
   useEffect(() => {
     if (phase !== "leaving") return;
-    const id = window.setTimeout(() => {
+    const stage = stageRef.current;
+    const logo = document.querySelector<HTMLElement>(".hero-logo");
+    const from = stage?.getBoundingClientRect();
+    const to = logo?.getBoundingClientRect();
+    const timing: KeyframeAnimationOptions = { duration: zoetrope.fadeMs, easing: zoetrope.leaveEase, fill: "forwards" };
+
+    let anim: Animation | undefined;
+    if (landed.current && stage && logo && from && to && to.width > 0 && to.bottom > 0 && to.top < window.innerHeight) {
+      const dx = to.left + to.width / 2 - (from.left + from.width / 2);
+      const dy = to.top + to.height / 2 - (from.top + from.height / 2);
+      logo.style.visibility = "hidden";
+      // a script animation outranks the stage's CSS one, so no fight over transform
+      anim = stage.animate(
+        [{ transform: "none" }, { transform: `translate(${dx}px, ${dy}px) scale(${to.width / from.width})` }],
+        timing,
+      );
+    } else {
+      anim = stage?.animate([{ opacity: 1 }, { opacity: 0 }], timing);
+    }
+
+    // hand over the moment the glide ends; the timer is a backstop
+    let done = false;
+    const handOver = () => {
+      if (done) return;
+      done = true;
+      if (logo) logo.style.visibility = "";
       document.documentElement.dataset.splash = "seen";
-    }, zoetrope.fadeMs);
+    };
+    anim?.finished.then(handOver, () => {});
+    const id = window.setTimeout(handOver, zoetrope.fadeMs + 250);
     return () => window.clearTimeout(id);
   }, [phase]);
 
@@ -80,7 +114,7 @@ export function ZoetropeSplash() {
   return (
     <div
       className={`splash${playing ? " splash--play" : ""}${phase === "leaving" ? " splash--leaving" : ""}`}
-      style={{ transitionDuration: `${zoetrope.fadeMs}ms` }}
+      style={{ "--leave-ms": `${zoetrope.fadeMs}ms`, "--leave-ease": zoetrope.leaveEase } as React.CSSProperties}
       role="presentation"
       onClick={() => setPhase("leaving")}
     >

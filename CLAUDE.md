@@ -45,6 +45,12 @@ static export (`out/`) and hosted on Cloudflare Pages from `main`.
 - **The header and footer are shared** (`SiteHeader`, `SiteFooter`); the
   home page passes `home` so its section links stay plain anchors. The
   splash is mounted by the home page only.
+- **The home page melts when left alone** (`Melt.tsx`): an SVG filter on
+  `<main>` while it runs, over the static (`.static`, a fixed layer behind
+  everything that shows only where a block has no background of its own).
+  Nothing inside `<main>` may be `position: fixed` (the filter would pin it
+  to `<main>`); overlays go outside it, as the splash, cues and captions do.
+  The captions are the lyrics (`lyrics.ts`), passed in by `page.tsx`.
 - **Every nav tab has its own colourway**, main and offset both unique and
   unlike the top of the page's teal/magenta (the header takes the colours
   of the section in view). A new section needs a new pair.

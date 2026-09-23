@@ -1,10 +1,12 @@
 import { band, single } from "@/data/band";
+import { parseLyrics, songs } from "@/data/lyrics";
 import { HeroSingle } from "@/components/HeroSingle";
 import { HeroLogo } from "@/components/HeroLogo";
 import { ScrollEffects } from "@/components/ScrollEffects";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ZoetropeSplash } from "@/components/ZoetropeSplash";
+import { Melt } from "@/components/Melt";
 import { structuredDataJson } from "@/lib/structuredData";
 import { Ticker } from "@/components/Ticker";
 import { Banner } from "@/components/Banner";
@@ -15,6 +17,9 @@ import { Merch } from "@/components/sections/Merch";
 import { About } from "@/components/sections/About";
 import { Contact } from "@/components/sections/Contact";
 
+// every song's lines, captioned over the static once the page has melted
+const captions = songs.map((s) => parseLyrics(s.lyrics).flatMap((stanza) => stanza.lines));
+
 export default function Home() {
   return (
     <>
@@ -22,6 +27,10 @@ export default function Home() {
           page opens straight onto the lyrics */}
       <ZoetropeSplash />
       <ScrollEffects />
+      <Melt captions={captions} />
+      <div className="static" aria-hidden="true">
+        <div className="static__wave" />
+      </div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: structuredDataJson() }} />
       <SiteHeader home />
 

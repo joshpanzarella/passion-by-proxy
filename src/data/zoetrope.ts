@@ -22,7 +22,9 @@ export const zoetrope = {
   spinDownMs: 900,
   // How long the stopped logo holds before the site fades in.
   holdMs: 500,
-  fadeMs: 700,
+  // The site fading in while the logo glides into its place in the hero.
+  fadeMs: 900,
+  leaveEase: "cubic-bezier(0.65, 0, 0.35, 1)",
   // Longest wait for the frames to download before playing anyway.
   loadTimeoutMs: 2500,
 };
