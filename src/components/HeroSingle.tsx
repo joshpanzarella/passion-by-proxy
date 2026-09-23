@@ -69,7 +69,7 @@ export function HeroSingle({ release }: { release: Release }) {
       {out ? (
         <div className="hero-single__out">
           <p className="hero-single__line">
-            new {release.kind} <strong>{release.title}</strong> — out now
+            new {release.kind} <strong>{release.title}</strong> out now
           </p>
           {listen && (
             <a className="button button--big" href={listen} rel="noopener noreferrer" target="_blank">
@@ -79,7 +79,7 @@ export function HeroSingle({ release }: { release: Release }) {
         </div>
       ) : (
         <p className="hero-single__line">
-          new {release.kind} <strong>{release.title}</strong> — out{" "}
+          new {release.kind} <strong>{release.title}</strong> out{" "}
           {release.date ? formatDate(release.date, { weekday: "long", month: "long", day: "numeric" }).toLowerCase() : release.dateLabel}
           {now !== null && release.date && <Left ms={localMidnight(release.date) - now} />}
         </p>
