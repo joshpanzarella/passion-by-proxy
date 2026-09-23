@@ -590,6 +590,14 @@ html[data-melting] main {
   filter: url(#melt);
 }
 
+/* nothing under it moves while it runs (the hero video and the banners'
+   waves stop in their components): any change in <main> has the whole
+   filter redone, and Safari does that on the processor, so the melt stutters
+   and, once the page has sunk, keeps redoing it for nothing */
+html[data-melting] .hero__scroll {
+  animation-play-state: paused, running; /* the bob, not the scroll-linked fade */
+}
+
 /* at both edges (one by the scroll bar), once the melt is under way:
    scrolling puts it back. They bob at slightly different rates, so they
    drift out of step and back in about every 14 seconds. */

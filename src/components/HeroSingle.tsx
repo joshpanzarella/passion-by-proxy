@@ -9,9 +9,10 @@ import { useNowMinute } from "@/lib/useNow";
 // countdown or, from release day, "out now" and a big listen button.
 //
 // The video waits for the splash to finish (<html data-splash> is set when
-// it has played or was skipped), pauses while off screen, and never plays
-// for reduced motion; the poster stands in. It does not even download
-// until then (preload="none"), so it never competes with the splash.
+// it has played or was skipped), pauses while off screen or while the page
+// melts, and never plays for reduced motion; the poster stands in. It does
+// not even download until then (preload="none"), so it never competes with
+// the splash.
 export function HeroSingle({ release }: { release: Release }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const now = useNowMinute();
@@ -22,20 +23,23 @@ export function HeroSingle({ release }: { release: Release }) {
     video.muted = true; // React does not always render the attribute; autoplay needs it
     const root = document.documentElement;
     let onScreen = true;
-    const play = () => {
-      if (root.dataset.splash && onScreen) video.play().catch(() => {});
+    // not while the page melts (Melt.tsx): each new frame would have the
+    // whole melt redone
+    const sync = () => {
+      if (!root.dataset.splash) return;
+      if (onScreen && root.dataset.melting === undefined) video.play().catch(() => {});
+      else video.pause();
     };
-    const splashDone = new MutationObserver(play);
-    splashDone.observe(root, { attributes: true, attributeFilter: ["data-splash"] });
+    const changed = new MutationObserver(sync);
+    changed.observe(root, { attributes: true, attributeFilter: ["data-splash", "data-melting"] });
     const seen = new IntersectionObserver(([entry]) => {
       onScreen = entry.isIntersecting;
-      if (onScreen) play();
-      else video.pause();
+      sync();
     });
     seen.observe(video);
-    play();
+    sync();
     return () => {
-      splashDone.disconnect();
+      changed.disconnect();
       seen.disconnect();
     };
   }, []);

@@ -6,8 +6,9 @@ import { useEffect, useRef } from "react";
 // a small WebGL shader that bends it with a few slow, crossing sine waves.
 // The <img> underneath stays as it is, and is all anyone sees with reduced
 // motion, without WebGL, or before the first frame (the canvas fades in).
-// Draws only while on screen, at 1x: the art is soft, and sharper costs
-// power for nothing. Sized and drifted by the same CSS as the <img>.
+// Draws only while on screen and the page is not melting, at 1x: the art is
+// soft, and sharper costs power for nothing. Sized and drifted by the same
+// CSS as the <img>.
 
 const VERT = `attribute vec2 a;varying vec2 v;void main(){v=a*.5+.5;gl_Position=vec4(a,0.,1.);}`;
 
@@ -63,8 +64,10 @@ export function BannerWarp({ src, amount = 1 }: { src: string; amount?: number }
 
     const img = new Image();
     img.src = src;
+    const root = document.documentElement;
     let ready = false;
     let visible = false;
+    let melting = root.dataset.melting !== undefined;
     let raf = 0;
     let start = 0; // the first frame, so the build-up is seen
 
@@ -85,10 +88,10 @@ export function BannerWarp({ src, amount = 1 }: { src: string; amount?: number }
       gl.uniform1f(u("t"), (now - start) / 1000);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       canvas.dataset.on = "";
-      raf = visible ? window.requestAnimationFrame(frame) : 0;
+      raf = visible && !melting ? window.requestAnimationFrame(frame) : 0;
     };
     const run = () => {
-      if (ready && visible && !raf) raf = window.requestAnimationFrame(frame);
+      if (ready && visible && !melting && !raf) raf = window.requestAnimationFrame(frame);
     };
 
     img
@@ -115,6 +118,13 @@ export function BannerWarp({ src, amount = 1 }: { src: string; amount?: number }
       { rootMargin: "100px" },
     );
     seen.observe(canvas.parentElement ?? canvas);
+    // still while the page melts (Melt.tsx): each new frame would have the
+    // whole melt redone
+    const melt = new MutationObserver(() => {
+      melting = root.dataset.melting !== undefined;
+      run();
+    });
+    melt.observe(root, { attributes: true, attributeFilter: ["data-melting"] });
     const resized = new ResizeObserver(size);
     resized.observe(canvas);
     // a lost context leaves the <img> showing
@@ -127,6 +137,7 @@ export function BannerWarp({ src, amount = 1 }: { src: string; amount?: number }
     return () => {
       window.cancelAnimationFrame(raf);
       seen.disconnect();
+      melt.disconnect();
       resized.disconnect();
       canvas.removeEventListener("webglcontextlost", lost);
     };
