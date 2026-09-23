@@ -55,6 +55,8 @@ export type Link = { label: string; href: string };
 export const isLive = (l: Link) => l.href !== "" && l.href !== "#";
 
 const spotifyArtist = "https://open.spotify.com/artist/4g8s6vZBEsGST2PkMqaFoR";
+const appleMusicArtist = "https://music.apple.com/us/artist/passion-by-proxy/1816682846";
+const bandcampPage = "https://passion-by-proxy.bandcamp.com/";
 
 export type Release = {
   kind: "single" | "album";
@@ -97,12 +99,12 @@ export const single: Release = {
   },
   blurb: "Placeholder: a sentence about U&I.",
   listen: spotifyArtist,
-  // Swap Spotify for the track's own link once it is out; add the rest
-  // as they go live.
+  // The band's pages on each service for now; swap in the track's own
+  // links once it is out.
   links: [
     { label: "Spotify", href: spotifyArtist },
-    { label: "Apple Music", href: "#" },
-    { label: "Bandcamp", href: "#" },
+    { label: "Apple Music", href: appleMusicArtist },
+    { label: "Bandcamp", href: bandcampPage },
   ],
 };
 
@@ -196,7 +198,7 @@ export const merch: MerchItem[] = [
 
 export const socials: Link[] = [
   { label: "Instagram", href: "https://www.instagram.com/passion_by_proxy/" },
-  { label: "Bandcamp", href: "https://passion-by-proxy.bandcamp.com/" },
+  { label: "Bandcamp", href: bandcampPage },
   { label: "Spotify", href: spotifyArtist },
   { label: "YouTube", href: "#" },
   { label: "TikTok", href: tiktokProfile },
