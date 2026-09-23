@@ -1,4 +1,4 @@
-import { album, single, type Release } from "@/data/band";
+import { album, firstSingle, single, type Release } from "@/data/band";
 
 // Song lyrics. Each song is plain text:
 //  - a blank line between verses
@@ -7,7 +7,9 @@ import { album, single, type Release } from "@/data/band";
 //    get their own look; any label is shown as written.
 //  - a verse with no label is just a verse
 // Songs appear on /lyrics under their release (and any `alsoOn`), in
-// `track` order. Placeholder lorem ipsum until the real words come in.
+// `track` order. Songs marked `placeholder` are still lorem ipsum: they show
+// on /lyrics but stay out of the captions on the melted home page; delete
+// the mark when the real words go in, and the captions take them up.
 
 export type Song = {
   slug: string; // the page address: /lyrics/<slug>
@@ -18,6 +20,7 @@ export type Song = {
   // track: it is listed under each, with one page
   alsoOn?: Release[];
   credits?: string; // "words and music by …"
+  placeholder?: true; // still lorem ipsum: kept out of the captions
   lyrics: string;
 };
 
@@ -27,6 +30,7 @@ export const songs: Song[] = [
     title: "Proxy Music",
     release: album,
     track: 1,
+    placeholder: true,
     lyrics: `
 Lorem dolore nostrud enim laboris nostrud
 Exercitation fugiat pariatur cupidatat
@@ -59,6 +63,7 @@ Velit do lorem sint laborum
     title: "U&I",
     release: album,
     track: 2,
+    placeholder: true,
     alsoOn: [single], // the single too
     credits: "words and music by Passion by Proxy",
     lyrics: `
@@ -108,6 +113,7 @@ you and I, you and I
     title: "One Die Snake Eyes",
     release: album,
     track: 3,
+    placeholder: true,
     lyrics: `
 Non consequat commodo ullamco voluptate anim ea
 Incididunt deserunt ipsum exercitation id reprehenderit
@@ -150,6 +156,7 @@ Dolore nisi incididunt quis enim
     title: "Sick Stability",
     release: album,
     track: 4,
+    placeholder: true,
     lyrics: `
 Do occaecat id esse culpa pariatur
 Laborum veniam aliqua est voluptate elit
@@ -182,6 +189,7 @@ Qui cillum lorem aliquip nisi non
     title: "The Runner Up",
     release: album,
     track: 5,
+    placeholder: true,
     lyrics: `
 Aliquip consectetur id sint
 Minim ex cupidatat laborum aliqua irure quis
@@ -224,6 +232,7 @@ Anim ut deserunt dolor voluptate amet
     title: "Zoe’s Zoetrope",
     release: album,
     track: 6,
+    placeholder: true,
     credits: "words and music by Passion by Proxy",
     lyrics: `
 [verse]
@@ -268,6 +277,7 @@ a sapiente delectus
     title: "Dead End Clout",
     release: album,
     track: 7,
+    placeholder: true,
     lyrics: `
 Minim minim mollit amet est voluptate minim
 Adipiscing nisi ullamco non
@@ -310,6 +320,7 @@ Consequat ad adipiscing irure quis
     title: "Wet Street Causes Rain",
     release: album,
     track: 8,
+    placeholder: true,
     lyrics: `
 Sed et elit ullamco
 Ad ullamco proident commodo
@@ -341,6 +352,7 @@ Sunt ad aute magna duis do cillum
     title: "Cut Corners Run in Circles",
     release: album,
     track: 9,
+    placeholder: true,
     lyrics: `
 Eiusmod labore fugiat ipsum
 Laboris occaecat voluptate reprehenderit magna sint
@@ -383,6 +395,7 @@ Et et anim est duis
     title: "Placid Pastiche",
     release: album,
     track: 10,
+    placeholder: true,
     lyrics: `
 Elit aute qui labore adipiscing sunt
 Ullamco qui elit esse do
@@ -409,6 +422,58 @@ Irure excepteur ut laboris irure eiusmod
 Nulla commodo enim incididunt
 `,
   },
+  {
+    slug: "i-wont-be-long",
+    title: "I Won’t Be(Long)",
+    release: firstSingle,
+    track: 1,
+    lyrics: `
+I won’t belong
+I won’t be long
+
+I’ll take you where the water lays
+I’ll take you where it flows
+I’ll pray with you for brighter days
+You’ll be weeping what I sew
+I’ll take you to a distant place
+Right outside your door
+Where people used to make mistakes
+Now they just keep score
+
+I’ll take you where the water lays
+I’ll take you where it flows
+I’ll wait in the infirmary
+To affirm what I know
+I love you liked I’m damned too
+Come on baby, reciprocate
+All the time you’re wondering
+If there is a space in
+
+I won’t belong
+I won’t be long
+
+Love me like your damned to
+Fan me like a flame
+Let me complicate you
+If you’ve been living lame
+I’ll take you where the water lays
+I’ll take you where it flows
+We’ll keep it all between us
+I’ll tell everyone I know
+
+I was sleeping in an aqueduct
+Down the river, a pair of spades
+I was dreaming of an architect
+Who didn’t do it to get paid
+I’ll love you like I’m damned to
+Then I’ll pour you down the drain
+All the time I’m wondering
+If there is a space in
+
+I won’t belong
+I won’t be long
+`,
+  },
 ];
 
 export type Stanza = { label?: string; kind: "verse" | "chorus" | "bridge" | "other"; lines: string[] };
@@ -431,7 +496,7 @@ export function parseLyrics(text: string): Stanza[] {
 
 // Releases in the order they appear on /lyrics, each with its songs.
 export function songsByRelease() {
-  const releases = [single, album];
+  const releases = [single, album, firstSingle];
   return releases
     .map((r) => ({
       release: r,
@@ -450,4 +515,4 @@ export function neighbours(slug: string) {
 }
 
 // A release's colourway class (see .lyrics--single / --album in globals.css)
-export const releaseTone = (r: Release) => `tone--${r.kind}`;
+export const releaseTone = (r: Release) => `tone--${r.tone ?? r.kind}`;

@@ -16,15 +16,15 @@ export default function LyricsIndex() {
       <SiteHeader current="lyrics" />
       <main className="lyrics-index">
         <h1 className="lyrics-index__title offset">lyrics</h1>
-        {songsByRelease().map(({ release, songs }) => (
-          <section key={release.title} className={`lyrics-index__release ${releaseTone(release)}`} aria-labelledby={`rel-${release.kind}`}>
+        {songsByRelease().map(({ release, songs }, n) => (
+          <section key={release.title} className={`lyrics-index__release ${releaseTone(release)}`} aria-labelledby={`rel-${n}`}>
             <div className="lyrics-index__art">
               {/* eslint-disable-next-line @next/next/no-img-element -- pre-sized webp */}
               <img src={release.cover ?? release.art} alt="" loading="lazy" />
             </div>
             <div>
               <p className="release__kind">{release.kind}</p>
-              <h2 id={`rel-${release.kind}`} className="lyrics-index__release-title offset">
+              <h2 id={`rel-${n}`} className="lyrics-index__release-title offset">
                 {release.title}
               </h2>
               <ol className="lyrics-index__songs">

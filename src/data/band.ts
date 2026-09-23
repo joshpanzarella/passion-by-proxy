@@ -82,6 +82,9 @@ export type Release = {
   // Player embed URL (Spotify "Embed track" or Bandcamp "Embed this
   // album" src). Shows a player under the release once set.
   embed?: string;
+  // Its colourway (.tone--* in globals.css), sampled from its art, when not
+  // the one for its kind (tone--single, tone--album).
+  tone?: string;
 };
 
 export const single: Release = {
@@ -119,6 +122,17 @@ export const album: Release = {
   blurb:
     "The truly, unbelievably, hotly anticipated freshman album from Phoenixville’s Passion by Proxy. “Alliterate” promises to show you that we’ve tried to put PbP in a box, but, like Pandora’s, they’ve escaped, and now only hope and this album remain.",
   links: [], // pre-save link goes here
+};
+
+// The first single, out before this site. On the lyrics page for now.
+export const firstSingle: Release = {
+  kind: "single",
+  title: "I Won’t Be(Long)",
+  date: "2025-05-22",
+  cover: "/media/i-wont-be-long-cover.webp",
+  tone: "desert",
+  blurb: "",
+  links: [{ label: "Bandcamp", href: "https://passion-by-proxy.bandcamp.com/track/i-wont-be-long" }],
 };
 
 const tiktokProfile = "https://www.tiktok.com/@passionproxy";

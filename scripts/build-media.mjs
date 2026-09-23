@@ -4,7 +4,7 @@
 //                    banner=banner.jpg logo=logo-flat.png \
 //                    texture-teal=… texture-gold=… texture-red=… \
 //                    glitter=glitter-type.png arc=arc-type.png photo=band.jpg \
-//                    album-cover=alliterate.jpg
+//                    album-cover=alliterate.jpg iwbl-cover=i-wont-be-long.jpg
 //
 // Pass only the ones that changed. Originals (up to 17 MB) stay out of the
 // repo. Art with a black background is flattened onto black, the page's own
@@ -51,6 +51,8 @@ const jobs = {
   arc: (src) => sharp(src).trim().resize({ width: 1000 }).webp({ quality: 85 }).toFile(out("wordmark-arc.webp")),
   // Alliterate's official cover, square
   "album-cover": (src) => sharp(src).resize(1000, 1000).webp({ quality: 82 }).toFile(out("alliterate-cover.webp")),
+  // I Won't Be(Long), the first single: its cover, square (Bandcamp has it)
+  "iwbl-cover": (src) => sharp(src).resize(1000, 1000).webp({ quality: 82 }).toFile(out("i-wont-be-long-cover.webp")),
   // band photo (about section): never enlarged, at most 1600 px wide
   photo: (src) =>
     sharp(src).resize({ width: 1600, withoutEnlargement: true }).webp({ quality: 82 }).toFile(out("band-photo.webp")),
