@@ -98,6 +98,11 @@
      flattened onto it); black in both themes */
   --splash-bg: #000000;
 
+  /* Spotify's dark player (sampled): its top and its track list; the card
+     left in its place while the page melts (Chrome), dark in both themes */
+  --spotify-top: #1f1f1f;
+  --spotify-list: #121212;
+
   --font-body: "Inter", system-ui, sans-serif;
 
   --gutter: clamp(16px, 5vw, 64px);
@@ -643,6 +648,12 @@ html[data-melting="hide-players"] .melts iframe {
   visibility: hidden;
 }
 
+/* and the player's card is left behind to melt (TikTok's and YouTube's
+   frames have their own) */
+html[data-melting="hide-players"] .spotify {
+  background: linear-gradient(var(--spotify-top) 200px, var(--spotify-list) 200px);
+}
+
 /* at both edges (one by the scroll bar), once the melt is under way:
    scrolling puts it back. They bob at slightly different rates, so they
    drift out of step and back in about every 14 seconds. */
@@ -890,11 +901,16 @@ html[data-melting] .melt-cue--right {
 }
 
 .spotify {
+  height: 352px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.spotify iframe {
   display: block;
   width: 100%;
-  height: 352px;
+  height: 100%;
   border: 0;
-  border-radius: 12px;
 }
 
 .status {

@@ -100,14 +100,14 @@ function Players() {
         <iframe className="bandcamp" data-reveal="" src={band.bandcampPlayer} title={`${band.name} on Bandcamp`} loading="lazy" seamless />
       )}
       {band.spotifyArtistId && (
-        <iframe
-          className="spotify"
-          data-reveal=""
-          src={`https://open.spotify.com/embed/artist/${band.spotifyArtistId}?theme=0`}
-          title={`${band.name} on Spotify`}
-          loading="lazy"
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        />
+        <div className="spotify" data-reveal="">
+          <iframe
+            src={`https://open.spotify.com/embed/artist/${band.spotifyArtistId}?theme=0`}
+            title={`${band.name} on Spotify`}
+            loading="lazy"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          />
+        </div>
       )}
     </div>
   );
