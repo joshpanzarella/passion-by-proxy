@@ -619,6 +619,14 @@ html[data-melting] .site-footer__wordmark * {
   animation-play-state: paused;
 }
 
+/* the banners' undulating copy is WebGL, which Safari on an iPhone keeps on
+   a layer of its own, out of the filter's reach, so it stood still while
+   the page melted: it hides, and the image under it (the same art, its
+   waves stopped anyway) melts with the rest */
+html[data-melting] .banner canvas {
+  visibility: hidden;
+}
+
 /* Chrome (every browser but Safari, which melts it with the rest) draws
    another site's player (Spotify, TikTok, YouTube) apart from the page, out
    of reach of the filter and even of the player's own opacity: rather than
