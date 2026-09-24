@@ -3,6 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import type { Stanza } from "@/data/lyrics";
 
+// ⅋ (a turned &, as in "U⅋I") isn't in the site's font: the font's own &,
+// turned over (.turned-amp)
+const withTurnedAmps = (line: string) =>
+  line.split("⅋").flatMap((part, i) => (i ? [<span key={i} className="turned-amp">&amp;</span>, part] : [part]));
+
 // The lyrics column with its reading light and film strip.
 //
 // Reading light: the stanza under the middle of the screen is full
@@ -78,7 +83,7 @@ export function LyricsReader({ stanzas }: { stanzas: Stanza[] }) {
             <p className="stanza__lines">
               {s.lines.map((line, j) => (
                 <span key={j} className="stanza__line">
-                  {line}
+                  {withTurnedAmps(line)}
                 </span>
               ))}
             </p>

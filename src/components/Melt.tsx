@@ -79,6 +79,9 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
     const playing = document.querySelector<HTMLElement>(".site-header__playing");
     let timers: number[] = []; // the captions'
     const later = (fn: () => void, ms: number) => timers.push(window.setTimeout(fn, ms));
+    // ⅋ (a turned &) isn't in the caption fonts: their own &, turned over
+    const turnedAmp = () => Object.assign(document.createElement("span"), { className: "turned-amp", textContent: "&" });
+    const show = (text: string) => caption.replaceChildren(...text.split("⅋").flatMap((part, i) => (i ? [turnedAmp(), part] : [part])));
 
     // one line, in bursts (mostly a word, sometimes two or three at once, at
     // uneven gaps), held a while, then the song's next line
@@ -89,7 +92,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
         n = Math.min(words.length, n + 1 + (Math.random() < 0.35 ? 1 + Math.floor(Math.random() * 2) : 0));
         const shown = n;
         later(() => {
-          caption.textContent = `♪ ${words.slice(0, shown).join(" ")}${shown === words.length ? " ♪" : ""}`;
+          show(`♪ ${words.slice(0, shown).join(" ")}${shown === words.length ? " ♪" : ""}`);
         }, at);
         at += between(BURST_MS);
       }

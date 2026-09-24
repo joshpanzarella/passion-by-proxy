@@ -703,7 +703,7 @@ html[data-melting] .melt-cue--right {
   pointer-events: none;
 }
 
-.melt-captions span {
+.melt-captions > span {
   padding: 0.12em 0.45em;
   background: #000;
   color: #fff;
@@ -711,7 +711,7 @@ html[data-melting] .melt-cue--right {
   box-decoration-break: clone;
 }
 
-.melt-captions span:empty {
+.melt-captions > span:empty {
   display: none;
 }
 
@@ -1688,6 +1688,14 @@ html[data-melting] .melt-cue--right {
   /* a long line wraps with a hanging indent, so it reads as one line */
   padding-left: 1.2em;
   text-indent: -1.2em;
+}
+
+/* ⅋ (a turned &, as in "U⅋I"): the fonts here don't have it, so it is
+   their own & turned over (the lyrics and the melt's captions) */
+.turned-amp {
+  display: inline-block;
+  text-indent: 0;
+  rotate: 180deg;
 }
 
 .stanza__label {
