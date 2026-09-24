@@ -7,7 +7,8 @@ import { useEffect, useRef } from "react";
 // static behind (stronger while it melts), then sinks off the bottom
 // altogether, leaving only the static and captions. Cues at both edges say how
 // to fix it. Halfway through, the static starts carrying closed captions: a
-// random song's lines from a random place, one at a time, each typed in
+// random stanza of a random song, then one of another, and so on (each song
+// once before any comes round again), a line at a time, each typed in
 // uneven bursts of a word or a few, as live TV captions come in, with the
 // song's title by the logo in the header. Any scroll, tap or key puts it all back at
 // once.
@@ -36,10 +37,11 @@ const ROUND_BY = 0.25; // tips and shoulders are fully formed by this share of t
 const SINK = 4; // after the melt, everything sinks this many screens × (time past it, in melts)²
 const BURST_MS = [80, 400] as const; // the gap between bursts of words, at random
 const HOLD_MS = [1_400, 3_000] as const; // a finished line stays up this long, at random
+const HOP_LINES = 8; // at most this many lines of a song before the captions move to another
 const between = ([lo, hi]: readonly [number, number]) => lo + Math.random() * (hi - lo);
 
-// captions: each song's title, and its lines in order
-export function Melt({ captions }: { captions: { title: string; lines: string[] }[] }) {
+// captions: each song's title, and its stanzas' lines
+export function Melt({ captions }: { captions: { title: string; stanzas: string[][] }[] }) {
   const filterRef = useRef<SVGFilterElement>(null);
   const cropRef = useRef<SVGFEOffsetElement>(null);
   const coarseRef = useRef<SVGFEImageElement>(null);
@@ -84,19 +86,48 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
     const show = (text: string) => caption.replaceChildren(...text.split("⅋").flatMap((part, i) => (i ? [turnedAmp(), part] : [part])));
 
     // one line, in bursts (mostly a word, sometimes two or three at once, at
-    // uneven gaps), held a while, then the song's next line
-    const roll = (lines: string[], i: number) => {
-      const words = lines[i % lines.length].split(/\s+/);
+    // uneven gaps), held a while, then whatever comes next
+    const roll = (line: string, next: () => void) => {
+      const words = line.split(/\s+/);
       let at = 0;
       for (let n = 0; n < words.length; ) {
         n = Math.min(words.length, n + 1 + (Math.random() < 0.35 ? 1 + Math.floor(Math.random() * 2) : 0));
         const shown = n;
-        later(() => {
-          show(`♪ ${words.slice(0, shown).join(" ")}${shown === words.length ? " ♪" : ""}`);
-        }, at);
+        const type = () => show(`♪ ${words.slice(0, shown).join(" ")}${shown === words.length ? " ♪" : ""}`);
+        // the first at once, so a new song's words come with its title
+        if (at === 0) type();
+        else later(type, at);
         at += between(BURST_MS);
       }
-      later(() => roll(lines, i + 1), at + between(HOLD_MS));
+      later(next, at + between(HOLD_MS));
+    };
+
+    // the songs in a shuffled deck: each comes up once before any comes
+    // round again, and never twice running (across a reshuffle either); the
+    // deck carries over from one melt to the next
+    const sung = captions.filter((song) => song.stanzas.length > 0);
+    let deck: typeof sung = [];
+    let last: (typeof sung)[number] | undefined;
+    const draw = () => {
+      if (deck.length === 0) {
+        deck = [...sung];
+        for (let i = deck.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [deck[i], deck[j]] = [deck[j], deck[i]];
+        }
+        if (deck.length > 1 && deck[deck.length - 1] === last) [deck[0], deck[deck.length - 1]] = [deck[deck.length - 1], deck[0]];
+      }
+      last = deck.pop()!;
+      return last;
+    };
+    // a random stanza of the next song (its first few lines, if it's a long
+    // one), line by line, its title by the logo, then on to another song
+    const hop = () => {
+      const song = draw();
+      const lines = song.stanzas[Math.floor(Math.random() * song.stanzas.length)].slice(0, HOP_LINES);
+      if (playing) playing.textContent = `♪ ${song.title}`;
+      const sing = (i: number) => roll(lines[i], i + 1 < lines.length ? () => sing(i + 1) : hop);
+      sing(0);
     };
 
     const reset = () => {
@@ -173,14 +204,7 @@ export function Melt({ captions }: { captions: { title: string; lines: string[] 
       root.dataset.melting = safari || chrome ? "" : "hide-players";
       start = performance.now();
       raf = window.requestAnimationFrame(frame);
-      const sung = captions.filter((song) => song.lines.length > 0);
-      if (sung.length > 0) {
-        const song = sung[Math.floor(Math.random() * sung.length)];
-        later(() => {
-          if (playing) playing.textContent = `♪ ${song.title}`;
-          roll(song.lines, Math.floor(Math.random() * song.lines.length));
-        }, MELT_MS / 2);
-      }
+      if (sung.length > 0) later(hop, MELT_MS / 2);
     };
 
     const frame = (now: number) => {

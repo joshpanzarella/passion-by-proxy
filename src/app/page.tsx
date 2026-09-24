@@ -17,11 +17,11 @@ import { Merch } from "@/components/sections/Merch";
 import { About } from "@/components/sections/About";
 import { Contact } from "@/components/sections/Contact";
 
-// every song's lines (real words only, not placeholders), captioned over
+// every song's stanzas (real words only, not placeholders), captioned over
 // the static as the page melts
 const captions = songs
   .filter((s) => !s.placeholder)
-  .map((s) => ({ title: s.title, lines: parseLyrics(s.lyrics).flatMap((stanza) => stanza.lines) }));
+  .map((s) => ({ title: s.title, stanzas: parseLyrics(s.lyrics).map((stanza) => stanza.lines) }));
 
 export default function Home() {
   return (
