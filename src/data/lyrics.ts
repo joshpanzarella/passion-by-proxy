@@ -30,32 +30,46 @@ export const songs: Song[] = [
     title: "Proxy Music",
     release: album,
     track: 1,
-    placeholder: true,
     lyrics: `
-Lorem dolore nostrud enim laboris nostrud
-Exercitation fugiat pariatur cupidatat
-Adipiscing tempor aliquip dolor ad
-Dolor ad velit aute ut
+We’re competing
+Open season
+May the best man sin
 
-Ut nisi sed ea dolor aute sunt
-Sed aliquip consequat labore
-Quis exercitation magna amet incididunt consequat
-Irure velit sit quis magna et amet
+I’ll concede it
+I’m conceited
+Still, I’m planning the whim
 
-[chorus]
-Nulla est nisi consectetur id nostrud dolor
-Non laborum do sed proident
-Velit do lorem sint laborum
+Feeling weakened
+Losing weekends
+But I’d do it again
+(Do it again...)
 
-[bridge]
-Est ullamco esse officia commodo laboris
-Duis aliquip adipiscing fugiat nisi
-Ipsum do laboris deserunt nostrud voluptate
+Who needs sleeping?
+I’ve been steeping
+In a passenger van
 
-[chorus]
-Nulla est nisi consectetur id nostrud dolor
-Non laborum do sed proident
-Velit do lorem sint laborum
+Canning preachings
+Reaping weepings
+Yeah, I do what I can
+
+What you on about?
+No ones to deep
+To understand
+(To understand...)
+
+If I was supposed to watch my tongue like you keep saying
+Then put my eyes in my mouth, come on, I’m waiting
+
+Come on I’m waiting
+Come on I’m waiting
+
+Do you call it “lo-fi” when its just the best you can do?
+Do you scream out your lungs ’cause you can’t sing a tune?
+
+Can’t sing a tune
+Can’t sing a tune
+Can’t sing a tune.... No....
+Can’t sing a tune.... Now....
 `,
   },
   {
@@ -63,92 +77,96 @@ Velit do lorem sint laborum
     title: "U&I",
     release: album,
     track: 2,
-    placeholder: true,
     alsoOn: [single], // the single too
     credits: "words and music by Passion by Proxy",
     lyrics: `
-[verse]
-Lorem ipsum dolor sit amet, consectetur
-adipiscing elit, sed do eiusmod
-tempor incididunt ut labore
-et dolore magna aliqua
+Yesterday I was thinking about
+All the things I can’t do without
+Like motor rides down the country side
+I could live or die, just you decide
 
-Ut enim ad minim veniam, quis nostrud
-exercitation ullamco laboris
-nisi ut aliquip ex ea commodo
-consequat, duis aute irure dolor
+I laughed in the face of a runaway train
+I shrugged it off, ’cause I was done away with that pain
+I’ll take you out tonight
+We could feel up the turbines
+You danced and danced at the chance of rain
+You chalked it up to some unbalancing in your brain
+Some things can’t be denied
+Come on baby, that’s U⅋I
 
-[chorus]
-In reprehenderit in voluptate
-velit esse cillum dolore
-eu fugiat nulla pariatur
-you and I, you and I
+U&I
+U⅋I
 
-[verse]
-Excepteur sint occaecat cupidatat
-non proident, sunt in culpa
-qui officia deserunt mollit
-anim id est laborum
+Time... feels like old clothes...
+Right... under your nose...
+Never half as good when you pose
+But perfect in it’s dose
+In it’s dose..
+In it’s dose...
+In it’s dose....
+(I laughed in the face of a runaway train)
+In it’s dose.....
+(I shrugged it off, ’cause I was done away with that pain)
+In it’s dose........
+(I’ll take you out tonight)
+Come on baby, that’s U⅋I
+Come on baby, that’s U&I
 
-[chorus]
-In reprehenderit in voluptate
-velit esse cillum dolore
-eu fugiat nulla pariatur
-you and I, you and I
-
-[bridge]
-Sed ut perspiciatis unde omnis
-iste natus error sit voluptatem
-accusantium doloremque
-
-[chorus]
-In reprehenderit in voluptate
-velit esse cillum dolore
-eu fugiat nulla pariatur
-you and I, you and I
+U⅋I
+U&I
 `,
   },
   {
     slug: "one-die-snake-eyes",
-    title: "One Die Snake Eyes",
+    title: "One Die, Snake Eyes",
     release: album,
     track: 3,
-    placeholder: true,
     lyrics: `
-Non consequat commodo ullamco voluptate anim ea
-Incididunt deserunt ipsum exercitation id reprehenderit
-Do velit nulla cupidatat ad reprehenderit minim
-Nulla dolor consectetur nulla duis ullamco
+Desire no desire
+Then you need no need
+Do you want to not want now?
+Do you dream of no sleep?
 
-Sed qui laborum reprehenderit ipsum
-Culpa sint ut quis reprehenderit laboris excepteur
-Incididunt elit qui cillum cupidatat consectetur
-Dolor veniam ex aute
+Keep moving towards stasis
+Then you steal whats free
+And I know you won’t believe it
+Limelights not green
 
-[chorus]
-Irure quis ullamco minim sed anim
-Irure lorem qui quis incididunt
-Dolore nisi incididunt quis enim
+So go on and catch a gasp..
+Better roll up the sleeves on your tank top
 
-Ea incididunt nostrud sint veniam incididunt
-Incididunt irure laboris amet velit id ad
-Elit adipiscing velit ipsum
-Ipsum irure aute consectetur commodo
+And I know you won’t believe it
+I screenshot the cracks on my phone
+Found solace since my soul split
+The whole things overblown
 
-[chorus]
-Irure quis ullamco minim sed anim
-Irure lorem qui quis incididunt
-Dolore nisi incididunt quis enim
+Your hips don’t lie, but hypocrites lie twice
+How did I get snake eyes with only one die?
 
-[bridge]
-Voluptate occaecat esse labore
-Eiusmod mollit do sit consequat
-Velit magna dolor cillum ullamco anim
+Are you starving for hunger?
+Are you Achin’ to Be?
+Well I know you’re not an atheist
+That’s too much to believe
 
-[chorus]
-Irure quis ullamco minim sed anim
-Irure lorem qui quis incididunt
-Dolore nisi incididunt quis enim
+I’ve given up on reasons
+I sharpen it until it’s dull
+Hoarding all your empty vessels
+And husking the hulls
+
+Gunpoint kindness I admit..
+Russian roulette with stones and sticks
+Can’t get enough of this trial
+
+Your hips don’t lie, but hypocrites lie twice
+How did I get snake eyes with only one die?
+
+How did I get it, how did I get?
+How did I get it, how did I get?
+How did I get it, how did I get?
+How did I get it, how did I get?
+
+Your hips don’t lie, but hypocrites lie twice
+How did I get snake eyes with only one die?
 `,
   },
   {
@@ -156,32 +174,68 @@ Dolore nisi incididunt quis enim
     title: "Sick Stability",
     release: album,
     track: 4,
-    placeholder: true,
     lyrics: `
-Do occaecat id esse culpa pariatur
-Laborum veniam aliqua est voluptate elit
-Fugiat lorem nulla ad ad nisi magna
-Commodo proident eiusmod non
+I’ve been going straight
+From coffee to booze
+I’ve been staying up late
+& I never hit snooze
+I swear that I’m getting up
+But then I’m refreshing the news
+(refreshing the news)
+As told by two cartoons
+Who fake argue
+and they say....
 
-Enim aute cillum consectetur laborum est
-Deserunt dolore exercitation in officia qui do
-Labore aute occaecat sed cupidatat anim labore
-Proident fugiat qui dolor deserunt dolore
+“Fix your car, fix your door, fix your animals”
+“Fix your friends, fix your foes, fix that hole in your heart”
+“Fix the game”
+“The game is fixed”
+“Get your mind right out the ditch”
+Already halfway there
+Don’t even know how to start
 
-[chorus]
-Sint sint nulla labore
-Labore occaecat laboris aliqua
-Qui cillum lorem aliquip nisi non
+But maybe it’s not broken
+Maybe it’s just easier this way
+The only thing that stays the same
+Is how much I want things to change
 
-[bridge]
-Proident dolor anim consectetur ex reprehenderit
-Fugiat deserunt laborum veniam voluptate ut esse
-Pariatur sit cillum cillum dolore
+I’ve been raising the stakes
+To keep myself petrified
+I’ve been on a spending spree
+Ever since a nickel cost a dime
+I don’t have much left
+(nothing left, nothing left)
+Since I gave you a piece of my mind
+(piece of my mind)
+I’ll just replay it in my head until I feel justified
 
-[chorus]
-Sint sint nulla labore
-Labore occaecat laboris aliqua
-Qui cillum lorem aliquip nisi non
+Fix your car
+Fix your door
+Fix your animals
+Fix your friends
+Fix your foes
+Fix that hole in my heart
+Fix the game, the game is fixed
+Get your mind right out the ditch
+Already halfway there
+Don’t even know how to start
+
+But maybe it’s not broken
+Maybe it’s just easier this way
+The only thing that stays the same
+Is how much I want things to change
+Maybe it’s not
+(it’s not!) (it’s not!)
+Maybe it’s not
+(it’s not!) (it’s not!)
+Maybe it’s not broken
+The only thing that stays the same
+Is how much I want things to change
+
+My sick stability, it’s killing me I know
+My sick stability, it’s killing me I know
+I know, I know
+It’s killing me I know...
 `,
   },
   {
@@ -189,42 +243,68 @@ Qui cillum lorem aliquip nisi non
     title: "The Runner Up",
     release: album,
     track: 5,
-    placeholder: true,
     lyrics: `
-Aliquip consectetur id sint
-Minim ex cupidatat laborum aliqua irure quis
-Culpa exercitation incididunt ex commodo
-Elit commodo ullamco ullamco amet anim sit
+So- so sorry I missed your call
+I made it so my phone don’t ring at all
+& I leveled the earth
+So I don’t fall again
+How ya- How ya doing?
+Yeah, how it’s been?
+All I do is repeat- repeat and rinse
+Hows life decaying in decadence my friend?
 
-Nisi minim veniam id qui
-Et aliquip et velit in sint
-Minim id aliquip laborum nisi cillum dolor
-Cupidatat minim adipiscing consequat
+You drank the water from the wishing well
+What’s another synonym for “ill”
+You’re taking every color pill
+Until you brown out on your sofa
+Collapsing all the multitudes
+Brainstorming new ways to be rude
+Open is the mouth that chews
+The fat, the ring on your coaster
 
-[chorus]
-Esse voluptate ullamco voluptate
-Ad exercitation cillum ad pariatur ut
-Anim ut deserunt dolor voluptate amet
+My whole life I’ve been a drip away
+From a glass half full, it evaporates
+On the bright side it looks like rain again
+The ebb, the flow
+The wax, the wayne
+The cheaters win a loser’s game
+I’m starting to have faith in fate again
 
-Fugiat est ut voluptate reprehenderit
-Id magna occaecat veniam excepteur ex adipiscing
-Lorem ut ullamco enim cillum reprehenderit
-Officia officia pariatur esse commodo do
+Not too much man, how ’bout you?
+I’m trying my best not to blow a fuse
+Yeah, I’m trying my best not to throw a fuss
+It’s never ever ever enough
+& the solution comes in a topical gel
+A gun sound effect would go hear well
+Call my name, ring my bell
+& we’ll move back to Minnesota
 
-[chorus]
-Esse voluptate ullamco voluptate
-Ad exercitation cillum ad pariatur ut
-Anim ut deserunt dolor voluptate amet
+My whole life I’ve been a drip away
+From a glass half full, it evaporates
+On the bright side it looks like rain again
+The six of wands, the knight of cups
+Running up on the runner up
+I tried to erase what I should have let fade
 
-[bridge]
-Dolore elit veniam sunt tempor minim
-Qui veniam occaecat occaecat nisi proident eiusmod
-Ad voluptate duis exercitation proident
+I know I should have let it fade
+I know I should have let it fade
+Let it fade...
+Let it fade...
 
-[chorus]
-Esse voluptate ullamco voluptate
-Ad exercitation cillum ad pariatur ut
-Anim ut deserunt dolor voluptate amet
+Every night, I have fake litigations
+In my-
+Fake litigations in my mind..
+I realize, it’s a poor imitation
+’Cause you’d never listen
+
+Never listen, no you never listen
+Never listen, no you never listen
+Never listen, no you never listen
+Never listen, oh no, you never listen
+Never listen, no you never listen
+Never listen, no you never listen
+Never listen, no you never listen
+Never listen, oh no, you never listen
 `,
   },
   {
@@ -232,44 +312,61 @@ Anim ut deserunt dolor voluptate amet
     title: "Zoe’s Zoetrope",
     release: album,
     track: 6,
-    placeholder: true,
     credits: "words and music by Passion by Proxy",
     lyrics: `
-[verse]
-At vero eos et accusamus et iusto
-odio dignissimos ducimus qui blanditiis
-praesentium voluptatum deleniti
-atque corrupti quos dolores
+Nah I ain’t gonna look at Zoe’s Zoetrope no more
+Nah I ain’t gonna look at Zoe’s Zoetrope no more
+The morning condensation’s
+Tasting kinda condescending
+Copy my copy pastings
+The truth is never ending
+But the end, she says, is closer
+Than it’s been before
+But I’m not going to be looking at Zoe’s Zoetrope no more
 
-Et quas molestias excepturi sint
-occaecati cupiditate non provident
-similique sunt in culpa qui officia
-deserunt mollitia animi, id est laborum
+I ain’t gonna look at Zoe’s Zoetrope no more
+I ain’t gonna look at Zoe’s Zoetrope no more
+She swears it’s not so simple
+As the darkness verses the light
+Yeah, it might be 4D chess to you
+But it’s still just black and white
+Call up your RoundUp Ready friends
+And face the children of the corn
+That don’t want to look at Zoe’s Zoetrope anymore
 
-[chorus]
-Round and round, et harum quidem
-rerum facilis est et expedita
-distinctio, round and round
+Yeah, yeah, yeah you got it
+Got it got it wrong
+A tale as old as time,
+The finger wags the dog
+When the fruit of your labor
+Is rotten at the core-
+I don’t think I’ll be looking at Zoe’s Zoetrope anymore
+More…
+More…
+More, more, more…
 
-[verse]
-Nam libero tempore, cum soluta nobis
-est eligendi optio cumque nihil
-impedit quo minus id quod maxime
-placeat facere possimus
+No I don’t think I’ll stare at Zoe’s Zoetrope anymore
+No I don’t think I’ll stare at Zoe’s Zoetrope anymore
+She’s getting kinda giddy
+When a new bomb drops
+GoFundMe for a kidney
+Never mind — her mom’s a cop!
+Should’ve grown a classy conscious
+And made herself a whore
+Nah - I don’t want to stare at Zoe’s Zoetrope anymore
 
-[bridge]
-Temporibus autem quibusdam
-et aut officiis debitis aut rerum
-necessitatibus saepe eveniet
-
-[chorus]
-Round and round, et harum quidem
-rerum facilis est et expedita
-distinctio, round and round
-
-[outro]
-Itaque earum rerum hic tenetur
-a sapiente delectus
+No I don’t think I’ll stare at Zoe’s Zoetrope anymore
+I don’t want to look at Zoe’s Zoetrope anymore
+Freebase the associations
+I guess you gotta learn
+The shelf life of the
+Self-consciously self-assured
+When the verge and the edge
+Are always pounding at the door-
+And your scab picking arm
+Somehow never gettin’ sore-
+Don’t think I’ll be looking at Zoe’s Zoetrope no more
+I don’t think I’m looking at Zoe’s Zoetrope no more!
 `,
   },
   {
@@ -277,42 +374,47 @@ a sapiente delectus
     title: "Dead End Clout",
     release: album,
     track: 7,
-    placeholder: true,
     lyrics: `
-Minim minim mollit amet est voluptate minim
-Adipiscing nisi ullamco non
-Voluptate qui do nisi
-Officia cillum excepteur ea excepteur
+Such sad.. Such sad, awful, terrible, and horrible news
+The worst people you know want nothing to do with you
+The most middling of the middlemen in the crew
 
-Elit est anim ex sit ea adipiscing
-Est cillum dolore ullamco exercitation ipsum occaecat
-Sit aute lorem adipiscing
-Velit elit adipiscing quis irure
+Has sung a tune
 
-[chorus]
-Sit est anim ut ipsum
-Exercitation ad laborum qui sed consequat
-Consequat ad adipiscing irure quis
+Now you’re finding out
+It’s dead end clout
 
-Aliquip eiusmod ex amet ut
-Ullamco duis qui occaecat ut
-Labore nostrud reprehenderit amet
-Laboris sed consectetur laboris enim ea
+I sang my heart out
 
-[chorus]
-Sit est anim ut ipsum
-Exercitation ad laborum qui sed consequat
-Consequat ad adipiscing irure quis
+Now I’m done, can’t play in this town
+Someone just beat me with their brow
+Succumb to the suckers and their thumbs
 
-[bridge]
-Consectetur culpa ad cupidatat quis duis
-Aliqua amet reprehenderit ut fugiat sit cillum
-Anim aute est deserunt elit
+Or change your name to mud
 
-[chorus]
-Sit est anim ut ipsum
-Exercitation ad laborum qui sed consequat
-Consequat ad adipiscing irure quis
+What you talking about?
+
+I swear I don’t know nothing about it now
+
+And anyhow (anyhow!)
+If I did… would it be the kind of thing that I’d say out loud?
+(out loud!)
+I’d keep it buried in the ground
+
+Now you’re finding out
+It’s dead end clout
+
+I’ll tear your heart out
+
+I’m done, can’t play in this town
+Someone just beat me with their brow
+Succumb to the suckers and the thumbs
+
+Or change your name and
+
+Go insane and
+They’ll pick your brain
+But never to your face
 `,
   },
   {
@@ -320,74 +422,95 @@ Consequat ad adipiscing irure quis
     title: "Wet Street Causes Rain",
     release: album,
     track: 8,
-    placeholder: true,
     lyrics: `
-Sed et elit ullamco
-Ad ullamco proident commodo
-Ullamco mollit occaecat id sint ea
-Dolor culpa commodo officia esse quis veniam
+I’m sick of everything now
+The taste of blood got old
+On my tongue is copper green
+How did I reach the eighth fold?
+Tried to be a decent person
+Now everyone’s the worst
+Tried sewing seeds of glory
+But they only want to see the dirt
 
-[chorus]
-Incididunt id anim consequat
-Ipsum laboris non enim dolor
-Fugiat in cupidatat ex id anim
+& how come the wet streets cause the rain?
+Gotta wonder if it’s thunder and...
+How come the outcome stays the same anyway...
 
-Consequat tempor nisi laborum sint aliquip
-Occaecat amet ut commodo magna commodo
-Ut enim laborum eiusmod laboris ullamco reprehenderit
-Sint adipiscing velit ut tempor ut
+If it’s so easy for me to say?
+Why’s it so hard?
+Why’s it so hard?
+If it’s so easy for me to say
+Why’s it so hard for me to be heard?
 
-[chorus]
-Incididunt id anim consequat
-Ipsum laboris non enim dolor
-Fugiat in cupidatat ex id anim
+For me to be heard...
 
-[outro]
-Nostrud non sit excepteur consectetur quis
-Sunt ad aute magna duis do cillum
+I was eighteen at ground zero
+I watched the world implode
+Questions answered the questions
+Everybody got diagnosed
+I don’t know how you can figure
+That you can feel things more
+Rattle off your list of treasons
+Didn’t know we were keeping score and
+How come the wet streets cause the rain?
+God I wonder whose thumb your under now?
+
+If it’s so easy for me to say?
+Why’s it so hard?
+Why’s it so hard?
+If it’s so easy for me to say
+Why’s it so hard for me to be heard?
+
+Yeah why’s it so hard?
+Why’s it so hard?
+
+If it’s so easy for me to say?
+Why’s it so hard?
+Why’s it so hard?
+If it’s so easy for me to say
+Why’s it so hard for me to be heard?
 `,
   },
   {
     slug: "cut-corners-run-in-circles",
-    title: "Cut Corners Run in Circles",
+    title: "Cut Corners (Run in Circles)",
     release: album,
     track: 9,
-    placeholder: true,
     lyrics: `
-Eiusmod labore fugiat ipsum
-Laboris occaecat voluptate reprehenderit magna sint
-Magna veniam occaecat non sunt ipsum
-Adipiscing occaecat dolore ut velit exercitation ut
+Yeah I was giving up “up” to keep you down
+I was cutting off my head to not wear a crown
+I’d feed myself to the wolves to starve all the hounds
+& I’d run for the hills to escape the mounds
 
-Dolor quis laboris sint sunt laborum est
-Mollit sed sit nostrud amet
-Sed aliqua aute velit
-In qui dolor sint magna irure ipsum
+You keep on cutting corners and you’ll run in circles
+All the way down, you see no turtles
+“It’s not a diary, it’s called a journal”
+Yeah right...
 
-[chorus]
-Magna id magna fugiat in minim
-Commodo et sunt exercitation officia occaecat
-Et et anim est duis
+Though I can choke down the news
+I persists at what I presume
+Illiterate at reading rooms
+I just lit a rag off your perfume
 
-Fugiat occaecat ad eiusmod
-Proident quis ullamco amet
-Non adipiscing sint aliqua id ex
-Anim dolor excepteur voluptate nulla enim
+Your perfume...
+Your perfume....
 
-[chorus]
-Magna id magna fugiat in minim
-Commodo et sunt exercitation officia occaecat
-Et et anim est duis
+Doesn’t make a difference if no one’s around
+I’m cutting all the trees, they won’t make a sound
+You only pick your poison in mils or ounces
+Strong enough to kill a horse, forgive me, a stallion
 
-[bridge]
-Nulla mollit do do eiusmod est et
-Aliquip ea tempor fugiat deserunt officia incididunt
-Eiusmod ut esse labore tempor consequat voluptate
+You keep on cutting corners and you’ll run in circles
+All the way down, you see no turtles
+Your leather bound spine meets it’s final hurdle tonight
 
-[chorus]
-Magna id magna fugiat in minim
-Commodo et sunt exercitation officia occaecat
-Et et anim est duis
+Though I can choke down the news
+I persists at what I presume
+Illiterate at reading rooms
+I just lit a rag off your perfume
+
+Your perfume...
+Your perfume....
 `,
   },
   {
@@ -395,31 +518,44 @@ Et et anim est duis
     title: "Placid Pastiche",
     release: album,
     track: 10,
-    placeholder: true,
     lyrics: `
-Elit aute qui labore adipiscing sunt
-Ullamco qui elit esse do
-Ut elit tempor amet
-Officia aliquip sit non
+You don’t believe in hell
+But you make it well
+Don’t believe in laws
+But you still keep me in a cell
 
-[chorus]
-Magna occaecat adipiscing elit qui incididunt incididunt
-Occaecat ea commodo nulla cupidatat id sit
-Duis do deserunt et laborum ipsum
+Don’t believe in walls
+You just stack blocks tall
+For as far as the eye can see
+The same eyes that cry when they fall
 
-Nisi cillum sint ut mollit fugiat
-Culpa id fugiat sunt consectetur labore anim
-Elit quis quis sunt fugiat nisi
-Sunt dolore ut reprehenderit non commodo
+Well you can change your tune
+& still find an excuse
+Maybe sing a drone
+Or maybe play your monotonal lute
 
-[chorus]
-Magna occaecat adipiscing elit qui incididunt incididunt
-Occaecat ea commodo nulla cupidatat id sit
-Duis do deserunt et laborum ipsum
+You say you aren’t free
+You seem it to me
+When you can say whatever you want
+& expect me to agree
 
-[outro]
-Irure excepteur ut laboris irure eiusmod
-Nulla commodo enim incididunt
+NOW EVERY SCENES
+A PLACID PASTICHE
+EVERYBODY RAISE A TOAST
+TO THE KING OF THE ROYALTY FREE
+
+COME NOW ALL LEPERS
+AND LEAPERS OF FAITH
+IT’S FINALLY HATCHING
+THE EGG ON MY FACE
+
+YOU SAY YOU CAN’T BREATHE
+BUT I CAN HEAR YOU SCREAM
+I JUDGE YOU NOT BY WHAT YOU ASK FOR
+BUT FROM WHAT YOU RECEIVE
+
+I JUDGE YOU NOT BY WHAT YOU ASK FOR
+BUT FROM WHAT YOU RECEIVE
 `,
   },
   {
