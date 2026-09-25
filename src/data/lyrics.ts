@@ -143,6 +143,7 @@ I screenshot the cracks on my phone
 Found solace since my soul split
 The whole things overblown
 
+[chorus]
 Your hips don’t lie, but hypocrites lie twice
 How did I get snake eyes with only one die?
 
@@ -160,14 +161,17 @@ Gunpoint kindness I admit..
 Russian roulette with stones and sticks
 Can’t get enough of this trial
 
+[chorus]
 Your hips don’t lie, but hypocrites lie twice
 How did I get snake eyes with only one die?
 
+[bridge]
 How did I get it, how did I get?
 How did I get it, how did I get?
 How did I get it, how did I get?
 How did I get it, how did I get?
 
+[chorus]
 Your hips don’t lie, but hypocrites lie twice
 How did I get snake eyes with only one die?
 `,
