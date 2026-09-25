@@ -1,5 +1,5 @@
 import { band, single } from "@/data/band";
-import { parseLyrics, songs } from "@/data/lyrics";
+import { openSongs, parseLyrics } from "@/data/lyrics";
 import { HeroSingle } from "@/components/HeroSingle";
 import { HeroLogo } from "@/components/HeroLogo";
 import { ScrollEffects } from "@/components/ScrollEffects";
@@ -18,9 +18,9 @@ import { Merch } from "@/components/sections/Merch";
 import { About } from "@/components/sections/About";
 import { Contact } from "@/components/sections/Contact";
 
-// every song's stanzas (real words only, not placeholders), captioned over
-// the static as the page melts
-const captions = songs
+// every open song's stanzas (real words only: no placeholders, nothing
+// sealed), captioned over the static as the page melts
+const captions = openSongs
   .filter((s) => !s.placeholder)
   .map((s) => ({ title: s.title, stanzas: parseLyrics(s.lyrics).map((stanza) => stanza.lines) }));
 

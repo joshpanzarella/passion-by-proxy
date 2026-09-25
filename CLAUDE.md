@@ -42,6 +42,10 @@ static export (`out/`) and hosted on Cloudflare Pages from `main`.
   lines); pages are generated per song. Reading comes first: the column
   stays ~40ch, nothing animates behind the words, and the reading light
   (dimming the other stanzas) must stay subtle and off for reduced motion.
+  A release in `sealed` (`lyrics.ts`) keeps its words secret until it is
+  out: its songs are greyed out on /lyrics, get no page and no sitemap
+  entry, and stay out of the captions, so the words ship nowhere. Empty it
+  on release day.
 - **The header and footer are shared** (`SiteHeader`, `SiteFooter`); the
   home page passes `home` so its section links stay plain anchors. The
   splash is mounted by the home page only.
@@ -66,7 +70,8 @@ static export (`out/`) and hosted on Cloudflare Pages from `main`.
   them out of the filter and nothing melts. Headless WebKit screenshots
   of a scrolled melt are shifted and can't be trusted for this.
   The captions are the lyrics (`lyrics.ts`), passed in by `page.tsx`;
-  songs marked `placeholder` (still lorem ipsum) are left out.
+  songs marked `placeholder` (still lorem ipsum) and sealed ones are left
+  out.
   Safari runs the displacement maps on the CPU, so on an iPhone the melt
   is choppier (~10 fps) than on a desktop. A column-based melt (`feOffset`
   strips) was tried to speed it up and dropped: it lost the look.

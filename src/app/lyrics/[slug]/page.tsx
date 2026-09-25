@@ -2,22 +2,22 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { band, isLive } from "@/data/band";
-import { neighbours, parseLyrics, releaseTone, songs } from "@/data/lyrics";
+import { neighbours, openSongs, parseLyrics, releaseTone } from "@/data/lyrics";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { LyricsReader } from "@/components/LyricsReader";
 
-// One page per song, written out at build time.
+// One page per song, written out at build time; none for a sealed one.
 export const dynamicParams = false;
 export function generateStaticParams() {
-  return songs.map((s) => ({ slug: s.slug }));
+  return openSongs.map((s) => ({ slug: s.slug }));
 }
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const song = songs.find((s) => s.slug === slug);
+  const song = openSongs.find((s) => s.slug === slug);
   if (!song) return {};
   return {
     title: `${song.title} lyrics`,
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function SongPage({ params }: Props) {
   const { slug } = await params;
-  const song = songs.find((s) => s.slug === slug);
+  const song = openSongs.find((s) => s.slug === slug);
   if (!song) notFound();
   const { prev, next } = neighbours(song.slug);
   // the song's own release first, then any other it is on (U&I: the album

@@ -10,6 +10,7 @@ import { album, firstSingle, single, type Release } from "@/data/band";
 // `track` order. Songs marked `placeholder` are still lorem ipsum: they show
 // on /lyrics but stay out of the captions on the melted home page; delete
 // the mark when the real words go in, and the captions take them up.
+// A release in `sealed` (below) keeps its words back until it is out.
 
 export type Song = {
   slug: string; // the page address: /lyrics/<slug>
@@ -629,6 +630,17 @@ I won’t be long
   },
 ];
 
+// Releases whose words are kept back until they are out: on /lyrics their
+// songs are listed greyed out, with no page of their own, and they stay out
+// of the captions and the sitemap. A song also on an open release (U&I, out
+// as the single) stays open. Empty this when the album comes out.
+export const sealed: Release[] = [album];
+
+export const isSealed = (s: Song) => [s.release, ...(s.alsoOn ?? [])].every((r) => sealed.includes(r));
+
+// the songs whose words can be read: a page each
+export const openSongs = songs.filter((s) => !isSealed(s));
+
 export type Stanza = { label?: string; kind: "verse" | "chorus" | "bridge" | "other"; lines: string[] };
 
 // Blank lines split stanzas; a [label] line names the stanza it starts.
@@ -659,10 +671,11 @@ export function songsByRelease() {
 }
 
 // The song before and after, running through every release in order, each
-// song once (a single that is also an album track is met in the album).
+// song once (a single that is also an album track is met in the album), the
+// sealed ones skipped.
 export function neighbours(slug: string) {
   const ordered = songsByRelease()
-    .flatMap((g) => g.songs.filter((s) => s.release === g.release));
+    .flatMap((g) => g.songs.filter((s) => s.release === g.release && !isSealed(s)));
   const i = ordered.findIndex((s) => s.slug === slug);
   return { prev: i > 0 ? ordered[i - 1] : undefined, next: i >= 0 && i < ordered.length - 1 ? ordered[i + 1] : undefined };
 }

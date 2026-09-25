@@ -1,5 +1,5 @@
 import { album, band, firstSingle, isLive, single, type Link, type Release } from "@/data/band";
-import { releaseTone, songs } from "@/data/lyrics";
+import { openSongs, releaseTone } from "@/data/lyrics";
 import NextLink from "next/link";
 import { ReleaseStatus } from "@/components/ReleaseStatus";
 import { Section } from "./Section";
@@ -66,9 +66,9 @@ function Spotlight({ release, fresh = false }: { release: Release; fresh?: boole
   );
 }
 
-// the release's one song if it has exactly one (a single), else the list
+// the release's one song if it has exactly one open (a single), else the list
 function lyricsHref(release: Release) {
-  const on = songs.filter((s) => s.release === release || s.alsoOn?.includes(release));
+  const on = openSongs.filter((s) => s.release === release || s.alsoOn?.includes(release));
   return on.length === 1 ? `/lyrics/${on[0].slug}` : "/lyrics";
 }
 
