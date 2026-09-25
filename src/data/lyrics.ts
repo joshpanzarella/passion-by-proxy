@@ -659,9 +659,11 @@ export function parseLyrics(text: string): Stanza[] {
     .filter((s) => s.lines.length > 0);
 }
 
-// Releases in the order they appear on /lyrics, each with its songs.
+// Releases in the order they appear on /lyrics, each with its songs: the
+// new single, the first (out already), then the album (to come), as in the
+// music section.
 export function songsByRelease() {
-  const releases = [single, album, firstSingle];
+  const releases = [single, firstSingle, album];
   return releases
     .map((r) => ({
       release: r,
@@ -670,12 +672,10 @@ export function songsByRelease() {
     .filter((g) => g.songs.length > 0);
 }
 
-// The song before and after, running through every release in order, each
-// song once (a single that is also an album track is met in the album), the
-// sealed ones skipped.
+// The song before and after, in /lyrics order, each song once, where it
+// first appears (U&I in the single, at the top), the sealed ones skipped.
 export function neighbours(slug: string) {
-  const ordered = songsByRelease()
-    .flatMap((g) => g.songs.filter((s) => s.release === g.release && !isSealed(s)));
+  const ordered = [...new Set(songsByRelease().flatMap((g) => g.songs))].filter((s) => !isSealed(s));
   const i = ordered.findIndex((s) => s.slug === slug);
   return { prev: i > 0 ? ordered[i - 1] : undefined, next: i >= 0 && i < ordered.length - 1 ? ordered[i + 1] : undefined };
 }
