@@ -60,12 +60,14 @@ To understand
 If I was supposed to watch my tongue like you keep saying
 Then put my eyes in my mouth, come on, I’m waiting
 
+[chorus]
 Come on I’m waiting
 Come on I’m waiting
 
 Do you call it “lo-fi” when its just the best you can do?
 Do you scream out your lungs ’cause you can’t sing a tune?
 
+[outro]
 Can’t sing a tune
 Can’t sing a tune
 Can’t sing a tune.... No....
@@ -193,6 +195,7 @@ As told by two cartoons
 Who fake argue
 and they say....
 
+[pre-chorus]
 “Fix your car, fix your door, fix your animals”
 “Fix your friends, fix your foes, fix that hole in your heart”
 “Fix the game”
@@ -201,6 +204,7 @@ and they say....
 Already halfway there
 Don’t even know how to start
 
+[chorus]
 But maybe it’s not broken
 Maybe it’s just easier this way
 The only thing that stays the same
@@ -216,6 +220,7 @@ Since I gave you a piece of my mind
 (piece of my mind)
 I’ll just replay it in my head until I feel justified
 
+[pre-chorus]
 Fix your car
 Fix your door
 Fix your animals
@@ -227,6 +232,7 @@ Get your mind right out the ditch
 Already halfway there
 Don’t even know how to start
 
+[chorus]
 But maybe it’s not broken
 Maybe it’s just easier this way
 The only thing that stays the same
@@ -239,6 +245,7 @@ Maybe it’s not broken
 The only thing that stays the same
 Is how much I want things to change
 
+[outro]
 My sick stability, it’s killing me I know
 My sick stability, it’s killing me I know
 I know, I know
