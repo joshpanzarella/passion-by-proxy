@@ -999,8 +999,13 @@ html[data-melting] .melt-cue--right {
   color: var(--muted);
 }
 
-/* a release after the album (the first single) keeps the album's spacing */
-.album + .spotlight {
+/* the cover on the right (the first single, second in the zigzag) */
+.spotlight--flip .spotlight__cover {
+  order: 2;
+}
+
+/* a single after another (the first single) keeps the album's spacing */
+.spotlight + .spotlight {
   margin-top: clamp(4rem, 10vw, 7rem);
 }
 
@@ -1024,7 +1029,6 @@ html[data-melting] .melt-cue--right {
 
 /* the official cover: framed like U&I's, in the album's gold and blue */
 .album__cover {
-  order: 2;
   aspect-ratio: 1;
   border: 1px solid var(--c);
   box-shadow: 8px 8px 0 var(--c2);
@@ -1038,7 +1042,6 @@ html[data-melting] .melt-cue--right {
 }
 
 .album__art {
-  order: 2;
   overflow: hidden;
   /* the art sits on black like the page: no frame, it just glows */
 }
@@ -1069,8 +1072,11 @@ html[data-melting] .melt-cue--right {
 
   .album__art,
   .album__cover {
-    order: 0;
     max-width: 420px;
+  }
+
+  .spotlight--flip .spotlight__cover {
+    order: 0;
   }
 }
 

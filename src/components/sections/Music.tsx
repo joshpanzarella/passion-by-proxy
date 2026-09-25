@@ -4,24 +4,26 @@ import NextLink from "next/link";
 import { ReleaseKind, ReleaseStatus } from "@/components/ReleaseStatus";
 import { Section } from "./Section";
 
-// The new single leads with its cover and lettering; the album follows as
-// its own feature with the bottles, then the first single, laid out like the
-// new one (the covers zigzag). Each takes its colours from its artwork.
+// The new single leads with its cover and lettering; the first single,
+// out already, follows, laid out like it; then the album, still to come, as
+// its own feature (the covers zigzag: left, right, left). Each takes its
+// colours from its artwork.
 export function Music() {
   return (
     <Section id="music" title="music">
       <Spotlight release={single} fresh />
+      <Spotlight release={firstSingle} flip />
       <AlbumFeature release={album} />
-      <Spotlight release={firstSingle} />
       <Players />
     </Section>
   );
 }
 
-// fresh: the new one ("new single"); otherwise just its kind
-function Spotlight({ release, fresh = false }: { release: Release; fresh?: boolean }) {
+// fresh: the new one ("new single"); otherwise just its kind. flip: the
+// cover on the right
+function Spotlight({ release, fresh = false, flip = false }: { release: Release; fresh?: boolean; flip?: boolean }) {
   return (
-    <article className={`spotlight ${releaseTone(release)}`}>
+    <article className={`spotlight ${releaseTone(release)}${flip ? " spotlight--flip" : ""}`}>
       <div className="spotlight__cover" data-reveal="">
         {release.cover ? (
           // eslint-disable-next-line @next/next/no-img-element -- pre-sized webp from npm run media
