@@ -2177,6 +2177,7 @@ html[data-melting] .melt-cue--right {
 /* ---------- zoetrope splash ---------- */
 
 .splash {
+  --stage-w: min(88vw, 720px);
   position: fixed;
   inset: 0;
   z-index: 100;
@@ -2226,7 +2227,7 @@ html:not([data-splash]) body:has(.splash) {
 
 .splash__stage {
   position: relative;
-  width: min(88vw, 720px);
+  width: var(--stage-w);
   /* frame size from scripts/build-zoetrope.mjs: 900 x 621 */
   aspect-ratio: 900 / 621;
   --slit-pitch: clamp(22px, 5vw, 40px);
@@ -2244,16 +2245,21 @@ html:not([data-splash]) body:has(.splash) {
 /* The name in katakana under the logo, as a Japanese pressing prints a
    foreign band's: in the lettering colour of the frame showing (a copy per
    frame, on the frames' keyframes, splashCss), and left behind, fading, as
-   the logo glides off to the hero. Japanese system fonts: nothing to load. */
+   the logo glides off to the hero. Japanese system fonts: nothing to load.
+   A subtitle to "passion -by- proxy®", lettered in the frame: about a third
+   of the frame wide, tucked up under the lettering (the frames keep 4% of
+   their height, 2.76% of their width, clear below it) and centred on it (a
+   hair right of the frame's middle: 51% across). */
 .splash__ja {
   display: grid;
-  margin: 0.5rem 0 0;
+  margin: calc(var(--stage-w) * -0.0276 + 0.3em) 0 0;
+  translate: calc(var(--stage-w) * 0.01) 0;
   /* the tracking's trailing space, given back on the left: centred */
-  padding-left: 0.3em;
+  padding-left: 0.2em;
   font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, Meiryo, "Noto Sans JP", "Noto Sans CJK JP", sans-serif;
-  font-size: clamp(0.95rem, 3.4vw, 1.6rem);
-  font-weight: 700;
-  letter-spacing: 0.3em;
+  font-size: clamp(10px, calc(var(--stage-w) * 0.023), 17px);
+  font-weight: 600;
+  letter-spacing: 0.2em;
   line-height: 1.2;
   white-space: nowrap;
   transition: opacity 300ms ease-out;
