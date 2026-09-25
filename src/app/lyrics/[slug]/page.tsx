@@ -61,14 +61,14 @@ export default async function SongPage({ params }: Props) {
           <nav className="lyrics__pager" aria-label="more songs">
             {prev ? (
               <Link href={`/lyrics/${prev.slug}`} rel="prev">
-                ← {prev.title}
+                ←{"\u00a0"}{prev.title}
               </Link>
             ) : (
               <span />
             )}
             {next ? (
               <Link href={`/lyrics/${next.slug}`} rel="next">
-                {next.title} →
+                {next.title}{"\u00a0"}→
               </Link>
             ) : (
               <span />

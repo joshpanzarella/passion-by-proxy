@@ -1670,8 +1670,8 @@ html[data-melting] .melt-cue--right {
 }
 
 .lyrics__text {
-  font-size: clamp(1.15rem, 0.9rem + 0.9vw, 1.35rem);
-  line-height: 1.7;
+  font-size: clamp(1.05rem, 0.85rem + 0.9vw, 1.35rem);
+  line-height: 1.45;
 }
 
 .stanza {
@@ -1679,22 +1679,22 @@ html[data-melting] .melt-cue--right {
   transition: opacity 450ms ease;
 }
 
+/* every line on one left edge; a long line wraps in even halves, its rows
+   closer together than two lines are, so it still reads as one */
 .stanza__lines {
+  display: grid;
+  gap: 0.3em;
   margin: 0;
 }
 
 .stanza__line {
-  display: block;
-  /* a long line wraps with a hanging indent, so it reads as one line */
-  padding-left: 1.2em;
-  text-indent: -1.2em;
+  text-wrap: balance;
 }
 
 /* ⅋ (a turned &, as in "U⅋I"): the fonts here don't have it, so it is
    their own & turned over (the lyrics and the melt's captions) */
 .turned-amp {
   display: inline-block;
-  text-indent: 0;
   rotate: 180deg;
 }
 
@@ -1707,13 +1707,23 @@ html[data-melting] .melt-cue--right {
   color: var(--c);
 }
 
+/* chorus and bridge: a rule hung in the margin (the gutter is 16px at
+   least), so their words keep the verses' left edge */
 .stanza--chorus,
 .stanza--bridge {
-  padding-left: 1.1rem;
+  position: relative;
+}
+
+.stanza--chorus::before,
+.stanza--bridge::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: -0.75rem;
   border-left: 2px solid var(--c2);
 }
 
-.stanza--bridge {
+.stanza--bridge::before {
   border-left-style: dashed;
 }
 
@@ -1742,6 +1752,16 @@ html[data-melting] .melt-cue--right {
   gap: 1rem;
   width: 100%;
   font-style: italic;
+}
+
+/* a long title wraps in even halves, its arrow kept with it; the next song
+   keeps to the right edge */
+.lyrics__pager a {
+  text-wrap: balance;
+}
+
+.lyrics__pager a[rel="next"] {
+  text-align: right;
 }
 
 @media (max-width: 820px) {
