@@ -163,7 +163,7 @@ export type Video = {
 
 // Empty ids show as "coming soon" cards.
 export const videos: Video[] = [
-  { title: "U&I", youtubeId: "" },
+  { title: "U&I", youtubeId: "lB-dPUWDcrs" },
   { title: "Live session", youtubeId: "" },
 ];
 
