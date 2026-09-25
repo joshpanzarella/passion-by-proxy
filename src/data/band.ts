@@ -33,7 +33,7 @@ export const band = {
   // Mailing list on Kit: the form's id, the number in its embed code
   // (app.kit.com/forms/THIS_NUMBER/subscriptions). Shows a sign-up box in
   // "message in a bottle" (the contact section). Empty hides it.
-  kitFormId: "",
+  kitFormId: "9962520",
   // Or a sign-up page on another service: shows a button instead. Used only
   // when kitFormId is empty.
   newsletterHref: "",
