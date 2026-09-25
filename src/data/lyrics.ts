@@ -276,6 +276,7 @@ Brainstorming new ways to be rude
 Open is the mouth that chews
 The fat, the ring on your coaster
 
+[pre-chorus]
 My whole life I’ve been a drip away
 From a glass half full, it evaporates
 On the bright side it looks like rain again
@@ -293,6 +294,7 @@ A gun sound effect would go hear well
 Call my name, ring my bell
 & we’ll move back to Minnesota
 
+[pre-chorus]
 My whole life I’ve been a drip away
 From a glass half full, it evaporates
 On the bright side it looks like rain again
@@ -300,17 +302,18 @@ The six of wands, the knight of cups
 Running up on the runner up
 I tried to erase what I should have let fade
 
+[bridge]
 I know I should have let it fade
 I know I should have let it fade
 Let it fade...
 Let it fade...
-
 Every night, I have fake litigations
 In my-
 Fake litigations in my mind..
 I realize, it’s a poor imitation
 ’Cause you’d never listen
 
+[outro]
 Never listen, no you never listen
 Never listen, no you never listen
 Never listen, no you never listen
