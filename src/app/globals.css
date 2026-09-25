@@ -506,6 +506,154 @@ a {
   text-shadow: none;
 }
 
+/* ---------- social strip ---------- */
+
+/* The socials as small icons under the ticker (SocialStrip.tsx), drawn the
+   way the logo is: the glyph solid, its outline echoed three times,
+   stepping off down and right in the offset colour and the main one by
+   turns. Left to right they take the logo's zoetrope colourways in order
+   (teal, orange, pink, purple, red: the six frames but the blue, which has
+   no sampled colour yet). They arrive mis-registered and snap together, like
+   the headings; a hover fans the echoes out and spins the icon once through
+   the colourways, as the drum does, to land back on its own. No layers, no
+   filters: it all melts with the page. */
+.social-strip {
+  list-style: none;
+  margin: 0;
+  padding: 1.75rem var(--gutter) 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem clamp(0.75rem, 4vw, 2rem);
+}
+
+/* --f: its frame in the turn (social-spin-*, below) */
+.social-strip li:nth-child(5n + 1) { --c: var(--teal); --c2: var(--magenta); --f: 0; }
+.social-strip li:nth-child(5n + 2) { --c: var(--orange); --c2: var(--green); --f: 1; }
+.social-strip li:nth-child(5n + 3) { --c: var(--pink); --c2: var(--lime); --f: 2; }
+.social-strip li:nth-child(5n + 4) { --c: var(--purple); --c2: var(--yellow); --f: 3; }
+.social-strip li:nth-child(5n + 5) { --c: var(--red); --c2: var(--lime); --f: 4; }
+
+.social-strip a {
+  position: relative;
+  display: block;
+  padding: 0.5rem;
+  color: var(--c);
+  text-decoration: none;
+}
+
+.social-strip svg {
+  display: block;
+  width: 30px;
+  height: 30px;
+  overflow: visible;
+}
+
+.social-strip__glyph {
+  fill: var(--c);
+}
+
+.social-strip__echo {
+  --step: 0.85px; /* in the icon's 24-unit grid */
+  fill: none;
+  stroke: var(--c2);
+  stroke-width: 0.55;
+  translate: calc(var(--k) * var(--step)) calc(var(--k) * var(--step));
+}
+
+.social-strip__echo:nth-of-type(2) {
+  stroke: var(--c);
+}
+
+/* the name, under the icon on hover (and always for its screen reader);
+   out of the row's way, so the icons alone set its spacing */
+.social-strip__name {
+  position: absolute;
+  top: calc(100% - 0.2rem);
+  left: 50%;
+  translate: -50% 0;
+  white-space: nowrap;
+  font-size: 0.72rem;
+  font-style: italic;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.social-strip a:hover .social-strip__name,
+.social-strip a:focus-visible .social-strip__name,
+.social-strip__name--only {
+  opacity: 1;
+}
+
+.social-strip__name--only {
+  position: static;
+  translate: none;
+  font-size: 0.95rem;
+}
+
+.social-strip a:focus-visible {
+  outline: 2px solid var(--c);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .social-strip__echo {
+    transition: translate 900ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+
+  html[data-js] .social-strip [data-reveal] .social-strip__echo {
+    --step: 3px;
+  }
+
+  html[data-js] .social-strip [data-reveal].is-in .social-strip__echo {
+    --step: 0.85px;
+  }
+
+  html[data-js] .social-strip [data-reveal].is-in a:is(:hover, :focus-visible) .social-strip__echo,
+  .social-strip a:is(:hover, :focus-visible) .social-strip__echo {
+    --step: 1.7px;
+    transition-duration: 300ms;
+    transition-delay: 0s;
+  }
+
+  /* one turn of the drum from the frame after its own, landing on its own:
+     it starts a frame past its place in the cycle and runs five frames */
+  .social-strip a:is(:hover, :focus-visible) :is(.social-strip__glyph, .social-strip__echo) {
+    animation-duration: 420ms;
+    animation-timing-function: linear;
+    animation-delay: calc((var(--f) + 1) * -84ms);
+    animation-iteration-count: calc(1.2 + var(--f) * 0.2);
+  }
+
+  .social-strip a:is(:hover, :focus-visible) .social-strip__glyph {
+    animation-name: social-spin-main;
+  }
+
+  .social-strip a:is(:hover, :focus-visible) .social-strip__echo {
+    animation-name: social-spin-offset;
+  }
+}
+
+/* the drum's cycle: a frame per colourway, in the strip's order, cut hard */
+@keyframes social-spin-main {
+  0%, 19.99% { fill: var(--teal); }
+  20%, 39.99% { fill: var(--orange); }
+  40%, 59.99% { fill: var(--pink); }
+  60%, 79.99% { fill: var(--purple); }
+  80%, 100% { fill: var(--red); }
+}
+
+@keyframes social-spin-offset {
+  0%, 19.99% { stroke: var(--magenta); }
+  20%, 39.99% { stroke: var(--green); }
+  40%, 59.99% { stroke: var(--lime); }
+  60%, 79.99% { stroke: var(--yellow); }
+  80%, 100% { stroke: var(--lime); }
+}
+
 /* ---------- static ---------- */
 
 /* Faint TV static behind the home page, and every so often a wave pushing
@@ -729,8 +877,11 @@ html[data-melting] .melt-cue--right {
   border-top: 1px solid var(--line);
 }
 
-.ticker + .section {
+/* the icons belong to the ticker above: no rule, and less room, before
+   the first section */
+.social-strip + .section {
   border-top: 0;
+  padding-top: 3rem;
 }
 
 .section__label {

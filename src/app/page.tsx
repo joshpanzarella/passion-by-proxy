@@ -10,6 +10,7 @@ import { Melt } from "@/components/Melt";
 import { structuredDataJson } from "@/lib/structuredData";
 import { Ticker } from "@/components/Ticker";
 import { Banner } from "@/components/Banner";
+import { SocialStrip } from "@/components/SocialStrip";
 import { Music } from "@/components/sections/Music";
 import { Videos } from "@/components/sections/Videos";
 import { Shows } from "@/components/sections/Shows";
@@ -53,6 +54,7 @@ export default function Home() {
           </a>
         </section>
         <Ticker />
+        <SocialStrip />
         <Music />
         <Banner kind="strip" src="/media/texture-gold.webp" />
         <Videos />
