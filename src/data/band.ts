@@ -16,10 +16,7 @@ export const band = {
   // for someone who has never heard of the band.
   description:
     "Passion by Proxy is a band from Phoenixville, PA. New single U&I out September 25, 2026; album Alliterate out November 20, 2026. Shows, merch, lyrics.",
-  bio: [
-    "Placeholder bio. Who is in the band, where you are from, what it sounds like.",
-    "Second paragraph if you want one. Delete this line if not.",
-  ],
+  bio: ["We are band. You are ears."],
   // Where the band started (the band's word): given to search engines.
   foundedIn: { town: "Phoenixville", state: "PA" },
   // Band photo for the about section, built by `npm run media -- photo=…`.
