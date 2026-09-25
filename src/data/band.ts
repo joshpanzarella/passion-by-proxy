@@ -7,6 +7,9 @@ export const band = {
   // How people search for and write the name; used in metadata only.
   aliases: ["Passion-by-Proxy", "PbP"],
   short: "PbP",
+  // The name as a Japanese pressing prints a foreign band's: in katakana, a
+  // dot between the words. Under the logo in the splash only.
+  nameJapanese: "パッション・バイ・プロキシ",
   // Under the hero logo, shown as written.
   tagline: "DEAD END CLOUT",
   // What search results and link previews say about the site: plain words

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { band } from "@/data/band";
 import { SPLASH_KEY, splashCss, zoetrope } from "@/data/zoetrope";
 
 // Plays once per browser session. The inline script in layout.tsx marks
@@ -133,6 +134,16 @@ export function ZoetropeSplash() {
         ))}
         <div className="slits" />
       </div>
+      {/* the name in katakana under the logo, a copy in each frame's
+          lettering colour, shown with its frame; it stays behind (fades)
+          when the logo glides off to the hero */}
+      <p className="splash__ja" lang="ja" aria-hidden="true">
+        {zoetrope.frames.map((src, f) => (
+          <span key={src} style={{ color: zoetrope.lettering[f] }}>
+            {band.nameJapanese}
+          </span>
+        ))}
+      </p>
       <button className="splash__skip" type="button" onClick={() => setPhase("leaving")}>
         skip
       </button>

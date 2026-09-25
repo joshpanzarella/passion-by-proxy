@@ -2209,6 +2209,34 @@ html:not([data-splash]) body:has(.splash) {
   will-change: opacity;
 }
 
+/* The name in katakana under the logo, as a Japanese pressing prints a
+   foreign band's: in the lettering colour of the frame showing (a copy per
+   frame, on the frames' keyframes, splashCss), and left behind, fading, as
+   the logo glides off to the hero. Japanese system fonts: nothing to load. */
+.splash__ja {
+  display: grid;
+  margin: 0.5rem 0 0;
+  /* the tracking's trailing space, given back on the left: centred */
+  padding-left: 0.3em;
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, Meiryo, "Noto Sans JP", "Noto Sans CJK JP", sans-serif;
+  font-size: clamp(0.95rem, 3.4vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: opacity 300ms ease-out;
+}
+
+.splash__ja span {
+  grid-area: 1 / 1;
+  opacity: 0; /* the keyframes show one at a time, with its frame */
+  will-change: opacity;
+}
+
+.splash--leaving .splash__ja {
+  opacity: 0;
+}
+
 /* The drum's slits (splash and hero): dark bars that show with speed.
    They turn by moving the whole layer (--slit-shift, 0-1 of a pitch), which
    the GPU does without repainting; one extra pitch on the left covers the

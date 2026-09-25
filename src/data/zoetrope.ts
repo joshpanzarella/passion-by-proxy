@@ -10,6 +10,10 @@ export const zoetrope = {
     "/zoetrope/05.webp", // purple
     "/zoetrope/06.webp", // red
   ],
+  // Each frame's "passion -by- proxy®" colour, sampled from it (the median
+  // of the lettering's solid pixels): the katakana under the splash's logo
+  // takes the colour of the frame showing.
+  lettering: ["#d262d1", "#61bf74", "#7fc160", "#c3695e", "#c1b060", "#80bc60"],
   // The frame the drum stops on.
   landOn: 0,
 
@@ -109,6 +113,10 @@ export function splashCss(schedule: Step[] = buildSchedule()): { css: string; to
     `@keyframes pbp-slit-dark{${schedule.map((s, i) => `${pct(starts[i])}{opacity:${s.speed.toFixed(3)}}`).join("")}100%{opacity:0}}`,
     ...zoetrope.frames.map(
       (_, f) => `.splash--play .splash__frame:nth-of-type(${f + 1}){animation:pbp-frame-${f} ${total}ms linear both}`,
+    ),
+    // the katakana under the logo: a copy per frame, on the frames' own beat
+    ...zoetrope.frames.map(
+      (_, f) => `.splash--play .splash__ja span:nth-of-type(${f + 1}){animation:pbp-frame-${f} ${total}ms linear both}`,
     ),
     `.splash--play .splash__stage{animation:pbp-stage ${total}ms linear both}`,
     `.splash--play .slits{animation:pbp-slit-shift ${total}ms linear both,pbp-slit-dark ${total}ms linear both}`,
