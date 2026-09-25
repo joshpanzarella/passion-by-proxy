@@ -1,7 +1,7 @@
 import { album, band, firstSingle, isLive, single, type Link, type Release } from "@/data/band";
 import { openSongs, releaseTone } from "@/data/lyrics";
 import NextLink from "next/link";
-import { ReleaseStatus } from "@/components/ReleaseStatus";
+import { ReleaseKind, ReleaseStatus } from "@/components/ReleaseStatus";
 import { Section } from "./Section";
 
 // The new single leads with its cover and lettering; the album follows as
@@ -92,7 +92,7 @@ function AlbumFeature({ release }: { release: Release }) {
         </div>
       )}
       <div className="album__body" data-reveal="" style={{ "--i": 1 } as React.CSSProperties}>
-        <p className="release__kind">new {release.kind}</p>
+        <ReleaseKind release={release} />
         <h3 className="album__title offset">{release.title}</h3>
         <ReleaseStatus release={release} />
         <p>{release.blurb}</p>

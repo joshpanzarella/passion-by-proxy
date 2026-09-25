@@ -13,3 +13,16 @@ export function ReleaseStatus({ release }: { release: Release }) {
   if (released) return <span className="status status--out">out now</span>;
   return <span className="status">out {label}</span>;
 }
+
+// "new album coming soon" until its day, then "new album", flipping the
+// same way
+export function ReleaseKind({ release }: { release: Release }) {
+  const now = useNowMinute();
+  const released = release.date && now !== null && now >= localMidnight(release.date);
+  return (
+    <p className="release__kind">
+      new {release.kind}
+      {released ? "" : " coming soon"}
+    </p>
+  );
+}
