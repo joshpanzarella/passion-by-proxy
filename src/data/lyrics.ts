@@ -94,9 +94,11 @@ You chalked it up to some unbalancing in your brain
 Some things can’t be denied
 Come on baby, that’s U⅋I
 
+[chorus]
 U&I
 U⅋I
 
+[bridge]
 Time... feels like old clothes...
 Right... under your nose...
 Never half as good when you pose
@@ -109,9 +111,10 @@ In it’s dose.....
 (I shrugged it off, ’cause I was done away with that pain)
 In it’s dose........
 (I’ll take you out tonight)
+
+[chorus]
 Come on baby, that’s U⅋I
 Come on baby, that’s U&I
-
 U⅋I
 U&I
 `,
