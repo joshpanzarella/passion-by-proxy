@@ -61,7 +61,7 @@ export default function Home() {
         <Banner kind="strip" src="/media/texture-teal.webp" />
         <Shows />
         <Merch />
-        <Banner src="/media/banner.webp" />
+        <Banner kind="strip" src="/media/banner.webp" />
         <About />
         <Banner kind="strip" src="/media/texture-red.webp" />
         <Contact />
