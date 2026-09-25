@@ -34,7 +34,7 @@ export default function LyricsIndex() {
               </h2>
               {sealed.includes(release) && (
                 <p className="lyrics-index__sealed-note">
-                  words out with the {release.kind}
+                  lyrics out with the {release.kind}
                   {release.date ? `, ${formatDate(release.date, { month: "long", day: "numeric" })}` : ""}
                 </p>
               )}
