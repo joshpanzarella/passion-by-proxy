@@ -246,31 +246,22 @@ a {
 }
 
 /* The name in katakana under the pill, as under the splash's logo: fine
-   print, about the pill's width, in the logo's magenta. Set at 10px and
-   scaled down (to under 4px), so a browser's minimum font size (Chinese
-   and Japanese settings have one) can't blow it up; the header is outside
-   .melts, so the transform is free. The box holds its scaled height. */
+   print in the logo's magenta, exactly the pill's width (30px tall at
+   174:96). An SVG line spaced out to its box's width (textLength), so no
+   font's widths push it past the pill; drawn at 10 units and scaled with
+   the SVG, so a browser's minimum font size (Chinese and Japanese settings
+   have one) can't blow it up. */
 .site-header__ja {
-  position: relative;
-  width: 100%;
-  height: 4px;
+  display: block;
+  width: calc(30px * 174 / 96);
+  height: auto;
 }
 
-.site-header__ja span {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  translate: -50% 0;
-  scale: 0.36;
-  transform-origin: top center;
-  padding-left: 0.2em;
+.site-header__ja text {
   font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, Meiryo, "Noto Sans JP", "Noto Sans CJK JP", sans-serif;
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.2em;
-  line-height: 1.1;
-  white-space: nowrap;
-  color: var(--magenta);
+  fill: var(--magenta);
 }
 
 /* the song the melt's captions are from (Melt.tsx), by the logo while they
