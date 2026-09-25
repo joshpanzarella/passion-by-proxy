@@ -128,7 +128,7 @@ export const album: Release = {
   // cover; kept for other uses
   art: "/media/alliterate-bottles.webp",
   blurb:
-    "The truly, unbelievably, hotly anticipated freshman album from Phoenixville’s Passion by Proxy. “Alliterate” promises to show you that we’ve tried to put PbP in a box, but, like Pandora’s, they’ve escaped, and now only hope and this album remain.",
+    "The truly, unbelievably, hotly anticipated freshman album from Phoenixville, Pa.’s Passion by Proxy. “Alliterate” promises to show you that we’ve tried to put PbP in a box, but, like Pandora’s, they’ve escaped, and now only hope and this album remain.",
   links: [], // pre-save link goes here
 };
 
