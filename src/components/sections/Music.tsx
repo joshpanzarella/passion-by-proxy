@@ -45,6 +45,18 @@ function Spotlight({ release, fresh = false }: { release: Release; fresh?: boole
         )}
         <ReleaseStatus release={release} />
         {release.blurb && <p>{release.blurb}</p>}
+        {release.quotes && (
+          <div className="quotes">
+            {release.quotes.map((q) => (
+              <figure key={q.text} className="quote">
+                <blockquote>
+                  <p>{q.text}</p>
+                </blockquote>
+                <figcaption>— {q.by}</figcaption>
+              </figure>
+            ))}
+          </div>
+        )}
         <Links links={release.links} />
         <p className="release__lyrics">
           <NextLink href={lyricsHref(release)}>read the lyrics →</NextLink>

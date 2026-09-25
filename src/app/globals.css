@@ -953,6 +953,52 @@ html[data-melting] .melt-cue--right {
   height: auto;
 }
 
+/* quotes about a release (band.ts `quotes`): the words, a big opening
+   mark hung before them in the logo's offset look, who said it under them */
+.quotes {
+  display: grid;
+  gap: 1.1rem;
+  margin: 1.25rem 0 1.5rem;
+}
+
+.quote {
+  margin: 0;
+}
+
+.quote blockquote {
+  position: relative;
+  margin: 0;
+  padding-left: 1.7rem;
+  font-size: 1.1rem;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.quote blockquote::before {
+  content: "“";
+  position: absolute;
+  left: 0;
+  top: -0.2em;
+  font-size: 2.6em;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--c);
+  text-shadow: 0.05em 0.045em 0 var(--c2);
+}
+
+.quote blockquote p {
+  margin: 0;
+  text-wrap: balance;
+}
+
+.quote figcaption {
+  margin-top: 0.3rem;
+  padding-left: 1.7rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
 /* a release after the album (the first single) keeps the album's spacing */
 .album + .spotlight {
   margin-top: clamp(4rem, 10vw, 7rem);

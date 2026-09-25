@@ -73,6 +73,9 @@ export type Release = {
   // `small`/`large` are paths without extension: .mp4 and .webm both exist.
   video?: { small: string; large: string; poster: string; width: number; height: number };
   blurb: string;
+  // Short quotes about it, shown after the blurb: the words (no quote
+  // marks), and who said them.
+  quotes?: { text: string; by: string }[];
   // Where the hero's big "listen" button goes once the release is out. A
   // link page that lists every service (DistroKid HyperFollow, Linkfire,
   // song.link) suits fans on different apps. Falls back to the first link.
@@ -99,7 +102,11 @@ export const single: Release = {
     width: 1200,
     height: 520,
   },
-  blurb: "Placeholder: a sentence about U&I.",
+  blurb: "",
+  quotes: [
+    { text: "U&I will become a power pop sensation before we get GTA6", by: "Anonymous" },
+    { text: "U&I > TS encore", by: "Anonymous (for safety reasons)" },
+  ],
   // The track's own pages (the "listen" buttons take the first); Bandcamp
   // is the band's page until the track is up there.
   links: [
