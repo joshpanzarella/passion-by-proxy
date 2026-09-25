@@ -7,8 +7,9 @@ import { useEffect, useRef } from "react";
 // static behind (stronger while it melts), then sinks off the bottom
 // altogether, leaving only the static and captions. Cues at both edges say how
 // to fix it. Halfway through, the static starts carrying closed captions: a
-// random stanza of a random song, then one of another, and so on (each song
-// once before any comes round again), a line at a time, each typed in
+// run of a random song's lines from the top of a random stanza, then a run
+// of another's, and so on (each song once before any comes round again), a
+// line at a time, each typed in
 // uneven bursts of a word or a few, as live TV captions come in, with the
 // song's title by the logo in the header. Any scroll, tap or key puts it all back at
 // once.
@@ -37,7 +38,7 @@ const ROUND_BY = 0.25; // tips and shoulders are fully formed by this share of t
 const SINK = 4; // after the melt, everything sinks this many screens × (time past it, in melts)²
 const BURST_MS = [80, 400] as const; // the gap between bursts of words, at random
 const HOLD_MS = [1_400, 3_000] as const; // a finished line stays up this long, at random
-const HOP_LINES = 8; // at most this many lines of a song before the captions move to another
+const HOP_LINES = 14; // this many lines of a song (most of a minute) before the captions move to another
 const between = ([lo, hi]: readonly [number, number]) => lo + Math.random() * (hi - lo);
 
 // captions: each song's title, and its stanzas' lines
@@ -120,11 +121,16 @@ export function Melt({ captions }: { captions: { title: string; stanzas: string[
       last = deck.pop()!;
       return last;
     };
-    // a random stanza of the next song (its first few lines, if it's a long
-    // one), line by line, its title by the logo, then on to another song
+    // HOP_LINES of the next song, line by line, from the top of a random
+    // stanza (one with that many lines still to come, so every run is as
+    // long), its title by the logo, then on to another song
     const hop = () => {
       const song = draw();
-      const lines = song.stanzas[Math.floor(Math.random() * song.stanzas.length)].slice(0, HOP_LINES);
+      const all = song.stanzas.flat();
+      const tops = song.stanzas.map((_, i) => song.stanzas.slice(0, i).flat().length);
+      const room = tops.filter((top) => all.length - top >= HOP_LINES);
+      const from = room.length > 0 ? room[Math.floor(Math.random() * room.length)] : 0;
+      const lines = all.slice(from, from + HOP_LINES);
       if (playing) playing.textContent = `♪ ${song.title}`;
       const sing = (i: number) => roll(lines[i], i + 1 < lines.length ? () => sing(i + 1) : hop);
       sing(0);
