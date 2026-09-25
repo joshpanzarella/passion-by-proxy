@@ -100,11 +100,10 @@ export const single: Release = {
     height: 520,
   },
   blurb: "Placeholder: a sentence about U&I.",
-  listen: spotifyArtist,
-  // The track's own page where it has one; the band's page on the rest
-  // until theirs are up.
+  // The track's own pages (the "listen" buttons take the first); Bandcamp
+  // is the band's page until the track is up there.
   links: [
-    { label: "Spotify", href: spotifyArtist },
+    { label: "Spotify", href: "https://open.spotify.com/album/78wvGs9FUo1ytUx5Wxrv6C" },
     { label: "Apple Music", href: "https://music.apple.com/us/album/u-i-single/6810252104" },
     { label: "Bandcamp", href: bandcampPage },
   ],
