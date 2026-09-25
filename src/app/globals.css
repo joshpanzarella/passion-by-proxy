@@ -1354,7 +1354,9 @@ html[data-melting] .melt-cue--right {
 .merch__image {
   width: 100%;
   aspect-ratio: 1;
-  background: var(--surface);
+  /* a soft light behind the shirt, so a black one (cut out of its white:
+     npm run media) still shows its shape on the dark */
+  background: radial-gradient(circle at 50% 45%, var(--line), var(--surface) 70%);
   border: 1px solid var(--c);
   box-shadow: 5px 5px 0 var(--c2);
   display: grid;

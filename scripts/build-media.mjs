@@ -4,7 +4,8 @@
 //                    banner=banner.jpg logo=logo-flat.png \
 //                    texture-teal=… texture-gold=… texture-red=… \
 //                    glitter=glitter-type.png arc=arc-type.png photo=band.jpg \
-//                    album-cover=alliterate.jpg iwbl-cover=i-wont-be-long.jpg
+//                    album-cover=alliterate.jpg iwbl-cover=i-wont-be-long.jpg \
+//                    shirt-1=tee.jpg shirt-2=boxy-tee.jpg
 //
 // Pass only the ones that changed. Originals (up to 17 MB) stay out of the
 // repo. Art with a black background is flattened onto black, the page's own
@@ -57,6 +58,10 @@ const jobs = {
   "album-cover": (src) => sharp(src).resize(1000, 1000).webp({ quality: 82 }).toFile(out("alliterate-cover.webp")),
   // I Won't Be(Long), the first single: its cover, square (Bandcamp has it)
   "iwbl-cover": (src) => sharp(src).resize(1000, 1000).webp({ quality: 82 }).toFile(out("i-wont-be-long-cover.webp")),
+  // merch shirts: product shots on white, cut out of it (white would glare
+  // on the dark page), for the merch cards' own background
+  "shirt-1": (src) => cutOut(src, "shirt-1.webp"),
+  "shirt-2": (src) => cutOut(src, "shirt-2.webp"),
   // band photo (about section): never enlarged, at most 1600 px wide
   photo: (src) =>
     sharp(src).resize({ width: 1600, withoutEnlargement: true }).webp({ quality: 82 }).toFile(out("band-photo.webp")),
@@ -130,6 +135,44 @@ function grow(src, w, h, r) {
     }
   }
   return out;
+}
+
+// A dark garment on white, cut out. The white joined to the edges goes
+// clear (a flood from the border, so any white in a print stays), and the
+// rim, a blend of garment and white, keeps as much as the garment shows
+// through: pixel = a * garment + (1 - a) * white, solved for a.
+const GARMENT = 18; // the shirts' black, at its edges
+async function cutOut(src, name) {
+  const { data, info } = await sharp(src).resize(900, 900).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+  const { width: w, height: h } = info;
+  const n = w * h;
+  const lum = (i) => 0.2126 * data[i * 3] + 0.7152 * data[i * 3 + 1] + 0.0722 * data[i * 3 + 2];
+  const back = new Uint8Array(n);
+  const todo = [];
+  for (let x = 0; x < w; x++) todo.push(x, (h - 1) * w + x);
+  for (let y = 0; y < h; y++) todo.push(y * w, y * w + w - 1);
+  while (todo.length) {
+    const i = todo.pop();
+    if (back[i] || lum(i) < 200) continue;
+    back[i] = 255;
+    const x = i % w;
+    if (x > 0) todo.push(i - 1);
+    if (x < w - 1) todo.push(i + 1);
+    if (i >= w) todo.push(i - w);
+    if (i < n - w) todo.push(i + w);
+  }
+  const rim = grow(back, w, h, 2);
+  const res = Buffer.alloc(n * 4);
+  for (let i = 0; i < n; i++) {
+    let a = 255;
+    let rgb = [data[i * 3], data[i * 3 + 1], data[i * 3 + 2]];
+    if (rim[i]) {
+      a = Math.round(Math.max(0, Math.min(1, (255 - lum(i)) / (255 - GARMENT))) * 255);
+      rgb = [GARMENT, GARMENT, GARMENT];
+    }
+    res.set([...rgb, a], i * 4);
+  }
+  await sharp(res, { raw: { width: w, height: h, channels: 4 } }).webp({ quality: 82, alphaQuality: 90 }).toFile(out(name));
 }
 
 function texture(src, name) {
