@@ -1101,6 +1101,11 @@ html[data-melting] .melt-cue--right {
   border-radius: 12px;
 }
 
+/* a release's own player: Spotify's compact size */
+.spotify--compact {
+  height: 152px;
+}
+
 .status {
   display: inline-block;
   font-size: 0.85rem;

@@ -81,8 +81,10 @@ export type Release = {
   // song.link) suits fans on different apps. Falls back to the first link.
   listen?: string;
   links: Link[]; // streaming / pre-save links; placeholders ("#") are hidden
-  // Player embed URL (Spotify "Embed track" or Bandcamp "Embed this
-  // album" src). Shows a player under the release once set.
+  // Its Spotify player: on Spotify, Share / Embed, and the src="..." from
+  // the code. Shows as a compact player at the top of the music section's
+  // "listen", above the artist's (whose list Spotify picks by plays, so a
+  // new release takes a while to show there).
   embed?: string;
   // Its colourway (.tone--* in globals.css), sampled from its art, when not
   // the one for its kind (tone--single, tone--album).
@@ -107,6 +109,7 @@ export const single: Release = {
     { text: "U&I will become a power pop sensation before we get GTA6", by: "Anonymous" },
     { text: "U&I > TS encore", by: "Anonymous (for safety reasons)" },
   ],
+  embed: "https://open.spotify.com/embed/album/78wvGs9FUo1ytUx5Wxrv6C?theme=0",
   // The track's own pages (the "listen" buttons take the first); Bandcamp
   // is the band's page until the track is up there.
   links: [

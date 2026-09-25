@@ -106,10 +106,23 @@ function AlbumFeature({ release }: { release: Release }) {
 
 function Players() {
   const bandcamp = band.bandcampPlayer.startsWith("https://bandcamp.com/EmbeddedPlayer/");
-  if (!bandcamp && !band.spotifyArtistId) return null;
+  // a release's own player first (the new single leads), then the artist's
+  const own = [single, firstSingle, album].filter((r) => r.embed);
+  if (!bandcamp && !band.spotifyArtistId && own.length === 0) return null;
   return (
     <div className="players">
       <p className="release__kind">listen</p>
+      {own.map((r) => (
+        <iframe
+          key={r.title}
+          className="spotify spotify--compact"
+          data-reveal=""
+          src={r.embed}
+          title={`${r.title} on Spotify`}
+          loading="lazy"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        />
+      ))}
       {bandcamp && (
         <iframe className="bandcamp" data-reveal="" src={band.bandcampPlayer} title={`${band.name} on Bandcamp`} loading="lazy" seamless />
       )}
