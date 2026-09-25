@@ -37,8 +37,8 @@ const ROUND_PX = 32; // the largest drip tip or shoulder
 const ROUND_BY = 0.25; // tips and shoulders are fully formed by this share of the melt
 const SINK = 4; // after the melt, everything sinks this many screens × (time past it, in melts)²
 const BURST_MS = [80, 400] as const; // the gap between bursts of words, at random
-const HOLD_MS = [1_400, 3_000] as const; // a finished line stays up this long, at random
-const HOP_LINES = 14; // this many lines of a song (most of a minute) before the captions move to another
+const HOLD_MS = [2_200, 4_200] as const; // a finished line stays up this long, at random
+const HOP_LINES = 14; // this many lines of a song (about a minute) before the captions move to another
 const between = ([lo, hi]: readonly [number, number]) => lo + Math.random() * (hi - lo);
 
 // captions: each song's title, and its stanzas' lines
