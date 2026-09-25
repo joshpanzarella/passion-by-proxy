@@ -219,8 +219,8 @@ export type MerchItem = {
 };
 
 export const merch: MerchItem[] = [
-  { name: "T-shirt one", price: "$25", image: "/media/shirt-1.webp", href: "#", note: "S–XXL" },
-  { name: "T-shirt two", price: "$25", image: "/media/shirt-2.webp", href: "#", note: "S–XXL" },
+  { name: "logo - drop shoulder", price: "$40", image: "/media/shirt-1.webp", href: "#", note: "S–XXL" },
+  { name: "logo - reg", price: "$40", image: "/media/shirt-2.webp", href: "#", note: "S–XXL" },
 ];
 
 export const socials: Link[] = [
