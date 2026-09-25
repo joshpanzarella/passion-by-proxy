@@ -2,6 +2,7 @@ import { album, band, firstSingle, isLive, single, type Link, type Release } fro
 import { openSongs, releaseTone } from "@/data/lyrics";
 import NextLink from "next/link";
 import { ReleaseKind, ReleaseStatus } from "@/components/ReleaseStatus";
+import { PlayerFrame } from "@/components/PlayerFrame";
 import { Section } from "./Section";
 
 // The new single leads with its cover and lettering; the first single,
@@ -113,26 +114,22 @@ function Players() {
     <div className="players">
       <p className="release__kind">listen</p>
       {own.map((r) => (
-        <iframe
+        <PlayerFrame
           key={r.title}
           className="spotify spotify--compact"
           data-reveal=""
           src={r.embed}
           title={`${r.title} on Spotify`}
-          loading="lazy"
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
         />
       ))}
-      {bandcamp && (
-        <iframe className="bandcamp" data-reveal="" src={band.bandcampPlayer} title={`${band.name} on Bandcamp`} loading="lazy" seamless />
-      )}
+      {bandcamp && <PlayerFrame className="bandcamp" data-reveal="" src={band.bandcampPlayer} title={`${band.name} on Bandcamp`} seamless />}
       {band.spotifyArtistId && (
-        <iframe
+        <PlayerFrame
           className="spotify"
           data-reveal=""
           src={`https://open.spotify.com/embed/artist/${band.spotifyArtistId}?theme=0`}
           title={`${band.name} on Spotify`}
-          loading="lazy"
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
         />
       )}
