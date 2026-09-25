@@ -41,7 +41,7 @@ void main() {
   gl_FragColor = texture2D(img, uv + d * amp * ease);
 }`;
 
-const AMP = 0.012; // of the image's size, at amount 1
+const AMP = 0.018; // of the image's size, at amount 1 (the bend peaks at 1.6x: inside the 4% edge ease)
 
 export function BannerWarp({ src, amount = 1 }: { src: string; amount?: number }) {
   const ref = useRef<HTMLCanvasElement>(null);
