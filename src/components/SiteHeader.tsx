@@ -16,6 +16,10 @@ export function SiteHeader({ home = false, current }: { home?: boolean; current?
       <a className="site-header__mark" href={home ? "#top" : "/"} aria-label={home ? `${band.name}, back to top` : `${band.name} home`}>
         {/* eslint-disable-next-line @next/next/no-img-element -- 8 KB logo */}
         <img src="/media/logo-pill.webp" alt="" width={174} height={96} />
+        {/* the name in katakana under the pill, as in the splash: fine print */}
+        <span className="site-header__ja" lang="ja" aria-hidden="true">
+          <span>{band.nameJapanese}</span>
+        </span>
       </a>
       {home && <span className="site-header__playing" aria-hidden="true" />}
       <nav aria-label="sections">
